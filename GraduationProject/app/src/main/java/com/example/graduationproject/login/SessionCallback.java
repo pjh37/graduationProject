@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.example.graduationproject.MainActivity;
 import com.kakao.auth.ErrorCode;
 import com.kakao.auth.ISessionCallback;
+import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeResponseCallback;
@@ -63,6 +64,7 @@ public class SessionCallback implements ISessionCallback {
                 intent.putExtra("userID",userProfile.getId());
                 intent.putExtra("userNicName",userProfile.getNickname());
                 mContext.startActivity(intent);
+
             }
         });
 

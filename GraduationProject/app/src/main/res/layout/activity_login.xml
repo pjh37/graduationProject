@@ -4,17 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.AppCompat.NoActionBar"
+    android:background="#494545"
     tools:context=".login.LoginActivity">
+
 
     <com.kakao.usermgmt.LoginButton
         android:id="@+id/com_kakao_login"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="15dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_below="@id/com_kakao_login">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:text="자동 로그인"/>
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/chkAutoLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            />
+    </LinearLayout>
 
 </RelativeLayout>
