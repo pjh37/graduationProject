@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -48,10 +49,13 @@ public class FormActivity extends AppCompatActivity {
     private int[] imgTypes={R.drawable.shortanswer,R.drawable.longanswer,R.drawable.multiplechoice,
             R.drawable.checkbox,R.drawable.dropdown, R.drawable.linear_scale,R.drawable.img_grid,
             R.drawable.date,R.drawable.time,R.drawable.divide_section};
+    private int form_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
+        Intent intent=getIntent();
+        form_id=intent.getIntExtra("_id",0);
         subViews=new ArrayList<>();
         formComponents=new ArrayList<>();
         formSaveManager=FormSaveManager.getInstance(this);
@@ -80,10 +84,26 @@ public class FormActivity extends AppCompatActivity {
         load();
 
     }
+    public String getTime(){
+        return String.valueOf(System.currentTimeMillis());
+    }
     public void save(){
         new Thread(new Runnable() {
             @Override
             public void run() {
+                //기존에 있던것인지 확인
+                boolean isExist=false;
+                String[] columns=new String[]{"_id"};
+                String selection="_id=?";
+                String[] selectionArgs=new String[]{String.valueOf(form_id)};
+                Cursor cursor=formSaveManager.query(columns,selection,selectionArgs,null,null,null);
+                if(cursor!=null){
+                    while(cursor.moveToNext()){
+                        isExist=true;
+                    }
+                    cursor.close();
+                }
+
                 JSONObject jsonObject=new JSONObject();
                 try {
                     jsonObject.put("title",editTitle.getText().toString());
@@ -99,7 +119,13 @@ public class FormActivity extends AppCompatActivity {
                 //Log.v("테스트",jsonObject.toString());
                 ContentValues addValue=new ContentValues();
                 addValue.put("json",jsonObject.toString());
-                formSaveManager.insert(addValue);
+                addValue.put("time",getTime());
+                if(isExist){
+                    formSaveManager.update(addValue,selection,selectionArgs);
+                }else{
+                    formSaveManager.insert(addValue);
+                }
+                finish();
             }
         }).start();
     }
@@ -111,7 +137,9 @@ public class FormActivity extends AppCompatActivity {
             public void run() {
 
                 String[] columns=new String[]{"_id","json"};
-                Cursor cursor=formSaveManager.query(columns,null,null,null,null,null);
+                String selection="_id=?";
+                String[] selectionArgs=new String[]{String.valueOf(form_id)};
+                Cursor cursor=formSaveManager.query(columns,selection,selectionArgs,null,null,null);
                 if(cursor!=null){
                     while(cursor.moveToNext()){
                         try{
@@ -159,6 +187,7 @@ public class FormActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 save();
+                //finish();
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {

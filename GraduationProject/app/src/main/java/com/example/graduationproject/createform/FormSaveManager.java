@@ -18,7 +18,8 @@ public class FormSaveManager {
         mDatabase.execSQL(
                 "CREATE TABLE IF NOT EXISTS "+TABLE_FORMS+
                         "("+"_id INTEGER PRIMARY KEY AUTOINCREMENT, "+
-                        "json  TEXT );"
+                        "json TEXT, "+
+                        "time TEXT);"
         );
 
     }

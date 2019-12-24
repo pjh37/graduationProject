@@ -42,7 +42,6 @@ public class FormComponent extends LinearLayout {
     private TextView txtDescription;
     private Button btnAddOption;
     private Switch mSwitch;
-    private int mOptionCnt=0;
     public FormComponent(Context context,int type){
         super(context);
         this.mContext=context;
@@ -66,7 +65,7 @@ public class FormComponent extends LinearLayout {
             } else if(mType==MULTIPLECHOICE||mType==CHECKBOXES||mType==DROPDOWN){
                 jsonObject.put("required_switch",mSwitch.isChecked());
                 JSONArray jsonArray=new JSONArray();
-                for(int i=0;i<mOptionCnt;i++){
+                for(int i=0;i<container.getChildCount();i++){
                     jsonArray.put(i,((Option)container.getChildAt(i)).getOption());
                 }
                 jsonObject.put("addedOption",jsonArray);
@@ -135,7 +134,6 @@ public class FormComponent extends LinearLayout {
                 public void onClick(View view) {
                     Option op=new Option(mContext,mType);
                     container.addView(op);
-                    mOptionCnt++;
                     //Log.v("테스트",((Option)container.getChildAt(0)).getOption());
                 }
             });
