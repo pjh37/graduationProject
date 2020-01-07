@@ -1,9 +1,18 @@
 package com.example.graduationproject;
 
 public class UploadedSurveyDTO {
+    private int _id;
     private String title;
     private int responseCnt;
     private String time;
+
+    public int get_id() {
+        return _id;
+    }
+
+    public void set_id(int _id) {
+        this._id = _id;
+    }
 
     public String getTitle() {
         return title;

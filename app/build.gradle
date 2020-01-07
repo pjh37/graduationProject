@@ -16,6 +16,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+
+        sourceCompatibility JavaVersion.VERSION_1_8
+
+        targetCompatibility JavaVersion.VERSION_1_8
+
+    }
 }
 
 dependencies {
@@ -29,7 +36,11 @@ dependencies {
     }
     //gson
     implementation 'com.google.code.gson:gson:2.8.5'
-
+    //google
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.firebase:firebase-analytics:17.2.0'
+    //firebase
+    implementation 'com.google.firebase:firebase-auth:19.2.0'
     //okhttp
     implementation "com.squareup.okhttp3:okhttp:4.0.1"
 
@@ -48,3 +59,4 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
+apply plugin: 'com.google.gms.google-services'

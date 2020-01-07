@@ -47,24 +47,25 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView.Adapter  uploadedSurveyAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<UploadedSurveyDTO> datas;
-    public  String userID;
-    private String url=getString(R.string.baseUrl);
+    public  String userEmail;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        url=getString(R.string.baseUrl);
         Intent intent=getIntent();
-        userID=intent.getStringExtra("userNicName");
+        userEmail=intent.getStringExtra("userEmail");
         drawerLayout=(DrawerLayout)findViewById(R.id.main_drawer);
         toggle=new ActionBarDrawerToggle(this,drawerLayout,R.string.drawer_open,R.string.drawer_close);
         datas=new ArrayList<>();
         uploadedSurveyRV=(RecyclerView)findViewById(R.id.response_wait_list);
         layoutManager=new LinearLayoutManager(getApplicationContext());
-        uploadedSurveyAdapter=new UploadedSurveyRV(getApplicationContext(),datas);
-        uploadedSurveyRV.setAdapter(uploadedSurveyAdapter);
+        uploadedSurveyRV.addItemDecoration(new ItemDecorate());
         uploadedSurveyRV.setLayoutManager(layoutManager);
-        getMySurveyList(userID);
+
+        getMySurveyList(userEmail);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("Forms");
         setSupportActionBar(toolbar);
@@ -79,12 +80,12 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 menuItem.setChecked(false);
                 TextView txtUserID=(TextView)findViewById(R.id.txtUserID);
-                txtUserID.setText(userID);
+                txtUserID.setText(userEmail);
                 drawerLayout.closeDrawer(GravityCompat.START);
                 switch (menuItem.getItemId()){
                     case R.id.offline: {
                         Intent intent = new Intent(getApplicationContext(), OfflineFormActivity.class);
-                        intent.putExtra("userNicName",userID);
+                        intent.putExtra("userEmail",userEmail);
                         startActivity(intent);
                         break;
                     }
@@ -102,8 +103,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent=new Intent();
                         intent.setAction(Intent.ACTION_SEND);
                         intent.setType("text/plain");
-                        intent.putExtra(Intent.EXTRA_SUBJECT,"엑스트라 서브젝트");
-                        intent.putExtra(Intent.EXTRA_TEXT,"엑스트라 텍스트");
+                        intent.putExtra(Intent.EXTRA_TEXT,getString(R.string.baseUrl)+"survey/6");
                         Intent chooser=Intent.createChooser(intent,"공유");
                         startActivity(chooser);
                          break;
@@ -139,14 +139,14 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    public void getMySurveyList(String userID){
+    public void getMySurveyList(String userEmail){
         OkHttpClient client=new OkHttpClient();
         RequestBody requestbody=new MultipartBody.Builder().
                 setType(MultipartBody.FORM)
-                .addFormDataPart("userID",userID)
+                .addFormDataPart("userEmail",userEmail)
                 .build();
         okhttp3.Request request=new okhttp3.Request.Builder()
-                .url(url+"user/form")
+                .url(url+"user/forms")
                 .header("Content-Type", "multipart/form-data")
                 .post(requestbody)
                 .build();
@@ -159,21 +159,35 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 //toastMessage("폼 전송 완료");
+                //Log.v("테스트","받은 폼 : "+response.body().string());
+                String res=response.body().string();
                 try{
-                    JSONArray jsonArray=new JSONArray(response.body().string());
+                    JSONArray jsonArray=new JSONArray(res);
                     Gson gson=new Gson();
                     for(int i=0;i<jsonArray.length();i++){
                         JSONObject jsonObject=jsonArray.getJSONObject(i);
                         FormDTO formDTO=gson.fromJson(jsonObject.getString("json"),FormDTO.class);
                         UploadedSurveyDTO uploadedSurveyDTO=new UploadedSurveyDTO();
+                        uploadedSurveyDTO.set_id(jsonObject.getInt("_id"));
                         uploadedSurveyDTO.setTitle(formDTO.getTitle());
                         uploadedSurveyDTO.setResponseCnt(jsonObject.getInt("response_cnt"));
                         uploadedSurveyDTO.setTime(getTime(jsonObject.getString("time")));
                         datas.add(uploadedSurveyDTO);
                     }
                     Log.v("테스트",datas.size()+"");
-                    uploadedSurveyAdapter.notifyDataSetChanged();
-                }catch (Exception e){}
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            uploadedSurveyAdapter=new UploadedSurveyRV(getApplicationContext(),userEmail,datas);
+                            uploadedSurveyRV.setAdapter(uploadedSurveyAdapter);
+                        }
+                    });
+
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.v("테스트","받은 폼 error: "+e.getMessage());
+                }
 
             }
         });
@@ -182,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         switch (v.getId()){
             case R.id.bottom_menu:
                 Intent intent=new Intent(this, BaseFormActivity.class);
-                intent.putExtra("userNicName",userID);
+                intent.putExtra("userEmail",userEmail);
                 overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
                 startActivity(intent);
                 break;

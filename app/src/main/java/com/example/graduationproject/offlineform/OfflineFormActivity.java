@@ -34,13 +34,13 @@ public class OfflineFormActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<FormItem> formItem;
     private FormSaveManager formSaveManager;
-    public String myName;
+    public String userEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offline_form);
         Intent intent=getIntent();
-        myName=intent.getStringExtra("userNicName");
+        userEmail=intent.getStringExtra("userEmail");
         formSaveManager=FormSaveManager.getInstance(this);
         formItem=new ArrayList<>();
         offlineForm=(RecyclerView)findViewById(R.id.recycleView);
@@ -123,7 +123,7 @@ public class OfflineFormActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         Intent intent=new Intent(getApplicationContext(), FormActivity.class);
                         intent.putExtra("_id",Integer.valueOf(_id.getText().toString()));
-                        intent.putExtra("userNicName",myName);
+                        intent.putExtra("userEmail",userEmail);
                         startActivity(intent);
                     }
                 });

@@ -15,8 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".form.BaseFormActivity"></activity>
-        <activity android:name=".form.FormActivity"></activity>
+        <activity android:name=".result.IndividualResultActivity"></activity>
+        <activity android:name=".result.ResultActivity" />
+        <activity android:name=".form.BaseFormActivity" />
+        <activity android:name=".form.FormActivity" />
         <activity android:name=".offlineform.OfflineFormActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".login.LoginActivity">

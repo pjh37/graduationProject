@@ -28,4 +28,11 @@ public class GlobalApplication extends Application {
     public static void setCurrentActivity(Activity currentActivity) {
         GlobalApplication.currentActivity = currentActivity;
     }
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        obj = null;
+    }
+
+
 }

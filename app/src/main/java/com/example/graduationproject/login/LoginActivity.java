@@ -1,10 +1,13 @@
 package com.example.graduationproject.login;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -17,12 +20,28 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import com.example.graduationproject.MainActivity;
 import com.example.graduationproject.R;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.Session;
 import com.kakao.usermgmt.LoginButton;
+import com.kakao.usermgmt.UserManagement;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -30,7 +49,9 @@ import java.security.Permission;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "로그인연동에러";
-    private SessionCallback callback;
+    private static final int RC_SIGN_IN=1;
+    private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseAuth firebaseAuth;
     private SharedPreferences mPref;
     private SharedPreferences.Editor editor;
     LoginButton btnKaKaoLogin;
@@ -43,20 +64,22 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
-        btnKaKaoLogin=(LoginButton)findViewById(R.id.com_kakao_login);
+        checkPermission();
+        GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient= GoogleSignIn.getClient(this,gso);
+        firebaseAuth=FirebaseAuth.getInstance();
+        SignInButton signInButton=findViewById(R.id.sign_in_button);
+        signInButton.setOnClickListener((view)->{
+            onClick(view);
+        });
         chkAutoLogin=(CheckBox)findViewById(R.id.chkAutoLogin);
         mPref=getSharedPreferences("login",MODE_PRIVATE);
         editor=mPref.edit();
-        getHashKey();
-        callback=new SessionCallback();
-        callback.setContext(this);
-        Session.getCurrentSession().addCallback(callback);
-        checkPermission();
-        if(mPref.getBoolean("isAutoLogin",false)){
 
-            Session.getCurrentSession().open(AuthType.KAKAO_TALK,this);
 
-        }
     }
     public void checkPermission(){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -83,20 +106,7 @@ public class LoginActivity extends AppCompatActivity {
             chkAutoLogin.setChecked(true);
         }
     }
-    private void getHashKey(){
-        try {                                                        // 패키지이름을 입력해줍니다.
-            PackageInfo info = getPackageManager().getPackageInfo("com.example.graduationproject", PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d(TAG,"key_hash="+ Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
+
     public void onClick(View v){
         switch (v.getId()){
             case R.id.chkAutoLogin:
@@ -108,7 +118,52 @@ public class LoginActivity extends AppCompatActivity {
                     editor.apply();
                 }
                 break;
+            case R.id.sign_in_button:
+               signIn();
+                break;
         }
     }
+    @Override
+    public void onActivityResult(int requestCode,int resultCode,Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode==RC_SIGN_IN){
+            Task<GoogleSignInAccount> task=GoogleSignIn.getSignedInAccountFromIntent(data);
 
+            handleSignInResult(task);
+        }
+    }
+    private void signIn(){
+        Intent intent= mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(intent,RC_SIGN_IN);
+    }
+    private void handleSignInResult(Task<GoogleSignInAccount> completeTask){
+        try{
+            GoogleSignInAccount account=completeTask.getResult(ApiException.class);
+            firebaseAuthWithGoogle(account);
+            String email=account.getEmail();
+            Log.v(TAG,email);
+        }catch (Exception e){}
+    }
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // 로그인 성공
+                            FirebaseUser user=firebaseAuth.getCurrentUser();
+                            Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
+                            Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                            intent.putExtra("userEmail",user.getEmail());
+                            startActivity(intent);
+                        } else {
+                            // 로그인 실패
+                            Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+    }
 }

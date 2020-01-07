@@ -22,6 +22,12 @@ public class KakaoSDKAdapter extends KakaoAdapter {
             public boolean isUsingWebviewTimer() {
                 return false;
             }
+
+            @Override
+            public boolean isSecureMode() {
+                return false;
+            }
+
             @Override
             public ApprovalType getApprovalType() {
                 return ApprovalType.INDIVIDUAL;
@@ -37,11 +43,6 @@ public class KakaoSDKAdapter extends KakaoAdapter {
     @Override
     public IApplicationConfig getApplicationConfig() {
         return new IApplicationConfig() {
-            @Override
-            public Activity getTopActivity() {
-                return GlobalApplication.getCurrentActivity();
-            }
-
             @Override
             public Context getApplicationContext() {
                 return GlobalApplication.getGlobalApplicationContext();

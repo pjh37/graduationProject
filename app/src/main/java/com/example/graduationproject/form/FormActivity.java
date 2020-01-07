@@ -45,7 +45,7 @@ public class FormActivity extends AppCompatActivity {
             R.drawable.checkbox,R.drawable.dropdown, R.drawable.linear_scale,R.drawable.img_grid,
             R.drawable.date,R.drawable.time,R.drawable.divide_section};
     private int form_id;
-    public String userID;
+    public String userEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +56,7 @@ public class FormActivity extends AppCompatActivity {
         Intent intent=getIntent();
         layouts=new ArrayList<>();
         parentContainer=(LinearLayout)findViewById(R.id.container);
-        userID=intent.getStringExtra("userNicName");
+        userEmail =intent.getStringExtra("userEmail");
         form_id=intent.getIntExtra("_id",-1);
         subViews=new ArrayList<>();
         formSaveManager= FormSaveManager.getInstance(this);
@@ -96,7 +96,7 @@ public class FormActivity extends AppCompatActivity {
 
         int formCnt=layouts.size();
         try {
-            jsonObject.put("userID",userID);
+            jsonObject.put("userEmail", userEmail);
             jsonObject.put("title",editTitle.getText().toString());
             jsonObject.put("description",editDescription.getText().toString());
             JSONArray jsonArray=new JSONArray();
@@ -172,14 +172,21 @@ public class FormActivity extends AppCompatActivity {
         switch (v.getId()){
             case R.id.btnFormComponentCreate: {
                 createDialog();
+                break;
             }
             case R.id.submit:{
-                Log.v("테스트","submit"+userID);
+                Log.v("테스트","submit"+ userEmail);
                 submit();
+                break;
             }
         }
     }
     public void submit(){
+        if(formSaveManager.isJsonExist(form_id)){
+            String selection="_id=?";
+            String[] selectionArgs=new String[]{String.valueOf(form_id)};
+            formSaveManager.delete(selection,selectionArgs);
+        }
         try{
             jsonObject=createJsonObject();
             jsonObject.put("time",getTime());
@@ -187,6 +194,7 @@ public class FormActivity extends AppCompatActivity {
             if(jsonObject!=null){
                 NetworkManager networkManager=NetworkManager.getInstance(getApplicationContext());
                 networkManager.submit(jsonObject);
+                finish();
             }
         }catch (Exception e){}
     }

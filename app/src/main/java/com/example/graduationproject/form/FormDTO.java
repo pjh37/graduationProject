@@ -3,6 +3,7 @@ package com.example.graduationproject.form;
 import java.util.ArrayList;
 
 public class FormDTO {
+
     private String title;
     private String description;
     private ArrayList<FormComponentVO> formComponents;
@@ -11,6 +12,8 @@ public class FormDTO {
     private ArrayList<String> addedOption;
     private ArrayList<Integer> linearScale;
      */
+
+
 
     public String getTitle() {
         return title;

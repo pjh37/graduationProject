@@ -3,6 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/border"
+    android:backgroundTint="#FCFCFC"
     android:elevation="10dp">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,7 +36,7 @@
         android:id="@+id/txtResponse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:textStyle="bold"
         android:textColor="#000000"
         android:text="0 response"/>
@@ -42,6 +44,6 @@
         android:id="@+id/txtTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:text="default"/>
 </LinearLayout>

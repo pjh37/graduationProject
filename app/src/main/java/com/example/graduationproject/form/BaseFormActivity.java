@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class BaseFormActivity extends AppCompatActivity {
+    private String userEmail;
     private EditText editTitle;
     private EditText editDescription;
     private LinearLayout parentContainer;
@@ -78,9 +80,11 @@ public class BaseFormActivity extends AppCompatActivity {
         switch (v.getId()){
             case R.id.btnFormComponentCreate: {
                 createDialog();
+                break;
             }
             case R.id.submit:{
                 submit();
+                break;
             }
         }
     }
@@ -93,6 +97,7 @@ public class BaseFormActivity extends AppCompatActivity {
             if(jsonObject!=null){
                 NetworkManager networkManager=NetworkManager.getInstance(getApplicationContext());
                 networkManager.submit(jsonObject);
+                finish();
             }
         }catch (Exception e){}
     }
@@ -115,6 +120,7 @@ public class BaseFormActivity extends AppCompatActivity {
         JSONObject jsonObject=new JSONObject();
         int formCnt=layouts.size();
         try {
+            jsonObject.put("userEmail", userEmail);
             jsonObject.put("title",editTitle.getText().toString());
             jsonObject.put("description",editDescription.getText().toString());
             JSONArray jsonArray=new JSONArray();
@@ -138,6 +144,8 @@ public class BaseFormActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void init(){
+        Intent intent=getIntent();
+        userEmail=intent.getStringExtra("userEmail");
         formSaveManager= FormSaveManager.getInstance(this);
         layouts=new ArrayList<>();
         editTitle=(EditText)findViewById(R.id.editTitle);
