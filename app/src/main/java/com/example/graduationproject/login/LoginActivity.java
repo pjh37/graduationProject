@@ -43,6 +43,8 @@ import com.kakao.auth.Session;
 import com.kakao.usermgmt.LoginButton;
 import com.kakao.usermgmt.UserManagement;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Permission;
@@ -128,7 +130,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode,resultCode,data);
         if(requestCode==RC_SIGN_IN){
             Task<GoogleSignInAccount> task=GoogleSignIn.getSignedInAccountFromIntent(data);
-
             handleSignInResult(task);
         }
     }
@@ -138,14 +139,14 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void handleSignInResult(Task<GoogleSignInAccount> completeTask){
         try{
-            GoogleSignInAccount account=completeTask.getResult(ApiException.class);
+            GoogleSignInAccount account=completeTask.getResult(ApiException.class); // @.@
             firebaseAuthWithGoogle(account);
             String email=account.getEmail();
             Log.v(TAG,email);
-        }catch (Exception e){}
+        }catch (Exception e){
+        }
     }
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

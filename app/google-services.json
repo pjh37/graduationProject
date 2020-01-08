@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "480291464114",
-    "firebase_url": "https://checkmate-8f8c4.firebaseio.com",
-    "project_id": "checkmate-8f8c4",
-    "storage_bucket": "checkmate-8f8c4.appspot.com"
+    "project_number": "423747387604",
+    "firebase_url": "https://test-ff2e3.firebaseio.com",
+    "project_id": "test-ff2e3",
+    "storage_bucket": "test-ff2e3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:480291464114:android:298aececccee7b6aa63aab",
+        "mobilesdk_app_id": "1:423747387604:android:6986642aebb68fa0cdbb41",
         "android_client_info": {
           "package_name": "com.example.graduationproject"
         }
       },
       "oauth_client": [
         {
-          "client_id": "480291464114-u3b16g20r2tlg52djflukdcdga8ooijf.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.graduationproject",
-            "certificate_hash": "50f0b007db7e6ef91d3b3e248c1423ca9391d2c2"
-          }
-        },
-        {
-          "client_id": "480291464114-fr7fcn4r9hpg2hhsm2vo1sge6i9pemdd.apps.googleusercontent.com",
+          "client_id": "423747387604-l508l09i1bf7p1cpu9ui35gujon6kft6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCbFhKDDqbfZ02b7tjO4DBfJhApLfYBudA"
+          "current_key": "AIzaSyAfpsh-1p3vFP5FSSApZ5pq2BPduZz5dNc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "480291464114-fr7fcn4r9hpg2hhsm2vo1sge6i9pemdd.apps.googleusercontent.com",
+              "client_id": "423747387604-l508l09i1bf7p1cpu9ui35gujon6kft6.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
