@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    android:elevation="10dp"
+    android:background="@drawable/border"
+    android:backgroundTint="#117FD6"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/editTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:hint="Section Title"
+            android:textColorHint="#ffffff"
+            android:textSize="30dp"
+            />
+        <ImageButton
+            android:id="@+id/delete_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#117FD6"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/delete"/>
+    </LinearLayout>
+    <EditText
+        android:id="@+id/editDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:hint="Section Title"
+        android:textColorHint="#ffffff"/>
+</LinearLayout>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/group1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/offline"
+            android:title="오프라인 폼"
+            android:icon="@drawable/offline"
+
+            />
+        <item
+            android:id="@+id/template"
+            android:title="템플릿"
+            android:icon="@drawable/template"/>
+        <item
+            android:id="@+id/notification"
+            android:title="알림"
+            android:icon="@drawable/notification"
+            >
+
+        </item>
+    </group>
+    <group android:id="@+id/group2" android:checkableBehavior="single">
+        <item
+            android:id="@+id/help"
+            android:title="도움"
+            android:icon="@drawable/help"/>
+        <item
+            android:id="@+id/share"
+            android:title="공유"
+            android:icon="@drawable/ic_share_black_24dp"/>
+    </group>
+
+</menu>
