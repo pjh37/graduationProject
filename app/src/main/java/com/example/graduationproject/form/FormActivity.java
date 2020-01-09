@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -75,7 +77,9 @@ public class FormActivity extends AppCompatActivity {
             datas.add(vo);
         }
         Log.v("테스트","getChildCount"+container.getChildAt(0)+"");
+
         load();
+
     }
     public String getTime(){
         return String.valueOf(System.currentTimeMillis());
@@ -93,8 +97,9 @@ public class FormActivity extends AppCompatActivity {
     }
     public JSONObject createJsonObject(){
         JSONObject jsonObject=new JSONObject();
-
-        int formCnt=layouts.size();
+        //저장문제로 변경중
+        //int formCnt=layouts.size();
+        int formCnt=container.getChildCount()-2;
         try {
             jsonObject.put("userEmail", userEmail);
             jsonObject.put("title",editTitle.getText().toString());
@@ -107,6 +112,7 @@ public class FormActivity extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
+        Log.v("테스트","save jsonobject : "+jsonObject.toString());
         return jsonObject;
     }
     public void load(){
@@ -115,7 +121,7 @@ public class FormActivity extends AppCompatActivity {
             public void run() {
                 jsonObject=formSaveManager.load(form_id);
                 if(jsonObject!=null){
-                    Log.v("테스트",jsonObject.toString());
+                    Log.v("테스트","load jsonobject : "+jsonObject.toString());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -126,13 +132,38 @@ public class FormActivity extends AppCompatActivity {
                                 editTitle.setText(formDTO.getTitle());
                                 editDescription.setText(formDTO.getDescription());
                                 ArrayList<FormComponentVO> forms=formDTO.getFormComponents();
-
+                                //Log.v("테스트","FormComponentVO 크기 : "+forms.size() );
                                 for(int i=0;i<forms.size();i++){
                                     FormAbstract temp=FormFactory.getInstance(getApplicationContext(),forms.get(i).getType())
                                             .createForm();
                                     temp.formComponentSetting(forms.get(i));
+                                    temp.onClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            if(view.getId()==R.id.delete_view){
+                                                container.removeView((LinearLayout)view.getParent().getParent().getParent());
+                                                layouts.remove(view.getParent().getParent().getParent());
+                                            }
+                                        }
+                                    });
+                                    temp.onItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                        @Override
+                                        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                                            toastMessage("아이템 클릭"+position);
+
+
+                                        }
+
+                                        @Override
+                                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                        }
+                                    });
                                     container.addView(temp);
+                                    layouts.add(temp);
+
                                 }
+
                             }catch (Exception e){
                                 e.printStackTrace();
                                 toastMessage(e.getMessage());
@@ -206,7 +237,30 @@ public class FormActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 FormAbstract layout=FormFactory.getInstance(getApplicationContext(),i).createForm();
                 layouts.add(layout);
+
+                layout.onClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(view.getId()==R.id.delete_view){
+                            container.removeView((LinearLayout)view.getParent().getParent().getParent());
+                            layouts.remove(view.getParent().getParent().getParent());
+
+                        }
+                    }
+                });
+                layout.onItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
                 parentContainer.addView(layout);
+
             }
         });
         builder.show();
