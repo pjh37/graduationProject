@@ -1,8 +1,10 @@
 package com.example.graduationproject.form;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,6 +62,7 @@ public class FormTypeOption extends FormAbstract {
             public void onClick(View view) {
                 Option option=new Option(mContext,mType);
                 mAddOptionContainer.addView(option);
+                Log.v("테스트","mAddOptionContainer child : "+mAddOptionContainer.getChildCount());
             }
         });
         spinner=(Spinner)findViewById(R.id.spinner);
@@ -79,14 +82,9 @@ public class FormTypeOption extends FormAbstract {
         list.add("동영상");
         CustomSpinnerAdapter spinnerAdapter=new CustomSpinnerAdapter(mContext,list);
         spinner.setAdapter(spinnerAdapter);
-        /*
-        mDeleteView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mParentContainer.removeView(mContainer);
-            }
-        });
-         */
+
+        mDeleteView.setOnClickListener(new ClickListener());
+
         if(mType==FormType.MULTIPLECHOICE){
             mTxtDescription.setText("multiple choice");
         }else if(mType==FormType.CHECKBOXES){
@@ -95,8 +93,19 @@ public class FormTypeOption extends FormAbstract {
             mTxtDescription.setText("dropdown");
         }
     }
+    public class ClickListener implements OnClickListener{
+        @Override
+        public void onClick(View view) {
+            if(view==mDeleteView){
+                ViewGroup parentView=(ViewGroup)customView.getParent();
+                parentView.removeView(customView);
+            }
+        }
+    }
+
     @Override
     public JSONObject getJsonObject(){
+        Log.v("테스트","mAddOptionContainer child : "+mAddOptionContainer.getChildCount());
         JSONObject jsonObject=new JSONObject();
         try{
             jsonObject.put("type",mType);
@@ -125,12 +134,6 @@ public class FormTypeOption extends FormAbstract {
         }
         //mParentContainer.addView(mContainer);
     }
-    @Override
-    public  void onItemSelectedListener(AdapterView.OnItemSelectedListener listener){
-        spinner.setOnItemSelectedListener(listener);
-    }
-    @Override
-    public void onClickListener(OnClickListener listener){
-        mDeleteView.setOnClickListener(listener);
-    }
+
+
 }

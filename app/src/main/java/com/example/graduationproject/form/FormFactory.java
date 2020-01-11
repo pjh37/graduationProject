@@ -20,8 +20,10 @@ public class FormFactory {
             return new FormTypeText(mContext,mType);
         }else if(mType==FormType.MULTIPLECHOICE||mType==FormType.CHECKBOXES||mType==FormType.DROPDOWN){
             return new FormTypeOption(mContext,mType);
-        }else if(mType==FormType.LINEARSCALE||mType==FormType.MULTIPLECHOICEGRID){
-
+        }else if(mType==FormType.LINEARSCALE){
+            return new FormTypeLinear(mContext,mType);
+        }else if(mType==FormType.MULTIPLECHOICEGRID){
+            return new FormTypeGrid(mContext,mType);
         }else if(mType==FormType.ADDSECTION){
             return new FormTypeSection(mContext,mType);
         }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -71,14 +72,9 @@ public class FormTypeText extends FormAbstract{
 
         mContainer=(LinearLayout)mEditQuestion.getParent().getParent();
         mParentContainer=(LinearLayout)mEditQuestion.getParent().getParent().getParent();
-        /*
-        mDeleteView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mParentContainer.removeView((LinearLayout)(mEditQuestion.getParent().getParent()));
-            }
-        });
-        */
+
+        mDeleteView.setOnClickListener(new ClickListener());
+
         if(mType==FormType.SHORTTEXT){
             mTxtDescription.setText("짧은 글");
         }else if(mType==FormType.LONGTEXT){
@@ -89,15 +85,15 @@ public class FormTypeText extends FormAbstract{
             mTxtDescription.setText("시간");
         }
     }
-    @Override
-    public  void onItemSelectedListener(AdapterView.OnItemSelectedListener listener){
-        spinner.setOnItemSelectedListener(listener);
+    public class ClickListener implements OnClickListener{
+        @Override
+        public void onClick(View view) {
+            if(view==mDeleteView){
+                ViewGroup parentView=(ViewGroup)customView.getParent();
+                parentView.removeView(customView);
+            }
+        }
     }
-    @Override
-    public void onClickListener(OnClickListener listener){
-        mDeleteView.setOnClickListener(listener);
-    }
-
 
     @Override
     public JSONObject getJsonObject(){
@@ -118,6 +114,4 @@ public class FormTypeText extends FormAbstract{
         mSwitch.setChecked(vo.isRequired_switch());
         //mParentContainer.addView(mContainer);
     }
-
-
 }

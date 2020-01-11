@@ -99,6 +99,7 @@ public class FormActivity extends AppCompatActivity {
         JSONObject jsonObject=new JSONObject();
         //저장문제로 변경중
         //int formCnt=layouts.size();
+
         int formCnt=container.getChildCount()-2;
         try {
             jsonObject.put("userEmail", userEmail);
@@ -106,7 +107,8 @@ public class FormActivity extends AppCompatActivity {
             jsonObject.put("description",editDescription.getText().toString());
             JSONArray jsonArray=new JSONArray();
             for(int i=0;i<formCnt;i++){
-                jsonArray.put(i,layouts.get(i).getJsonObject());
+                //jsonArray.put(i,layouts.get(i).getJsonObject());
+                jsonArray.put(i,((FormAbstract)container.getChildAt(i+2)).getJsonObject());
             }
             jsonObject.put("formComponents",jsonArray);
         }catch (Exception e){
@@ -137,33 +139,8 @@ public class FormActivity extends AppCompatActivity {
                                     FormAbstract temp=FormFactory.getInstance(getApplicationContext(),forms.get(i).getType())
                                             .createForm();
                                     temp.formComponentSetting(forms.get(i));
-                                    temp.onClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            if(view.getId()==R.id.delete_view){
-                                                container.removeView((LinearLayout)view.getParent().getParent().getParent());
-                                                layouts.remove(view.getParent().getParent().getParent());
-                                            }
-                                        }
-                                    });
-                                    temp.onItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                        @Override
-                                        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                                            toastMessage("아이템 클릭"+position);
-
-
-                                        }
-
-                                        @Override
-                                        public void onNothingSelected(AdapterView<?> adapterView) {
-
-                                        }
-                                    });
                                     container.addView(temp);
-                                    layouts.add(temp);
-
                                 }
-
                             }catch (Exception e){
                                 e.printStackTrace();
                                 toastMessage(e.getMessage());
@@ -179,14 +156,12 @@ public class FormActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         builder.setTitle("저장").setMessage("저장하시겠습니까?");
         builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 save();
-                //finish();
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -236,31 +211,7 @@ public class FormActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 FormAbstract layout=FormFactory.getInstance(getApplicationContext(),i).createForm();
-                layouts.add(layout);
-
-                layout.onClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(view.getId()==R.id.delete_view){
-                            container.removeView((LinearLayout)view.getParent().getParent().getParent());
-                            layouts.remove(view.getParent().getParent().getParent());
-
-                        }
-                    }
-                });
-                layout.onItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });
                 parentContainer.addView(layout);
-
             }
         });
         builder.show();

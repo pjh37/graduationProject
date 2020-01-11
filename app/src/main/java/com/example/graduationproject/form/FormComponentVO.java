@@ -8,7 +8,10 @@ public class FormComponentVO {
     private String description;
     private boolean required_switch;
     private ArrayList<String> addedOption;
-
+    private ArrayList<String> addedRowOption;
+    private ArrayList<String> addedColOption;
+    private int begin;
+    private int end;
     public int getType() {
         return type;
     }
@@ -47,5 +50,37 @@ public class FormComponentVO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public ArrayList<String> getAddedRowOption() {
+        return addedRowOption;
+    }
+
+    public void setAddedRowOption(ArrayList<String> addedRowOption) {
+        this.addedRowOption = addedRowOption;
+    }
+
+    public ArrayList<String> getAddedColOption() {
+        return addedColOption;
+    }
+
+    public void setAddedColOption(ArrayList<String> addedColOption) {
+        this.addedColOption = addedColOption;
+    }
+
+    public int getBegin() {
+        return begin;
+    }
+
+    public void setBegin(int begin) {
+        this.begin = begin;
+    }
+
+    public int getEnd() {
+        return end;
+    }
+
+    public void setEnd(int end) {
+        this.end = end;
     }
 }
