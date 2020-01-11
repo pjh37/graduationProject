@@ -1,6 +1,7 @@
 package com.example.graduationproject.form;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -60,6 +61,7 @@ public class FormTypeOption extends FormAbstract {
             public void onClick(View view) {
                 Option option=new Option(mContext,mType);
                 mAddOptionContainer.addView(option);
+
             }
         });
         spinner=(Spinner)findViewById(R.id.spinner);
@@ -97,6 +99,7 @@ public class FormTypeOption extends FormAbstract {
     }
     @Override
     public JSONObject getJsonObject(){
+        Log.v("테스트","mAddOptionContainer child : "+mAddOptionContainer.getChildCount());
         JSONObject jsonObject=new JSONObject();
         try{
             jsonObject.put("type",mType);
@@ -133,4 +136,5 @@ public class FormTypeOption extends FormAbstract {
     public void onClickListener(OnClickListener listener){
         mDeleteView.setOnClickListener(listener);
     }
+
 }

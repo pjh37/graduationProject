@@ -1,6 +1,7 @@
 package com.example.graduationproject.form;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ public class Option extends LinearLayout {
     private static final int MULTIPLECHOICE=2;
     private static final int CHECKBOXES=3;
     private static final int DROPDOWN=4;
+    private static final int MULTIPLECHOICEGRID=6;
     private Context mContext;
     private EditText editOption;
     public Option(Context context, int type){
@@ -29,6 +31,7 @@ public class Option extends LinearLayout {
             @Override
             public void onClick(View view) {
                 ((ViewGroup)view.getParent().getParent()).removeView((ViewGroup)view.getParent());
+                Log.v("테스트","mAddOptionContainer child : "+((ViewGroup)view.getParent().getParent()).getChildCount());
             }
         });
     }
@@ -41,9 +44,11 @@ public class Option extends LinearLayout {
     public void imgSelect(int type){
         ImageView img_icon=(ImageView)findViewById(R.id.img_icon);
         switch (type){
+            case MULTIPLECHOICEGRID:
             case MULTIPLECHOICE: img_icon.setImageResource(R.drawable.multiplechoice);break;
             case CHECKBOXES: img_icon.setImageResource(R.drawable.checkbox);break;
             case DROPDOWN: img_icon.setImageResource(R.drawable.dropdown);break;
+
         }
     }
 
