@@ -66,10 +66,5 @@ public class FormTypeSection extends FormAbstract{
         mEditDescription.setText(vo.getDescription());
         //mParentContainer.addView(mContainer);
     }
-    @Override
-    public  void onItemSelectedListener(AdapterView.OnItemSelectedListener listener){ }
-    @Override
-    public void onClickListener(OnClickListener listener){
-        mDeleteView.setOnClickListener(listener);
-    }
+
 }

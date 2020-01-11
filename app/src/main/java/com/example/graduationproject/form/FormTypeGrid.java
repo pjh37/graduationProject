@@ -3,6 +3,7 @@ package com.example.graduationproject.form;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -25,8 +26,9 @@ public class FormTypeGrid extends FormAbstract {
         mContext=context;
         this.mType=type;
         mInflater=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        customView=mInflater.inflate(R.layout.form_type_text,this,true);
+        customView=mInflater.inflate(R.layout.form_type_multiple_choice_grid,this,true);
         mDeleteView=(ImageButton)findViewById(R.id.delete_view);
+        mDeleteView.setOnClickListener(new ClickListener());
         mEditQuestion=(EditText)findViewById(R.id.editQuestion);
         mSwitch=(Switch)findViewById(R.id.required_switch);
     }
@@ -48,16 +50,16 @@ public class FormTypeGrid extends FormAbstract {
     public void formComponentSetting(FormComponentVO vo) {
 
     }
-
-    @Override
-    public void onClickListener(OnClickListener listener) {
-        mDeleteView.setOnClickListener(listener);
+    public class ClickListener implements OnClickListener{
+        @Override
+        public void onClick(View view) {
+            if(view==mDeleteView){
+                ViewGroup parentView=(ViewGroup)customView.getParent();
+                parentView.removeView(customView);
+            }
+        }
     }
 
-    @Override
-    public void onItemSelectedListener(AdapterView.OnItemSelectedListener listener) {
-
-    }
 
 
 }

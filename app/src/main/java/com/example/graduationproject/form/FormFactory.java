@@ -23,7 +23,7 @@ public class FormFactory {
         }else if(mType==FormType.LINEARSCALE){
             return new FormTypeLinear(mContext,mType);
         }else if(mType==FormType.MULTIPLECHOICEGRID){
-            return new FormTypeGrid();
+            return new FormTypeGrid(mContext,mType);
         }else if(mType==FormType.ADDSECTION){
             return new FormTypeSection(mContext,mType);
         }

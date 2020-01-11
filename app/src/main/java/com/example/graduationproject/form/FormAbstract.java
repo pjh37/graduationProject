@@ -12,8 +12,6 @@ import java.util.ArrayList;
 public abstract class FormAbstract extends LinearLayout {
     public abstract JSONObject getJsonObject();
     public abstract void formComponentSetting(FormComponentVO vo);
-    public abstract void onClickListener(OnClickListener listener);
-    public abstract void onItemSelectedListener(AdapterView.OnItemSelectedListener listener);
     private Context mContext;
     private int mType;
     public FormAbstract(Context context, int type){

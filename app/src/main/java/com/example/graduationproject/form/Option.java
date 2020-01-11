@@ -19,19 +19,22 @@ public class Option extends LinearLayout {
     private static final int MULTIPLECHOICEGRID=6;
     private Context mContext;
     private EditText editOption;
+    private View customView;
     public Option(Context context, int type){
         super(context);
         this.mContext=context;
         LayoutInflater inflater =(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.form_option,this,true);
+        customView=inflater.inflate(R.layout.form_option,this,true);
         imgSelect(type);
         ImageButton imageButton=(ImageButton)findViewById(R.id.delete_option);
         editOption=(EditText)findViewById(R.id.editOption);
         imageButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((ViewGroup)view.getParent().getParent()).removeView((ViewGroup)view.getParent());
-                Log.v("테스트","mAddOptionContainer child : "+((ViewGroup)view.getParent().getParent()).getChildCount());
+                ViewGroup parentView=(ViewGroup)customView.getParent();
+                parentView.removeView(customView);
+                //((ViewGroup)view.getParent().getParent()).removeView((ViewGroup)view.getParent());
+                //Log.v("테스트","mAddOptionContainer child : "+((ViewGroup)view.getParent().getParent()).getChildCount());
             }
         });
     }
