@@ -47,7 +47,7 @@ public class Option extends LinearLayout {
     public void imgSelect(int type){
         ImageView img_icon=(ImageView)findViewById(R.id.img_icon);
         switch (type){
-            case MULTIPLECHOICEGRID:
+            case MULTIPLECHOICEGRID:img_icon.setImageResource(R.drawable.multiplechoice);break;
             case MULTIPLECHOICE: img_icon.setImageResource(R.drawable.multiplechoice);break;
             case CHECKBOXES: img_icon.setImageResource(R.drawable.checkbox);break;
             case DROPDOWN: img_icon.setImageResource(R.drawable.dropdown);break;

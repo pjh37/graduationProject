@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -97,16 +98,20 @@ public class IndividualViewFragment extends Fragment {
 
                 //Log.v("테스트",res);
                 try {
-                    IndividualViewDTO individualViewDTO=new IndividualViewDTO();
+
                     JSONArray jsonArray=new JSONArray(res);
                     for(int i=0;i<jsonArray.length();i++){
+                        IndividualViewDTO individualViewDTO=new IndividualViewDTO();
                         JSONObject jsonObject=jsonArray.getJSONObject(i);
                         JSONObject jsonObjResult=jsonObject.getJSONObject("surveyResult");
+
                         String time=jsonObject.getString("time");
+                        Log.v("테스트",time);
                         individualViewDTO.setTime(time);
 
                         for(int j=0;j<jsonObjResult.length()-2;j++){
                             Object json=jsonObjResult.get(String.valueOf(j));
+
                             if(json instanceof JSONArray){
                                 JSONArray multiAnswerJson=(JSONArray)json;
                                 ArrayList<String> multiAnswer=new ArrayList<>();

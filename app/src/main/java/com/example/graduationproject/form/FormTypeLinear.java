@@ -26,6 +26,7 @@ public class FormTypeLinear extends FormAbstract{
     private ImageButton mDeleteView;
     private EditText mEditQuestion;
     private Switch mSwitch;
+    private Spinner spinner;
     private Spinner beginSpinner;
     private Spinner endSpinner;
     private ArrayList<String> beginList;
@@ -36,6 +37,8 @@ public class FormTypeLinear extends FormAbstract{
         this.mType=type;
         mInflater=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         customView=mInflater.inflate(R.layout.form_type_linear,this,true);
+        spinner=(Spinner)findViewById(R.id.spinner);
+
         mEditQuestion=(EditText)findViewById(R.id.editQuestion);
         mSwitch=(Switch)findViewById(R.id.required_switch);
         beginSpinner=(Spinner)findViewById(R.id.begin_spinner);
@@ -49,6 +52,11 @@ public class FormTypeLinear extends FormAbstract{
         for(int i=3;i<=10;i++){
             endList.add(String.valueOf(i));
         }
+        ArrayList<String> list=new ArrayList<>();
+        for(String str : getResources().getStringArray(R.array.formType)){list.add(str);}
+        CustomSpinnerAdapter spinnerAdapter=new CustomSpinnerAdapter(mContext,list);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setSelection(5);
         CustomSpinnerAdapter beginSpinnerAdapter=new CustomSpinnerAdapter(mContext,beginList);
         CustomSpinnerAdapter endSpinnerAdapter=new CustomSpinnerAdapter(mContext,endList);
         beginSpinner.setAdapter(beginSpinnerAdapter);
