@@ -3,7 +3,7 @@
     <string name="kakao_app_key">053549b2c82731621dbf53e58c360eac</string>
     <string name="drawer_open">open navigation drawer</string>
     <string name="drawer_close">close navigation drawer</string>
-    <string name="baseUrl">http://192.168.35.42:8001/</string>
+    <string name="baseUrl">http://pjh.cafe24app.com/</string>
     <!--http://pjh.cafe24app.com/  -->
     <!--http://192.168.35.42:8001/ -->
 </resources>
