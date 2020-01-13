@@ -54,19 +54,7 @@ public class FormTypeText extends FormAbstract{
         mDeleteView=(ImageButton)findViewById(R.id.delete_view);
         spinner=(Spinner)findViewById(R.id.spinner);
         ArrayList<String> list=new ArrayList<>();
-
-        list.add("단답형");
-        list.add("장문형");
-        list.add("다중선택");
-        list.add("체크박스");
-        list.add("드롭다운");
-        list.add("범위질문");
-        list.add("그리드");
-        list.add("날짜");
-        list.add("시간");
-        list.add("구획분할");
-        list.add("이미지");
-        list.add("동영상");
+        for(String str : getResources().getStringArray(R.array.formType)){list.add(str);}
         CustomSpinnerAdapter spinnerAdapter=new CustomSpinnerAdapter(mContext,list);
         spinner.setAdapter(spinnerAdapter);
 

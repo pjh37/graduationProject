@@ -17,6 +17,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -97,16 +100,58 @@ public class IndividualViewFragment extends Fragment {
 
                 //Log.v("테스트",res);
                 try {
-                    IndividualViewDTO individualViewDTO=new IndividualViewDTO();
+
                     JSONArray jsonArray=new JSONArray(res);
                     for(int i=0;i<jsonArray.length();i++){
+                        IndividualViewDTO individualViewDTO=new IndividualViewDTO();
                         JSONObject jsonObject=jsonArray.getJSONObject(i);
                         JSONObject jsonObjResult=jsonObject.getJSONObject("surveyResult");
+                        jsonObjResult.remove("form_id");
+                        jsonObjResult.remove("userEmail");
                         String time=jsonObject.getString("time");
+                        Log.v("테스트",time);
+                        Log.v("테스트",jsonObjResult.toString());
+                        Iterator<String> keys= jsonObjResult.keys();
+                        HashMap<String,ArrayList<String>> gridParser=new HashMap<>();
+                        ArrayList<String> removeKeys=new ArrayList<>();
+                        while(keys.hasNext()){
+                            String key=keys.next();
+                            Log.v("테스트","key값 : "+key);
+                            if(key.split("-").length==2){
+
+
+                                String[] grids=key.split("-");
+                                String gridKey=grids[0];
+                                String gridVal=jsonObjResult.getString(key);
+                                Log.v("테스트","gridKey : "+gridKey+"  gridVal :" +gridVal+" key : "+key);
+                                removeKeys.add(key);
+
+                                if(gridParser.containsKey(gridKey)){
+                                    gridParser.get(gridKey).add(gridVal);
+                                }else{
+                                    ArrayList<String> temp=new ArrayList<>();
+                                    temp.add(gridVal);
+                                    gridParser.put(gridKey,temp);
+                                }
+
+
+                            }
+                        }
+                       for(int j=0;j<removeKeys.size();j++){
+                           jsonObjResult.remove(removeKeys.get(j));
+                       }
+                        Log.v("테스트",jsonObjResult.toString());
+                        Iterator<String>  iterator=gridParser.keySet().iterator();
+                        while(iterator.hasNext()){
+                            String key=iterator.next();
+                            individualViewDTO.setResult(Integer.valueOf(key),gridParser.get(key));
+                        }
+                        individualViewDTO.setIndex(i+1);
                         individualViewDTO.setTime(time);
 
-                        for(int j=0;j<jsonObjResult.length()-2;j++){
+                        for(int j=0;j<jsonObjResult.length();j++){
                             Object json=jsonObjResult.get(String.valueOf(j));
+
                             if(json instanceof JSONArray){
                                 JSONArray multiAnswerJson=(JSONArray)json;
                                 ArrayList<String> multiAnswer=new ArrayList<>();
@@ -132,7 +177,10 @@ public class IndividualViewFragment extends Fragment {
                         }
                     });
 
-                }catch (Exception e){Log.v("테스트",e.getMessage());}
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.v("테스트",e.getMessage());
+                }
 
             }
         });

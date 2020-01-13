@@ -34,7 +34,7 @@
         android:layout_margin="5dp"
         android:text="multiple choice grid"/>
     <LinearLayout
-        android:id="@+id/add_row"
+        android:id="@+id/added_row_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -51,7 +51,7 @@
         android:backgroundTint="#2196F3"
         />
     <LinearLayout
-        android:id="@+id/add_col"
+        android:id="@+id/added_col_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">

@@ -54,7 +54,7 @@ public class IndividualViewRV extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position){
         IndividualViewDTO vo=datas.get(position);
-        ((ViewHolder)holder).txtIndex.setText(String.valueOf(vo.getIndex()+1));
+        ((ViewHolder)holder).txtIndex.setText(String.valueOf(vo.getIndex()));
         ((ViewHolder)holder).txtTime.setText(vo.getTime());
 
     }
