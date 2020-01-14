@@ -144,6 +144,10 @@ public class LoginActivity extends AppCompatActivity {
             String email=account.getEmail();
             Log.v(TAG,email);
         }catch (Exception e){
+<<<<<<< Updated upstream
+=======
+            e.printStackTrace();
+>>>>>>> Stashed changes
         }
     }
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {

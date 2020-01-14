@@ -8,13 +8,28 @@
   "client": [
     {
       "client_info": {
+<<<<<<< Updated upstream
         "mobilesdk_app_id": "1:423747387604:android:6986642aebb68fa0cdbb41",
+=======
+        "mobilesdk_app_id": "1:423747387604:android:7819a009b48b3780cdbb41",
+>>>>>>> Stashed changes
         "android_client_info": {
           "package_name": "com.example.graduationproject"
         }
       },
       "oauth_client": [
         {
+<<<<<<< Updated upstream
+=======
+          "client_id": "423747387604-uhqqhoeb3bbu2uf08pnc85bigu420nas.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.graduationproject",
+            "certificate_hash": "21dc0182b7ca6cafee4393ee3aa92a2d0b8ff224"
+          }
+        },
+        {
+>>>>>>> Stashed changes
           "client_id": "423747387604-l508l09i1bf7p1cpu9ui35gujon6kft6.apps.googleusercontent.com",
           "client_type": 3
         }
