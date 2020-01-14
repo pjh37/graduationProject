@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.graduationproject.R;
+import com.google.android.material.tabs.TabLayout;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 
 public class ResultActivity extends AppCompatActivity {
     private ViewPager viewPager;
+    private TabLayout mTabLayout;
     private ResultViewPagerAdapter pagerAdapter;
     private String url;
     private String userEmail;
@@ -46,12 +48,30 @@ public class ResultActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         url=getString(R.string.baseUrl);//getString(R.string.baseUrl);//http://192.168.35.42:8001
         viewPager=(ViewPager)findViewById(R.id.viewPager);
+        mTabLayout=(TabLayout)findViewById(R.id.tabs);
         Bundle args=new Bundle();
         args.putString("userEmail",userEmail);
         args.putInt("form_id",form_id);
         pagerAdapter=new ResultViewPagerAdapter(getSupportFragmentManager(),args);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(0);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     @Override

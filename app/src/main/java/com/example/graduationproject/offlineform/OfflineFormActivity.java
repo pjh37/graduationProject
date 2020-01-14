@@ -122,7 +122,7 @@ public class OfflineFormActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent=new Intent(getApplicationContext(), FormActivity.class);
-                        intent.putExtra("_id",Integer.valueOf(_id.getText().toString()));
+                        intent.putExtra("form_id",Integer.valueOf(_id.getText().toString()));
                         intent.putExtra("userEmail",userEmail);
                         startActivity(intent);
                     }

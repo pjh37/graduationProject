@@ -48,6 +48,7 @@ public class FormActivity extends AppCompatActivity {
             R.drawable.date,R.drawable.time,R.drawable.divide_section};
     private int form_id;
     public String userEmail;
+    private String jsonstr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +60,8 @@ public class FormActivity extends AppCompatActivity {
         layouts=new ArrayList<>();
         parentContainer=(LinearLayout)findViewById(R.id.container);
         userEmail =intent.getStringExtra("userEmail");
-        form_id=intent.getIntExtra("_id",-1);
+        form_id=intent.getIntExtra("form_id",-1);
+        jsonstr=intent.getStringExtra("json");
         subViews=new ArrayList<>();
         formSaveManager= FormSaveManager.getInstance(this);
         container=(LinearLayout)findViewById(R.id.container);
@@ -121,7 +123,14 @@ public class FormActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                jsonObject=formSaveManager.load(form_id);
+                if(jsonstr!=null){
+                    try{
+                        jsonObject=new JSONObject(jsonstr);
+                    }catch (Exception e){}
+                }else{
+                    jsonObject=formSaveManager.load(form_id);
+                }
+
                 if(jsonObject!=null){
                     Log.v("테스트","load jsonobject : "+jsonObject.toString());
                     runOnUiThread(new Runnable() {
@@ -188,18 +197,24 @@ public class FormActivity extends AppCompatActivity {
         }
     }
     public void submit(){
+        /*
         if(formSaveManager.isJsonExist(form_id)){
             String selection="_id=?";
             String[] selectionArgs=new String[]{String.valueOf(form_id)};
             formSaveManager.delete(selection,selectionArgs);
         }
+        */
         try{
             jsonObject=createJsonObject();
             jsonObject.put("time",getTime());
 
-            if(jsonObject!=null){
+            if(jsonObject!=null&&jsonstr==null){
                 NetworkManager networkManager=NetworkManager.getInstance(getApplicationContext());
                 networkManager.submit(jsonObject);
+                finish();
+            }else if(jsonstr!=null){
+                NetworkManager networkManager=NetworkManager.getInstance(getApplicationContext());
+                networkManager.update(jsonObject,form_id);
                 finish();
             }
         }catch (Exception e){}

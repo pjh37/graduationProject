@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".result.IndividualResultActivity"></activity>
+        <activity android:name=".UploadedFormEditableActivity"></activity>
+        <activity android:name=".result.IndividualResultActivity" />
         <activity android:name=".result.ResultActivity" />
         <activity android:name=".form.BaseFormActivity" />
         <activity android:name=".form.FormActivity" />
