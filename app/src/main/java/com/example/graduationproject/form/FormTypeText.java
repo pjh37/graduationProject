@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -31,16 +32,16 @@ public class FormTypeText extends FormAbstract{
     private TextView mTxtDescription;
     private Switch mSwitch;
     private Spinner spinner;
-    private LinearLayout mParentContainer;
-    private LinearLayout mContainer;
-    private ArrayList<FormAbstract> layouts;
     private View customView;
+    private ViewGroup parentView;
+    private boolean selected;
     public FormTypeText(Context context, int type){
         super(context,type);
         mContext=context;
         this.mType=type;
         mInflater=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         customView=mInflater.inflate(R.layout.form_type_text,this,true);
+        selected=true;
 
 
         init();
@@ -57,10 +58,8 @@ public class FormTypeText extends FormAbstract{
         for(String str : getResources().getStringArray(R.array.formType)){list.add(str);}
         CustomSpinnerAdapter spinnerAdapter=new CustomSpinnerAdapter(mContext,list);
         spinner.setAdapter(spinnerAdapter);
-
-        mContainer=(LinearLayout)mEditQuestion.getParent().getParent();
-        mParentContainer=(LinearLayout)mEditQuestion.getParent().getParent().getParent();
-
+        spinner.setOnItemSelectedListener(new ItemSelectListener());
+        spinner.setSelection(mType);
         mDeleteView.setOnClickListener(new ClickListener());
 
         if(mType==FormType.SHORTTEXT){
@@ -77,12 +76,28 @@ public class FormTypeText extends FormAbstract{
         @Override
         public void onClick(View view) {
             if(view==mDeleteView){
-                ViewGroup parentView=(ViewGroup)customView.getParent();
+                parentView=(ViewGroup)customView.getParent();
                 parentView.removeView(customView);
+
             }
         }
     }
-
+    public class ItemSelectListener implements AdapterView.OnItemSelectedListener{
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+            if(selected){
+                selected=false;
+            }else{
+                FormAbstract layout=FormFactory.getInstance(mContext,position).createForm();
+                parentView=(ViewGroup)customView.getParent();
+                int indexOfChild=parentView.indexOfChild(customView);
+                parentView.addView(layout,indexOfChild);
+                parentView.removeView(customView);
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) { }
+    }
     @Override
     public JSONObject getJsonObject(){
         JSONObject jsonObject=new JSONObject();

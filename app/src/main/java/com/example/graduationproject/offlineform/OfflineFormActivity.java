@@ -2,6 +2,7 @@ package com.example.graduationproject.offlineform;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,6 +47,7 @@ public class OfflineFormActivity extends AppCompatActivity {
         formItem=new ArrayList<>();
         offlineForm=(RecyclerView)findViewById(R.id.recycleView);
         layoutManager=new LinearLayoutManager(getApplicationContext());
+        offlineForm.addItemDecoration(new DividerItemDecoration(this,1));
         new LoadTask().execute();
     }
 
@@ -112,12 +115,14 @@ public class OfflineFormActivity extends AppCompatActivity {
             ImageView img_icon;
             TextView txtTitle;
             TextView txtTime;
+            ImageButton deleteBtn;
             public ViewHolder(View v){
                 super(v);
                 _id=(TextView)v.findViewById(R.id._id);
                 img_icon=(ImageView)v.findViewById(R.id.img_icon);
                 txtTitle=(TextView)v.findViewById(R.id.txtTitle);
                 txtTime=(TextView)v.findViewById(R.id.txtTime);
+                deleteBtn=(ImageButton)v.findViewById(R.id.deleteBtn);
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -125,6 +130,22 @@ public class OfflineFormActivity extends AppCompatActivity {
                         intent.putExtra("form_id",Integer.valueOf(_id.getText().toString()));
                         intent.putExtra("userEmail",userEmail);
                         startActivity(intent);
+                    }
+                });
+                deleteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String whereClause="_id=?";
+                        String[] whereArgs=new String[]{String.valueOf(_id.getText())};
+                        FormSaveManager.getInstance(OfflineFormActivity.this).delete(whereClause,whereArgs);
+                        formItem.remove(getAdapterPosition());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                offlineFormAdapter.notifyDataSetChanged();
+                            }
+                        });
+
                     }
                 });
             }

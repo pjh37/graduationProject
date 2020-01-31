@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.graduationproject.form.BaseFormActivity;
+import com.example.graduationproject.form.FormActivity;
 import com.example.graduationproject.form.FormDTO;
 import com.example.graduationproject.offlineform.OfflineFormActivity;
 import com.google.android.material.navigation.NavigationView;
@@ -227,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View v){
         switch (v.getId()){
             case R.id.bottom_menu:
-                Intent intent=new Intent(this, BaseFormActivity.class);
+                Intent intent=new Intent(this, FormActivity.class);
                 intent.putExtra("userEmail",userEmail);
                 overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
                 startActivity(intent);

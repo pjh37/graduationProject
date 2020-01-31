@@ -1,7 +1,11 @@
 package com.example.graduationproject.form;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.FaceDetector;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -12,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.graduationproject.NetworkManager;
 import com.example.graduationproject.R;
 import com.google.gson.Gson;
@@ -21,12 +26,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 
 public class FormActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE=10;
     private CustomAlertDialog dialog;
     private EditText editTitle;
     private EditText editDescription;
@@ -39,30 +46,33 @@ public class FormActivity extends AppCompatActivity {
 
     private FormSaveManager formSaveManager;
     private ArrayList<FormAbstract> layouts;
-    private LinearLayout parentContainer;
+
     private String[] txtTypes={"단답형","장문형","Multiple Choice",
             "Checkboxes","Dropdown","범위 질문",
-            "Multiple Choice Grid","날짜","시간","구획분할"};
+            "Multiple Choice Grid","날짜","시간","구획분할","이미지"};
     private int[] imgTypes={R.drawable.shortanswer,R.drawable.longanswer,R.drawable.multiplechoice,
             R.drawable.checkbox,R.drawable.dropdown, R.drawable.linear_scale,R.drawable.img_grid,
-            R.drawable.date,R.drawable.time,R.drawable.divide_section};
+            R.drawable.date,R.drawable.time,R.drawable.divide_section,R.drawable.image};
     private int form_id;
     public String userEmail;
     private String jsonstr;
+    private FormTypeImage formTypeImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_form);
+
         init();
     }
     public void init(){
         Intent intent=getIntent();
         layouts=new ArrayList<>();
-        parentContainer=(LinearLayout)findViewById(R.id.container);
+
         userEmail =intent.getStringExtra("userEmail");
         form_id=intent.getIntExtra("form_id",-1);
         jsonstr=intent.getStringExtra("json");
-        subViews=new ArrayList<>();
+
         formSaveManager= FormSaveManager.getInstance(this);
         container=(LinearLayout)findViewById(R.id.container);
         editTitle=(EditText)findViewById(R.id.editTitle);
@@ -72,7 +82,7 @@ public class FormActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         datas=new ArrayList<>();
-        for(int i=0;i<10;i++){
+        for(int i=0;i<txtTypes.length;i++){
             DialogVO vo=new DialogVO();
             vo.setTxtType(txtTypes[i]);
             vo.setImgType(imgTypes[i]);
@@ -81,8 +91,15 @@ public class FormActivity extends AppCompatActivity {
         Log.v("테스트","getChildCount"+container.getChildAt(0)+"");
 
         load();
-
+        registerReceiver(FormTypeImageBroadcastReceiver,new IntentFilter("com.example.graduationproject.FormTypeImage.IMAGE_ADD_BUTTON_CLICKED"));
     }
+    BroadcastReceiver FormTypeImageBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int formTypeImageIndex=intent.getIntExtra("form_id",-1);
+            formTypeImage= ((FormTypeImage)(container.getChildAt(formTypeImageIndex+2)));
+        }
+    };
     public String getTime(){
         return String.valueOf(System.currentTimeMillis());
     }
@@ -143,10 +160,16 @@ public class FormActivity extends AppCompatActivity {
                                 editTitle.setText(formDTO.getTitle());
                                 editDescription.setText(formDTO.getDescription());
                                 ArrayList<FormComponentVO> forms=formDTO.getFormComponents();
-                                //Log.v("테스트","FormComponentVO 크기 : "+forms.size() );
+                                if(forms==null){
+                                    Log.v("테스트","FormComponentVO 크기 : "+"is null" );
+                                }
+
                                 for(int i=0;i<forms.size();i++){
-                                    FormAbstract temp=FormFactory.getInstance(getApplicationContext(),forms.get(i).getType())
+                                    FormAbstract temp=FormFactory.getInstance(FormActivity.this,forms.get(i).getType())
                                             .createForm();
+                                    if(temp instanceof FormTypeImage){
+                                        ((FormTypeImage) temp).setFormComponent_id(i);
+                                    }
                                     temp.formComponentSetting(forms.get(i));
                                     container.addView(temp);
                                 }
@@ -194,6 +217,10 @@ public class FormActivity extends AppCompatActivity {
                 submit();
                 break;
             }
+            case R.id.btnImageAdd:{
+                Log.v("테스트","btnImageAdd가 눌렸습니다!!!!");
+                break;
+            }
         }
     }
     public void submit(){
@@ -225,11 +252,24 @@ public class FormActivity extends AppCompatActivity {
         builder.setAdapter(dialog, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                FormAbstract layout=FormFactory.getInstance(getApplicationContext(),i).createForm();
-                parentContainer.addView(layout);
+                FormAbstract layout=FormFactory.getInstance(FormActivity.this,i).createForm();
+                if(layout instanceof FormTypeImage){
+                    ((FormTypeImage) layout).setFormComponent_id(container.getChildCount()-2);
+                }
+                container.addView(layout);
             }
         });
         builder.show();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_CODE){
+            if(resultCode==RESULT_OK){
+                Glide.with(FormActivity.this).load(data.getData()).into(formTypeImage.getmAttachedImage());
+                formTypeImage.setDataUri(data.getData());
+            }
+        }
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -242,6 +282,23 @@ public class FormActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void toastMessage(final String msg){
-        Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(FormTypeImageBroadcastReceiver);
     }
 }

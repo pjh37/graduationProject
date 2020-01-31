@@ -9,7 +9,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4E5052"
+        android:background="#1C1D1D"
         android:textAlignment="center"
         app:layout_constraintTop_toTopOf="parent">
         <TextView

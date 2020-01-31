@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E0DCDB"
+    android:background="#E9E9E9"
     tools:context=".offlineform.OfflineFormActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4E5052"
+        android:background="#1C1D1D"
         android:textAlignment="center"
         >
         <TextView

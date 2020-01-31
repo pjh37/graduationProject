@@ -31,20 +31,19 @@ public class FormTypeOption extends FormAbstract {
     private ImageButton mDeleteView;
     private TextView mTxtDescription;
     private Button mBtnAddOption;
-    private ImageButton mBtnDeleteOption;
     private Switch mSwitch;
-    private LinearLayout mParentContainer;
     private LinearLayout mAddOptionContainer;
-    private LinearLayout mContainer;
-    private ArrayList<FormAbstract> layouts;
     private View customView;
     private Spinner spinner;
+    private boolean selected;
+    private ViewGroup parentView;
     public FormTypeOption(Context context, int type){
         super(context,type);
         mContext=context;
         this.mType=type;
         mInflater=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         customView=mInflater.inflate(R.layout.form_type_option,this,true);
+        selected=true;
         init();
     }
     public void init(){
@@ -53,11 +52,7 @@ public class FormTypeOption extends FormAbstract {
         mTxtDescription=(TextView)findViewById(R.id.txtDescription);
         mDeleteView=(ImageButton)findViewById(R.id.delete_view);
         mBtnAddOption=(Button)findViewById(R.id.btnAddOption);
-        mBtnDeleteOption=(ImageButton)findViewById(R.id.delete_option);
-
         mAddOptionContainer=(LinearLayout)findViewById(R.id.add_option_container);
-        mParentContainer =(LinearLayout)mAddOptionContainer.getParent().getParent();
-        mContainer=(LinearLayout)mAddOptionContainer.getParent();
         mBtnAddOption.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,7 +65,10 @@ public class FormTypeOption extends FormAbstract {
         ArrayList<String> list=new ArrayList<>();
         for(String str : getResources().getStringArray(R.array.formType)){list.add(str);}
         CustomSpinnerAdapter spinnerAdapter=new CustomSpinnerAdapter(mContext,list);
+
         spinner.setAdapter(spinnerAdapter);
+        spinner.setOnItemSelectedListener(new ItemSelectListener());
+        spinner.setSelection(mType);
 
         mDeleteView.setOnClickListener(new ClickListener());
 
@@ -82,15 +80,7 @@ public class FormTypeOption extends FormAbstract {
             mTxtDescription.setText("dropdown");
         }
     }
-    public class ClickListener implements OnClickListener{
-        @Override
-        public void onClick(View view) {
-            if(view==mDeleteView){
-                ViewGroup parentView=(ViewGroup)customView.getParent();
-                parentView.removeView(customView);
-            }
-        }
-    }
+
 
     @Override
     public JSONObject getJsonObject(){
@@ -123,6 +113,30 @@ public class FormTypeOption extends FormAbstract {
         }
         //mParentContainer.addView(mContainer);
     }
-
+    public class ClickListener implements OnClickListener{
+        @Override
+        public void onClick(View view) {
+            if(view==mDeleteView){
+                ViewGroup parentView=(ViewGroup)customView.getParent();
+                parentView.removeView(customView);
+            }
+        }
+    }
+    public class ItemSelectListener implements AdapterView.OnItemSelectedListener{
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+            if(selected){
+                selected=false;
+            }else{
+                FormAbstract layout=FormFactory.getInstance(mContext,position).createForm();
+                parentView=(ViewGroup)customView.getParent();
+                int indexOfChild=parentView.indexOfChild(customView);
+                parentView.addView(layout,indexOfChild);
+                parentView.removeView(customView);
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) { }
+    }
 
 }

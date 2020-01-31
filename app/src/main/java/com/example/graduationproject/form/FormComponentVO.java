@@ -1,5 +1,6 @@
 package com.example.graduationproject.form;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class FormComponentVO {
@@ -7,11 +8,21 @@ public class FormComponentVO {
     private String question;
     private String description;
     private boolean required_switch;
+    private String media_file;
     private ArrayList<String> addedOption;
     private ArrayList<String> addedRowOption;
     private ArrayList<String> addedColOption;
     private int begin;
     private int end;
+
+    public String getMedia_file() {
+        return media_file;
+    }
+
+    public void setMedia_file(String media_file) {
+        this.media_file = media_file;
+    }
+
     public int getType() {
         return type;
     }

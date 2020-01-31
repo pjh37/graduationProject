@@ -33,6 +33,8 @@ public class FormTypeGrid extends FormAbstract {
     private Button mBtnAddRow;
     private Button mBtnAddCol;
     private View customView;
+    private boolean selected;
+    private ViewGroup parentView;
     public FormTypeGrid(Context context, int type) {
         super(context, type);
         mContext=context;
@@ -54,7 +56,9 @@ public class FormTypeGrid extends FormAbstract {
         for(String str : getResources().getStringArray(R.array.formType)){list.add(str);}
         CustomSpinnerAdapter spinnerAdapter=new CustomSpinnerAdapter(mContext,list);
         spinner.setAdapter(spinnerAdapter);
+        spinner.setOnItemSelectedListener(new ItemSelectListener());
         spinner.setSelection(6);
+        selected=true;
     }
 
     @Override
@@ -94,14 +98,14 @@ public class FormTypeGrid extends FormAbstract {
             option.setOption(vo.getAddedRowOption().get(i));
             mAddedRowContainer.addView(option);
         }
-
+        
     }
 
     public class ClickListener implements OnClickListener{
         @Override
         public void onClick(View view) {
             if(view==mDeleteView){
-                ViewGroup parentView=(ViewGroup)customView.getParent();
+                parentView=(ViewGroup)customView.getParent();
                 parentView.removeView(customView);
             }else if(view==mBtnAddCol){
                 Option option=new Option(mContext,mType);
@@ -112,7 +116,23 @@ public class FormTypeGrid extends FormAbstract {
             }
         }
     }
+    public class ItemSelectListener implements AdapterView.OnItemSelectedListener{
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+            if(selected){
+                selected=false;
+            }else{
+                FormAbstract layout=FormFactory.getInstance(mContext,position).createForm();
+                parentView=(ViewGroup)customView.getParent();
+                int indexOfChild=parentView.indexOfChild(customView);
+                parentView.addView(layout,indexOfChild);
+                parentView.removeView(customView);
 
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) { }
+    }
 
 
 }

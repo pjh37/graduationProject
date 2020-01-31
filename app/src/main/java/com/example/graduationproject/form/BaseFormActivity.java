@@ -1,5 +1,6 @@
 package com.example.graduationproject.form;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -7,11 +8,17 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.graduationproject.NetworkManager;
 import com.example.graduationproject.R;
 
@@ -21,6 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class BaseFormActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE=10;
     private String userEmail;
     private EditText editTitle;
     private EditText editDescription;
@@ -29,11 +37,13 @@ public class BaseFormActivity extends AppCompatActivity {
     private FormSaveManager formSaveManager;
     private String[] txtTypes={"단답형","장문형","Multiple Choice",
             "Checkboxes","Dropdown","범위 질문",
-            "Multiple Choice Grid","날짜","시간","구획분할"};
+            "Multiple Choice Grid","날짜","시간","구획분할","이미지"};
     private int[] imgTypes={R.drawable.shortanswer,R.drawable.longanswer,R.drawable.multiplechoice,
             R.drawable.checkbox,R.drawable.dropdown, R.drawable.linear_scale,R.drawable.img_grid,
-            R.drawable.date,R.drawable.time,R.drawable.divide_section};
+            R.drawable.date,R.drawable.time,R.drawable.divide_section,R.drawable.image};
     private ArrayList<FormAbstract> layouts;
+    private ImageView mAttachedImage;
+    private FormTypeImage formTypeImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,13 +117,27 @@ public class BaseFormActivity extends AppCompatActivity {
         builder.setAdapter(dialog, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                FormAbstract layout=FormFactory.getInstance(getApplicationContext(),i).createForm();
+                FormAbstract layout=FormFactory.getInstance(BaseFormActivity.this,i).createForm();
                 layouts.add(layout);
+                if(layout instanceof FormTypeImage){
+                    formTypeImage=((FormTypeImage) layout);
+                }
                 parentContainer.addView(layout);
 
             }
         });
         builder.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_CODE){
+            if(resultCode==RESULT_OK){
+                Glide.with(BaseFormActivity.this).load(data.getData()).into(formTypeImage.getmAttachedImage());
+                formTypeImage.setDataUri(data.getData());
+            }
+        }
     }
 
     public JSONObject createJsonObject(){
@@ -156,11 +180,12 @@ public class BaseFormActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         datas=new ArrayList<>();
-        for(int i=0;i<10;i++){
+        for(int i=0;i<txtTypes.length;i++){
             DialogVO vo=new DialogVO();
             vo.setTxtType(txtTypes[i]);
             vo.setImgType(imgTypes[i]);
             datas.add(vo);
         }
     }
+
 }

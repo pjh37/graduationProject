@@ -8,12 +8,15 @@ import android.widget.Toast;
 import com.example.graduationproject.retrofitinterface.RetrofitService;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
@@ -68,10 +71,24 @@ public class NetworkManager {
     }
 
     public void submit(JSONObject jsonObject){
-        RequestBody requestbody=new MultipartBody.Builder().
-                setType(MultipartBody.FORM)
-                .addFormDataPart("json",jsonObject.toString())
-                .build();
+        Log.v("테스트","서버로 폼 전송 : "+jsonObject.toString());
+
+
+        MultipartBody.Builder builder=new MultipartBody.Builder();
+        builder.setType(MultipartBody.FORM);
+        builder.addFormDataPart("json",jsonObject.toString());
+        try{
+            JSONArray jsonArray=jsonObject.getJSONArray("formComponents");
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject jsonObject1=jsonArray.getJSONObject(i);
+                if(jsonObject1.getInt("type")==10){
+                    File file=(File)jsonObject1.get("real_file_data");
+                    builder.addFormDataPart(String.valueOf(jsonObject1.getInt("real_file_name")),file.getName(), RequestBody.create(file, MediaType.parse("image/jpeg")));
+                }
+            }
+        }catch (Exception e){e.printStackTrace();}
+
+        RequestBody requestbody=builder.build();
         okhttp3.Request request=new okhttp3.Request.Builder()
                 .url(url+"save")
                 .header("Content-Type", "multipart/form-data")
@@ -80,7 +97,7 @@ public class NetworkManager {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.v("테스트","폼 전송 실패");
+                Log.v("테스트","폼 전송 실패 : "+e.getMessage());
             }
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {

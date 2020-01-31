@@ -26,6 +26,8 @@ public class FormFactory {
             return new FormTypeGrid(mContext,mType);
         }else if(mType==FormType.ADDSECTION){
             return new FormTypeSection(mContext,mType);
+        }else if(mType==FormType.IMAGE){
+            return new FormTypeImage(mContext,mType);
         }
         return null;
     }

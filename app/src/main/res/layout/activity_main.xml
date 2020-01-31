@@ -17,7 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#4E5052"
+            android:background="#1C1D1D"
             android:textAlignment="center"
             app:layout_constraintTop_toTopOf="parent">
             <TextView
@@ -33,7 +33,7 @@
             android:id="@+id/response_wait_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="#C4BFBE"
+            android:background="#EEE9E9"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintBottom_toTopOf="@id/bottom_menu"/>
         <LinearLayout
@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:background="#4E5052"
+            android:background="#1C1D1D"
             android:onClick="onClick"
             app:layout_constraintBottom_toBottomOf="parent">
             <ImageView

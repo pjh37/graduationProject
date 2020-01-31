@@ -24,6 +24,7 @@ import java.util.Set;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import okhttp3.Call;
@@ -61,7 +62,7 @@ public class IndividualViewFragment extends Fragment {
         ViewGroup rootView=(ViewGroup)inflater.inflate(R.layout.activity_result_individual,container,false);
         individualViewRV=(RecyclerView)rootView.findViewById(R.id.recycleView);
         individualViewRV.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        individualViewRV.addItemDecoration(new DividerItemDecoration(getContext(),1));
         //Log.v("테스트","datas 크기 : "+datas.size());
         return rootView;
     }
