@@ -23,6 +23,7 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.example.graduationproject.MainActivity;
+import com.example.graduationproject.MainTempActivity;
 import com.example.graduationproject.R;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -155,7 +156,7 @@ public class LoginActivity extends AppCompatActivity {
                             // 로그인 성공
                             FirebaseUser user=firebaseAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
-                            Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                            Intent intent=new Intent(LoginActivity.this, MainTempActivity.class);
                             intent.putExtra("userEmail",user.getEmail());
                             startActivity(intent);
                         } else {

@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.example.graduationproject.form.BaseFormActivity;
 import com.example.graduationproject.form.FormActivity;
 import com.example.graduationproject.form.FormDTO;
+import com.example.graduationproject.mainActivityViwePager.MainVPAdapter;
 import com.example.graduationproject.offlineform.OfflineFormActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private String url;
     private ProgressBar progressBar;
     private boolean isFinish;
+    private MainVPAdapter mainVPAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
