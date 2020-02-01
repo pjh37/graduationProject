@@ -13,10 +13,12 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.graduationproject.form.FormActivity;
 import com.example.graduationproject.mainActivityViwePager.MainVPAdapter;
 import com.example.graduationproject.offlineform.OfflineFormActivity;
 import com.example.graduationproject.result.ResultViewPagerAdapter;
@@ -98,7 +100,10 @@ public class MainTempActivity extends AppCompatActivity {
                 return true;
             }
         });
-        mainVPAdapter=new MainVPAdapter(getSupportFragmentManager());
+        Bundle args=new Bundle();
+        args.putString("userEmail",userEmail);
+
+        mainVPAdapter=new MainVPAdapter(getSupportFragmentManager(),args);
         viewPager.setAdapter(mainVPAdapter);
         viewPager.setCurrentItem(0);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
@@ -118,5 +123,15 @@ public class MainTempActivity extends AppCompatActivity {
 
             }
         });
+    }
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.bottom_menu:
+                Intent intent=new Intent(this, FormActivity.class);
+                intent.putExtra("userEmail",userEmail);
+                overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+                startActivity(intent);
+                break;
+        }
     }
 }

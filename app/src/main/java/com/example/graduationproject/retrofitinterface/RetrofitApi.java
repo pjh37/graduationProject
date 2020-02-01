@@ -4,15 +4,15 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class APIClient {
+public class RetrofitApi {
     private static Retrofit retrofit=null;
-    public static Retrofit getClient(){
-        OkHttpClient client=new OkHttpClient.Builder().build();
+    public static RetrofitService getService(){
+
         retrofit=new Retrofit.Builder()
-                .baseUrl("http://pjh.cafe24app.com/")
+                .baseUrl("http://192.168.35.42:8001/")
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
                 .build();
-        return retrofit;
+        RetrofitService service=retrofit.create(RetrofitService.class);
+        return service;
     }
 }

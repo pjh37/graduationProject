@@ -19,7 +19,7 @@
         <RelativeLayout
             android:id="@+id/mySurveyContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="280dp"
             android:background="#ffffff"
             android:layout_marginBottom="10dp"
             app:layout_constraintTop_toTopOf="parent"
@@ -44,10 +44,11 @@
                 android:layout_below="@id/txtOfflineSurvey"
                 android:layout_marginTop="20dp"/>
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/responseWaitSurveyContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="330dp"
             android:background="#ffffff"
             android:layout_marginTop="3dp"
            android:layout_below="@id/mySurveyContainer"
@@ -75,5 +76,14 @@
 
         </RelativeLayout>
     </ScrollView>
-
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
