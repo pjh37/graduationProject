@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#C2BDC5"
+    android:background="#EEEEEE"
     tools:context=".form.FormActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="#4E5052"
+        android:background="#1C1D1D"
         app:layout_constraintTop_toTopOf="parent">
         <Button
             android:id="@+id/submit"
@@ -60,10 +60,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:onClick="onClick"
         android:src="@drawable/img_add_inner"
-        android:backgroundTint="#B30C0C0C"
+        android:backgroundTint="#1C1D1D"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:onClick="onClick"
+
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

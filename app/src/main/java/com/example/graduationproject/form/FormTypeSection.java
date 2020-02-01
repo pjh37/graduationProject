@@ -3,6 +3,7 @@ package com.example.graduationproject.form;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -11,6 +12,8 @@ import com.example.graduationproject.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class FormTypeSection extends FormAbstract{
     private Context mContext;
@@ -21,12 +24,14 @@ public class FormTypeSection extends FormAbstract{
     private ImageButton mDeleteView;
     private LinearLayout mParentContainer;
     private LinearLayout mContainer;
+    private ArrayList<FormAbstract> layouts;
+    private View customView;
     public FormTypeSection(Context context, int type){
         super(context,type);
         mContext=context;
         this.mType=type;
         mInflater=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mInflater.inflate(R.layout.form_type_section,this,true);
+        customView=mInflater.inflate(R.layout.form_type_section,this,true);
         init();
     }
     public void init(){
@@ -61,4 +66,5 @@ public class FormTypeSection extends FormAbstract{
         mEditDescription.setText(vo.getDescription());
         //mParentContainer.addView(mContainer);
     }
+
 }

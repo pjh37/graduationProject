@@ -75,9 +75,17 @@ public class IndividualResultActivity extends AppCompatActivity {
                         IndividualResultDTO individualResultDTO=new IndividualResultDTO();
                         ArrayList<String> answers=individualViewDTO.getResult().get(i);
                         String answer="";
-                        for(int j=0;j<answers.size();j++){
-                            answer+=answers.get(j);
+                        if(componentVOS.get(i).getType()==6){
+                            for(int j=0;j<answers.size();j++){
+                                answer+=(String.valueOf(j+1)+". "+componentVOS.get(i).getAddedColOption().get(Integer.valueOf(answers.get(j)))+" ");
+                            }
+
+                        }else{
+                            for(int j=0;j<answers.size();j++){
+                                answer+=answers.get(j);
+                            }
                         }
+
                         individualResultDTO.setQuestion(componentVOS.get(i).getQuestion());
                         individualResultDTO.setAnswer(answer);
                         Log.v("테스트",componentVOS.get(i).getQuestion()+"  "+answer);

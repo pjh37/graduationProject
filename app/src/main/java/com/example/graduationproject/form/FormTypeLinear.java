@@ -1,100 +1,87 @@
 package com.example.graduationproject.form;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import com.example.graduationproject.CustomSpinnerAdapter;
 import com.example.graduationproject.R;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class FormTypeOption extends FormAbstract {
+public class FormTypeLinear extends FormAbstract{
     private Context mContext;
     private int mType;
     private LayoutInflater mInflater;
-    private EditText mEditQuestion;
-    private ImageButton mDeleteView;
-    private TextView mTxtDescription;
-    private Button mBtnAddOption;
-    private Switch mSwitch;
-    private LinearLayout mAddOptionContainer;
     private View customView;
+    private ImageButton mDeleteView;
+    private EditText mEditQuestion;
+    private Switch mSwitch;
     private Spinner spinner;
+    private Spinner beginSpinner;
+    private Spinner endSpinner;
+    private EditText beginLabel;
+    private EditText endLabel;
+    private ArrayList<String> beginList;
+    private ArrayList<String> endList;
     private boolean selected;
     private ViewGroup parentView;
-    public FormTypeOption(Context context, int type){
+    public FormTypeLinear(Context context, int type){
         super(context,type);
         mContext=context;
         this.mType=type;
         mInflater=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        customView=mInflater.inflate(R.layout.form_type_option,this,true);
+        customView=mInflater.inflate(R.layout.form_type_linear,this,true);
+        spinner=(Spinner)findViewById(R.id.spinner);
         selected=true;
-        init();
-    }
-    public void init(){
         mEditQuestion=(EditText)findViewById(R.id.editQuestion);
         mSwitch=(Switch)findViewById(R.id.required_switch);
-        mTxtDescription=(TextView)findViewById(R.id.txtDescription);
+        beginSpinner=(Spinner)findViewById(R.id.begin_spinner);
+        endSpinner=(Spinner)findViewById(R.id.end_spinner);
+        beginLabel=(EditText)findViewById(R.id.begin_label);
+        endLabel=(EditText)findViewById(R.id.end_label);
         mDeleteView=(ImageButton)findViewById(R.id.delete_view);
-        mBtnAddOption=(Button)findViewById(R.id.btnAddOption);
-        mAddOptionContainer=(LinearLayout)findViewById(R.id.add_option_container);
-        mBtnAddOption.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Option option=new Option(mContext,mType);
-                mAddOptionContainer.addView(option);
-                Log.v("테스트","mAddOptionContainer child : "+mAddOptionContainer.getChildCount());
-            }
-        });
-        spinner=(Spinner)findViewById(R.id.spinner);
+        mDeleteView.setOnClickListener(new ClickListener());
+        beginList=new ArrayList<>();
+        beginList.add("0");
+        beginList.add("1");
+        endList=new ArrayList<>();
+        for(int i=3;i<=10;i++){
+            endList.add(String.valueOf(i));
+        }
         ArrayList<String> list=new ArrayList<>();
         for(String str : getResources().getStringArray(R.array.formType)){list.add(str);}
         CustomSpinnerAdapter spinnerAdapter=new CustomSpinnerAdapter(mContext,list);
-
         spinner.setAdapter(spinnerAdapter);
         spinner.setOnItemSelectedListener(new ItemSelectListener());
-        spinner.setSelection(mType);
-
-        mDeleteView.setOnClickListener(new ClickListener());
-
-        if(mType==FormType.MULTIPLECHOICE){
-            mTxtDescription.setText("multiple choice");
-        }else if(mType==FormType.CHECKBOXES){
-            mTxtDescription.setText("checkbox");
-        }else if(mType==FormType.DROPDOWN){
-            mTxtDescription.setText("dropdown");
-        }
+        spinner.setSelection(5);
+        CustomSpinnerAdapter beginSpinnerAdapter=new CustomSpinnerAdapter(mContext,beginList);
+        CustomSpinnerAdapter endSpinnerAdapter=new CustomSpinnerAdapter(mContext,endList);
+        beginSpinner.setAdapter(beginSpinnerAdapter);
+        endSpinner.setAdapter(endSpinnerAdapter);
     }
 
-
     @Override
-    public JSONObject getJsonObject(){
-        Log.v("테스트","mAddOptionContainer child : "+mAddOptionContainer.getChildCount());
+    public JSONObject getJsonObject() {
         JSONObject jsonObject=new JSONObject();
         try{
             jsonObject.put("type",mType);
             jsonObject.put("question",mEditQuestion.getText().toString());
             jsonObject.put("required_switch",mSwitch.isChecked());
-            JSONArray jsonArray=new JSONArray();
-            for(int i=0;i<mAddOptionContainer.getChildCount();i++){
-                jsonArray.put(i,((Option)mAddOptionContainer.getChildAt(i)).getOption());
-            }
-            jsonObject.put("addedOption",jsonArray);
+            jsonObject.put("begin",beginSpinner.getSelectedItemPosition());
+            jsonObject.put("end",endSpinner.getSelectedItemPosition());
+            jsonObject.put("begin_label",beginLabel.getText().toString());
+            jsonObject.put("end_label",endLabel.getText().toString());
+            Log.v("테스트",beginSpinner.getSelectedItemPosition()+"  "+endSpinner.getSelectedItemPosition());
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -106,12 +93,8 @@ public class FormTypeOption extends FormAbstract {
     public void formComponentSetting(FormComponentVO vo) {
         mEditQuestion.setText(vo.getQuestion());
         mSwitch.setChecked(vo.isRequired_switch());
-        for(int i=0;i<vo.getAddedOption().size();i++){
-            Option option=new Option(mContext,mType);
-            mAddOptionContainer.addView(option);
-            option.setOption(vo.getAddedOption().get(i));
-        }
-        //mParentContainer.addView(mContainer);
+        beginSpinner.setSelection(vo.getBegin());
+        endSpinner.setSelection(vo.getEnd());
     }
     public class ClickListener implements OnClickListener{
         @Override
@@ -138,5 +121,4 @@ public class FormTypeOption extends FormAbstract {
         @Override
         public void onNothingSelected(AdapterView<?> adapterView) { }
     }
-
 }

@@ -21,11 +21,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.graduationproject.form.BaseFormActivity;
+import com.example.graduationproject.form.FormActivity;
 import com.example.graduationproject.form.FormDTO;
+import com.example.graduationproject.mainActivityViwePager.MainVPAdapter;
 import com.example.graduationproject.offlineform.OfflineFormActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
@@ -49,7 +52,9 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<UploadedSurveyDTO> datas;
     public  String userEmail;
     private String url;
-
+    private ProgressBar progressBar;
+    private boolean isFinish;
+    private MainVPAdapter mainVPAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent=getIntent();
         userEmail=intent.getStringExtra("userEmail");
         drawerLayout=(DrawerLayout)findViewById(R.id.main_drawer);
+        progressBar=(ProgressBar)findViewById(R.id.progress);
+        isFinish=false;
         toggle=new ActionBarDrawerToggle(this,drawerLayout,R.string.drawer_open,R.string.drawer_close);
         datas=new ArrayList<>();
         uploadedSurveyRV=(RecyclerView)findViewById(R.id.response_wait_list);
@@ -65,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         uploadedSurveyRV.addItemDecoration(new ItemDecorate());
         uploadedSurveyRV.setLayoutManager(layoutManager);
 
-        getMySurveyList(userEmail);
+
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("Forms");
         setSupportActionBar(toolbar);
@@ -113,6 +120,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        datas.clear();
+        getMySurveyList(userEmail);
+    }
+
     public String getTime(String str){
         long now=Long.valueOf(str);
         Date date=new Date(now);
@@ -140,6 +155,17 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void getMySurveyList(String userEmail){
+        progressBar.setVisibility(View.VISIBLE);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(!isFinish){ }
+                if(isFinish){
+                    runOnUiThread(()->{ progressBar.setVisibility(View.GONE); });
+                }
+
+            }
+        }).start();
         OkHttpClient client=new OkHttpClient();
         RequestBody requestbody=new MultipartBody.Builder().
                 setType(MultipartBody.FORM)
@@ -160,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 //toastMessage("폼 전송 완료");
                 //Log.v("테스트","받은 폼 : "+response.body().string());
+                isFinish=true;
+
                 String res=response.body().string();
                 try{
                     JSONArray jsonArray=new JSONArray(res);
@@ -192,10 +220,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isFinish=false;
+    }
+
     public void onClick(View v){
         switch (v.getId()){
             case R.id.bottom_menu:
-                Intent intent=new Intent(this, BaseFormActivity.class);
+                Intent intent=new Intent(this, FormActivity.class);
                 intent.putExtra("userEmail",userEmail);
                 overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
                 startActivity(intent);

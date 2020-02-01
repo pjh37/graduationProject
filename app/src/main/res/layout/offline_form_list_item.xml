@@ -30,6 +30,15 @@
             android:layout_height="wrap_content"
             android:text="0.0.0"/>
     </LinearLayout>
+    <ImageButton
+        android:id="@+id/deleteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/delete"
+        />
     <TextView
         android:id="@+id/_id"
         android:layout_width="wrap_content"

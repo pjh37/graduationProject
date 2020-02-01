@@ -32,20 +32,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="text"/>
+        android:text="multiple choice grid"/>
     <LinearLayout
-        android:id="@+id/add_option_container"
+        android:id="@+id/added_row_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
     </LinearLayout>
     <Button
-        android:id="@+id/btnAddOption"
+        android:id="@+id/btnAddRow"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_margin="5dp"
-        android:text="추가"
+        android:text="Add Row"
+        android:textColor="#ffffff"
+        android:background="@drawable/corner_border"
+        android:backgroundTint="#2196F3"
+        />
+    <LinearLayout
+        android:id="@+id/added_col_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/btnAddCol"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_margin="5dp"
+        android:text="Add Column"
         android:textColor="#ffffff"
         android:background="@drawable/corner_border"
         android:backgroundTint="#2196F3"

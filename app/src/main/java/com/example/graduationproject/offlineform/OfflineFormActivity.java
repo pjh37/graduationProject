@@ -2,6 +2,7 @@ package com.example.graduationproject.offlineform;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,7 +46,8 @@ public class OfflineFormActivity extends AppCompatActivity {
         formSaveManager=FormSaveManager.getInstance(this);
         formItem=new ArrayList<>();
         offlineForm=(RecyclerView)findViewById(R.id.recycleView);
-        layoutManager=new LinearLayoutManager(getApplicationContext());
+        layoutManager=new LinearLayoutManager(this);
+        offlineForm.addItemDecoration(new DividerItemDecoration(this,1));
         new LoadTask().execute();
     }
 
@@ -66,7 +69,7 @@ public class OfflineFormActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             //offlineFormAdapter.notifyDataSetChanged();
-            offlineFormAdapter=new OfflineFormAdapter(getApplicationContext(),formItem);
+            offlineFormAdapter=new OfflineFormRVAdapter(OfflineFormActivity.this,formItem,userEmail);
             offlineForm.setAdapter(offlineFormAdapter);
             offlineForm.setLayoutManager(layoutManager);
             super.onPostExecute(aVoid);
@@ -100,54 +103,5 @@ public class OfflineFormActivity extends AppCompatActivity {
         }
     }
 
-    public class OfflineFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-        Context mContext;
-        private ArrayList<FormItem> formItem;
-        public OfflineFormAdapter(Context context, ArrayList<FormItem> formItem){
-            this.mContext=context;
-            this.formItem=formItem;
-        }
-        public class ViewHolder extends RecyclerView.ViewHolder{
-            TextView _id;
-            ImageView img_icon;
-            TextView txtTitle;
-            TextView txtTime;
-            public ViewHolder(View v){
-                super(v);
-                _id=(TextView)v.findViewById(R.id._id);
-                img_icon=(ImageView)v.findViewById(R.id.img_icon);
-                txtTitle=(TextView)v.findViewById(R.id.txtTitle);
-                txtTime=(TextView)v.findViewById(R.id.txtTime);
-                v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent=new Intent(getApplicationContext(), FormActivity.class);
-                        intent.putExtra("_id",Integer.valueOf(_id.getText().toString()));
-                        intent.putExtra("userEmail",userEmail);
-                        startActivity(intent);
-                    }
-                });
-            }
-        }
-        @NonNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View itemView= LayoutInflater.from(mContext).inflate(R.layout.offline_form_list_item,parent,false);
-            ViewHolder viewHolder=new ViewHolder(itemView);
-            return viewHolder;
-        }
-        @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            FormItem item=formItem.get(position);
-            ((ViewHolder)holder)._id.setText(String.valueOf(item.get_id()));
-            Glide.with(mContext).load(R.drawable.template).into(((ViewHolder)holder).img_icon);
-            ((ViewHolder)holder).txtTitle.setText(item.getTitle());
-            ((ViewHolder)holder).txtTime.setText(item.getTime());
-        }
-        @Override
-        public int getItemCount() {
-            return formItem.size();
-        }
 
-    }
 }

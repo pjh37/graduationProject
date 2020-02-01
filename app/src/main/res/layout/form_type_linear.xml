@@ -6,8 +6,7 @@
     android:layout_margin="15dp"
     android:elevation="10dp"
     android:background="@drawable/border"
-    android:backgroundTint="#FFFFFF"
-    >
+    android:backgroundTint="#FFFFFF">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -27,29 +26,51 @@
             android:layout_weight="3"
             android:layout_marginTop="7dp"/>
     </LinearLayout>
-    <TextView
-        android:id="@+id/txtDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="text"/>
     <LinearLayout
-        android:id="@+id/add_option_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Spinner
+            android:id="@+id/begin_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="to"/>
+        <Spinner
+            android:id="@+id/end_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/begin_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="라벨(선택사항)"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="~"/>
+        <EditText
+            android:id="@+id/end_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="라벨(선택사항)"/>
 
     </LinearLayout>
-    <Button
-        android:id="@+id/btnAddOption"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_margin="5dp"
-        android:text="추가"
-        android:textColor="#ffffff"
-        android:background="@drawable/corner_border"
-        android:backgroundTint="#2196F3"
-        />
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -60,6 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:clickable="true"
             android:background="#ffffff"
             android:src="@drawable/delete"/>
         <TextView

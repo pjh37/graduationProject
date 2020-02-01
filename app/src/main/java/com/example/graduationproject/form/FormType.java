@@ -11,4 +11,5 @@ public class FormType {
     static final int DATE=7;
     static final int TIME=8;
     static final int ADDSECTION=9;
+    static final int IMAGE=10;
 }

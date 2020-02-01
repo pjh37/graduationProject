@@ -23,6 +23,7 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.example.graduationproject.MainActivity;
+import com.example.graduationproject.MainTempActivity;
 import com.example.graduationproject.R;
 import com.example.graduationproject.ServiceSelectActivicy;
 import com.google.android.gms.auth.api.Auth;
@@ -51,7 +52,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Permission;
 
 public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = "로그인연동에러";
+    private static final String TAG = "로그인연동에러";//에러나면 하드코딩해서 이메일 넘길것!!!
     private static final int RC_SIGN_IN=1;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth firebaseAuth;

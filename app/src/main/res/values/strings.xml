@@ -3,12 +3,15 @@
     <string name="kakao_app_key">053549b2c82731621dbf53e58c360eac</string>
     <string name="drawer_open">open navigation drawer</string>
     <string name="drawer_close">close navigation drawer</string>
-    <string name="baseUrl">http://pjh.cafe24app.com/</string>
+
     <string name="title_activity_service_tab">ServiceTabActivity</string>
     <string name="tab_text_1">Wordle</string>
     <string name="tab_text_2">Blank</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="baseUrl">http://192.168.35.42:8001/</string>
+
     <!--http://pjh.cafe24app.com/  -->
+    <!--http://192.168.35.42:8001/ -->
 </resources>
