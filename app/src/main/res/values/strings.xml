@@ -4,5 +4,11 @@
     <string name="drawer_open">open navigation drawer</string>
     <string name="drawer_close">close navigation drawer</string>
     <string name="baseUrl">http://pjh.cafe24app.com/</string>
+    <string name="title_activity_service_tab">ServiceTabActivity</string>
+    <string name="tab_text_1">Wordle</string>
+    <string name="tab_text_2">Blank</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <!--http://pjh.cafe24app.com/  -->
 </resources>

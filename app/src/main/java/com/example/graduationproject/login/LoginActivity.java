@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.graduationproject.MainActivity;
 import com.example.graduationproject.R;
+import com.example.graduationproject.ServiceSelectActivicy;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -144,10 +145,7 @@ public class LoginActivity extends AppCompatActivity {
             String email=account.getEmail();
             Log.v(TAG,email);
         }catch (Exception e){
-<<<<<<< Updated upstream
-=======
             e.printStackTrace();
->>>>>>> Stashed changes
         }
     }
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
@@ -160,7 +158,8 @@ public class LoginActivity extends AppCompatActivity {
                             // 로그인 성공
                             FirebaseUser user=firebaseAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
-                            Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                            //Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                            Intent intent=new Intent(getApplicationContext(), ServiceSelectActivicy.class);
                             intent.putExtra("userEmail",user.getEmail());
                             startActivity(intent);
                         } else {

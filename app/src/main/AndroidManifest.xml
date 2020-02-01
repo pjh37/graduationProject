@@ -15,7 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".result.IndividualResultActivity"></activity>
+        <activity
+            android:name=".service.ServiceTabActivity"
+            android:label="@string/title_activity_service_tab"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".result.IndividualResultActivity" />
+        <activity android:name=".ServiceSelectActivicy" /> <!-- <activity android:name=".UploadedFormEditableActivity" /> -->
         <activity android:name=".result.ResultActivity" />
         <activity android:name=".form.BaseFormActivity" />
         <activity android:name=".form.FormActivity" />
