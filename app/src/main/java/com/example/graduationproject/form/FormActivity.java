@@ -273,6 +273,9 @@ public class FormActivity extends AppCompatActivity {
             case R.id.fab_pic: {
                 FormAbstract layout = FormFactory.getInstance(FormActivity.this, FormType.IMAGE)
                         .createForm();
+                if(layout instanceof FormTypeImage){
+                    ((FormTypeImage) layout).setFormComponent_id(container.getChildCount()-2);
+                }
                 container.addView(layout);
                 fab_close();
                 break;

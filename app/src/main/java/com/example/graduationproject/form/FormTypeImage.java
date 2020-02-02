@@ -120,7 +120,7 @@ public class FormTypeImage extends FormAbstract{
             String[] split=docId.split(":");
             String type=split[0];
             Uri contentUri=null;
-            if("old_image".equals(type)){
+            if("image".equals(type)){
                 contentUri=MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             }
             String selection=MediaStore.Images.Media._ID+"=?";
@@ -193,6 +193,7 @@ public class FormTypeImage extends FormAbstract{
     }
     public void setDataUri(Uri uri){
         this.uri=uri;
+        file=new File(getImagePath(uri));
     }
 
     public class ClickListener implements OnClickListener{
@@ -221,7 +222,7 @@ public class FormTypeImage extends FormAbstract{
                 activity.sendBroadcast(broadcast);
 
                 Intent intent=new Intent();
-                intent.setType("old_image/*");
+                intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 activity.startActivityForResult(intent,10);
 
