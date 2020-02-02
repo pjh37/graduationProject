@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="15dp"
     android:elevation="10dp"
     android:background="@drawable/border"
-    android:backgroundTint="#FFFFFF"
-    >
+    android:backgroundTint="#FFFFFF">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -27,12 +28,12 @@
             android:layout_weight="3"
             android:layout_marginTop="7dp"/>
     </LinearLayout>
-    <TextView
-        android:id="@+id/txtDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="text"/>
+    <!--    <TextView-->
+    <!--        android:id="@+id/txtDescription"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="5dp"-->
+    <!--        android:text="text"/>-->
     <LinearLayout
         android:id="@+id/add_option_container"
         android:layout_width="match_parent"
@@ -40,21 +41,68 @@
         android:orientation="vertical">
 
     </LinearLayout>
-    <Button
-        android:id="@+id/btnAddOption"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_margin="5dp"
-        android:text="추가"
-        android:textColor="#ffffff"
-        android:background="@drawable/corner_border"
-        android:backgroundTint="#2196F3"
-        />
+
+    <LinearLayout
+        android:id="@+id/etc_option_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_container"
+
+        >
+        <Button
+            android:id="@+id/btnAddOption"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_margin="5dp"
+            android:text="추가"
+            android:textColor="#ffffff"
+            android:background="@drawable/corner_border"
+            android:backgroundTint="#2196F3"
+            />
+
+        <TextView
+            android:id="@+id/etc_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/etc_switch"
+            android:text="기타옵션"/>
+        <Switch
+            android:id="@+id/etc_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+
+            />
+    </RelativeLayout>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right">
-
+        <ImageButton
+            android:id="@+id/copy_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:clickable="true"
+            android:background="#ffffff"
+            android:src="@drawable/copy"/>
         <ImageButton
             android:id="@+id/delete_view"
             android:layout_width="wrap_content"
@@ -62,15 +110,22 @@
             android:layout_marginTop="6dp"
             android:background="#ffffff"
             android:src="@drawable/delete"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#2196F3"
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+
             android:text="Required"/>
         <Switch
             android:id="@+id/required_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:layout_margin="5dp"/>
     </LinearLayout>
 

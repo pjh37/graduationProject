@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="15dp"
     android:elevation="10dp"
     android:background="@drawable/border"
-    android:backgroundTint="#FFFFFF">
-
+    android:backgroundTint="#FFFFFF"
+    >
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+        >
         <EditText
-            android:id="@+id/editQuestion"
+            android:id="@+id/editTitle"
             android:layout_width="0dp"
-            android:layout_weight="9"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:hint="Question"
+            android:layout_weight="8"
+            android:hint="Sub Title"
+            android:textColorHint="#111111"
+            android:textSize="20dp"
+            android:inputType="text"
             />
         <ImageButton
             android:id="@+id/copy_view"
@@ -37,24 +41,12 @@
             android:background="#ffffff"
             android:layout_gravity="center_vertical"
             android:src="@drawable/delete"/>
-
     </LinearLayout>
-    <Button
-        android:id="@+id/btnImageAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_margin="5dp"
-        android:background="@drawable/border"
-        android:text="이미지 첨부"
-        android:textColor="#ffffff"
-        android:backgroundTint="#246CE9"/>
-    <ImageView
-        android:id="@+id/attached_image"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/editDescription"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"/>
-
-
-
+        android:textColor="#111111"
+        android:hint="설명(선택사항)"
+        android:textColorHint="#111111"/>
 </LinearLayout>

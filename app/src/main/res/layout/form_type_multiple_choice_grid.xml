@@ -27,12 +27,14 @@
             android:layout_weight="3"
             android:layout_marginTop="7dp"/>
     </LinearLayout>
-    <TextView
-        android:id="@+id/txtDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="multiple choice grid"/>
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/txtDescription"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="5dp"-->
+    <!--        android:text="multiple choice grid"/>-->
+
     <LinearLayout
         android:id="@+id/added_row_container"
         android:layout_width="match_parent"
@@ -45,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_margin="5dp"
-        android:text="Add Row"
+        android:text="행 추가"
         android:textColor="#ffffff"
         android:background="@drawable/corner_border"
         android:backgroundTint="#2196F3"
@@ -62,7 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_margin="5dp"
-        android:text="Add Column"
+        android:text="열 추가"
         android:textColor="#ffffff"
         android:background="@drawable/corner_border"
         android:backgroundTint="#2196F3"
@@ -71,7 +73,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right">
-
+        <ImageButton
+            android:id="@+id/copy_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:clickable="true"
+            android:background="#ffffff"
+            android:src="@drawable/copy"/>
         <ImageButton
             android:id="@+id/delete_view"
             android:layout_width="wrap_content"
@@ -79,6 +88,11 @@
             android:layout_marginTop="6dp"
             android:background="#ffffff"
             android:src="@drawable/delete"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#2196F3"
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,3 +106,12 @@
     </LinearLayout>
 
 </LinearLayout>
+
+
+
+    <!--    android:text="Add Row"-->
+    <!--    android:text="Add Column"-->
+
+
+
+

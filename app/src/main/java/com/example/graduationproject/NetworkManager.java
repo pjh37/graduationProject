@@ -83,7 +83,7 @@ public class NetworkManager {
                 JSONObject jsonObject1=jsonArray.getJSONObject(i);
                 if(jsonObject1.getInt("type")==10){
                     File file=(File)jsonObject1.get("real_file_data");
-                    builder.addFormDataPart(String.valueOf(jsonObject1.getInt("real_file_name")),file.getName(), RequestBody.create(file, MediaType.parse("image/jpeg")));
+                    builder.addFormDataPart(String.valueOf(jsonObject1.getInt("real_file_name")),file.getName(), RequestBody.create(file, MediaType.parse("old_image/jpeg")));
                 }
             }
         }catch (Exception e){e.printStackTrace();}
