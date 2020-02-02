@@ -19,6 +19,7 @@ public class CustomAlertDialog extends ArrayAdapter<DialogVO> {
     private Context context;
     private ArrayList<DialogVO> datas;
     private int resid;
+
     public CustomAlertDialog(Context context, int resid, ArrayList<DialogVO> datas){
         super(context,resid);
         this.context=context;
@@ -33,26 +34,38 @@ public class CustomAlertDialog extends ArrayAdapter<DialogVO> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        if(convertView==null){
-            LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView=inflater.inflate(resid,null);
-            ViewHolder viewHolder=new ViewHolder(convertView);
-            convertView.setTag(viewHolder);
+        // 10 * 10 호출됨 .. 비정상
+
+        ViewHolder viewHolder;
+
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(resid, null);
+            viewHolder = new ViewHolder(convertView);
+            convertView.setTag(viewHolder); // gettag를 위해서
+
+            ImageView imageView = viewHolder.imageView;
+            TextView txtType = viewHolder.textView;
+            imageView.setImageResource(datas.get(position).getImgType());
+            txtType.setText(datas.get(position).getTxtType());
+
+            if (position == 2 || position == 5 || position == 8 || position == 10) {
+                convertView.setBackgroundResource(R.drawable.divider);
+            }
+
         }
-        ViewHolder viewHolder=(ViewHolder)convertView.getTag();
-        ImageView imageView=viewHolder.imageView;
-        TextView txtType=viewHolder.textView;
-        imageView.setImageResource(datas.get(position).getImgType());
-        txtType.setText(datas.get(position).getTxtType());
+
         return convertView;
     }
-        class ViewHolder {
-            public ImageView imageView;
-            public TextView textView;
-            public ViewHolder(View v){
-                imageView=(ImageView)v.findViewById(R.id.imgType);
-                textView=(TextView)v.findViewById(R.id.txtType);
-            }
+
+    class ViewHolder {
+        public ImageView imageView;
+        public TextView textView;
+
+        public ViewHolder(View v) {
+            imageView = (ImageView) v.findViewById(R.id.imgType);
+            textView = (TextView) v.findViewById(R.id.txtType);
         }
+    }
 
 }

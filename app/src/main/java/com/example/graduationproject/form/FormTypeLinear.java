@@ -21,53 +21,93 @@ import java.util.ArrayList;
 public class FormTypeLinear extends FormAbstract{
     private Context mContext;
     private int mType;
+
     private LayoutInflater mInflater;
     private View customView;
-    private ImageButton mDeleteView;
+
     private EditText mEditQuestion;
-    private Switch mSwitch;
     private Spinner spinner;
     private Spinner beginSpinner;
     private Spinner endSpinner;
+
     private EditText beginLabel;
     private EditText endLabel;
-    private ArrayList<String> beginList;
-    private ArrayList<String> endList;
-    private boolean selected;
-    private ViewGroup parentView;
+
+    private ImageButton mCopyView;
+    private ImageButton mDeleteView;
+    private Switch mSwitch;
+
     public FormTypeLinear(Context context, int type){
         super(context,type);
         mContext=context;
-        this.mType=type;
+        this.mType=type; // 위에 super 와 중복 아니야?
+
         mInflater=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         customView=mInflater.inflate(R.layout.form_type_linear,this,true);
-        spinner=(Spinner)findViewById(R.id.spinner);
-        selected=true;
-        mEditQuestion=(EditText)findViewById(R.id.editQuestion);
-        mSwitch=(Switch)findViewById(R.id.required_switch);
-        beginSpinner=(Spinner)findViewById(R.id.begin_spinner);
-        endSpinner=(Spinner)findViewById(R.id.end_spinner);
-        beginLabel=(EditText)findViewById(R.id.begin_label);
-        endLabel=(EditText)findViewById(R.id.end_label);
-        mDeleteView=(ImageButton)findViewById(R.id.delete_view);
-        mDeleteView.setOnClickListener(new ClickListener());
-        beginList=new ArrayList<>();
-        beginList.add("0");
-        beginList.add("1");
-        endList=new ArrayList<>();
-        for(int i=3;i<=10;i++){
-            endList.add(String.valueOf(i));
-        }
-        ArrayList<String> list=new ArrayList<>();
-        for(String str : getResources().getStringArray(R.array.formType)){list.add(str);}
-        CustomSpinnerAdapter spinnerAdapter=new CustomSpinnerAdapter(mContext,list);
+
+        mEditQuestion = (EditText) findViewById(R.id.editQuestion);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        beginSpinner = (Spinner) findViewById(R.id.begin_spinner);
+        endSpinner = (Spinner) findViewById(R.id.end_spinner);
+
+        beginLabel =  findViewById(R.id.begin_label);
+        endLabel = findViewById(R.id.end_label);
+
+        mCopyView = findViewById(R.id.copy_view);
+        mDeleteView = (ImageButton) findViewById(R.id.delete_view);
+        mSwitch = (Switch) findViewById(R.id.required_switch);
+
+        String[] spinnerItems =getResources().getStringArray(R.array.templateItemSpinner);
+        CustomSpinnerAdapter spinnerAdapter=new CustomSpinnerAdapter(mContext,spinnerItems);
         spinner.setAdapter(spinnerAdapter);
+        spinner.setSelection(mType);
         spinner.setOnItemSelectedListener(new ItemSelectListener());
-        spinner.setSelection(5);
-        CustomSpinnerAdapter beginSpinnerAdapter=new CustomSpinnerAdapter(mContext,beginList);
-        CustomSpinnerAdapter endSpinnerAdapter=new CustomSpinnerAdapter(mContext,endList);
-        beginSpinner.setAdapter(beginSpinnerAdapter);
-        endSpinner.setAdapter(endSpinnerAdapter);
+
+        mCopyView.setOnClickListener(new ClickListener());
+        mDeleteView.setOnClickListener(new ClickListener());
+
+    }
+    public FormTypeLinear(FormCopyFactory fcf) {
+        super(fcf.getmContext(), fcf.getmType());
+        mContext = fcf.getmContext();
+        this.mType = fcf.getmType();
+
+        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        customView = mInflater.inflate(R.layout.form_type_linear, this, true); // this 는 어디고 true 면 어디에 붙는거야?
+
+        mEditQuestion = (EditText) findViewById(R.id.editQuestion);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        beginSpinner = (Spinner) findViewById(R.id.begin_spinner);
+        endSpinner = (Spinner) findViewById(R.id.end_spinner);
+
+//        labelLeft=  findViewById(R.id.labelLeft);
+//        labelRight=  findViewById(R.id.labelRight);
+        beginLabel =  findViewById(R.id.begin_label);
+        endLabel = findViewById(R.id.end_label);
+
+        mCopyView = findViewById(R.id.copy_view);
+        mDeleteView = (ImageButton) findViewById(R.id.delete_view);
+        mSwitch = (Switch) findViewById(R.id.required_switch);
+
+        mEditQuestion.setText(fcf.getEditQuestion_text());
+        String[] spinnerItems = getResources().getStringArray(R.array.templateItemSpinner);
+        CustomSpinnerAdapter spinnerAdapter = new CustomSpinnerAdapter(mContext, spinnerItems);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setSelection(fcf.getmType()); // 처음에 한 번 호출
+        spinner.setOnItemSelectedListener(new ItemSelectListener());
+
+        beginSpinner.setSelection(fcf.getBegin_spinner_position(), false);
+        endSpinner.setSelection(fcf.getEnd_spinner_position(), false);
+
+//        labelLeft.setText(fcf.getLabelLeft_text());
+//        labelRight.setText(fcf.getLabelRight_text());
+        beginLabel.setText(fcf.getLabelLeft_text());
+        endLabel.setText(fcf.getLabelRight_text());
+
+        mCopyView.setOnClickListener(new ClickListener());
+        mDeleteView.setOnClickListener(new ClickListener());
+        mSwitch.setChecked(fcf.isRequired_switch_bool());
+
     }
 
     @Override
@@ -76,12 +116,22 @@ public class FormTypeLinear extends FormAbstract{
         try{
             jsonObject.put("type",mType);
             jsonObject.put("question",mEditQuestion.getText().toString());
-            jsonObject.put("required_switch",mSwitch.isChecked());
+
             jsonObject.put("begin",beginSpinner.getSelectedItemPosition());
             jsonObject.put("end",endSpinner.getSelectedItemPosition());
+
+//            if (labelLeft.getText().toString().trim().length() > 0) {
+//                jsonObject.put("begin_label",beginLabel.getText().toString());
+//            }
+//            if (labelRight.getText().toString().trim().length() > 0) {
+//                jsonObject.put("end_label",endLabel.getText().toString());
+//            }
+
             jsonObject.put("begin_label",beginLabel.getText().toString());
             jsonObject.put("end_label",endLabel.getText().toString());
-            Log.v("테스트",beginSpinner.getSelectedItemPosition()+"  "+endSpinner.getSelectedItemPosition());
+
+            jsonObject.put("required_switch",mSwitch.isChecked());
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -99,26 +149,52 @@ public class FormTypeLinear extends FormAbstract{
     public class ClickListener implements OnClickListener{
         @Override
         public void onClick(View view) {
-            if(view==mDeleteView){
-                ViewGroup parentView=(ViewGroup)customView.getParent();
+            if (view == mDeleteView) {
+                ViewGroup parentView = (ViewGroup) customView.getParent();
                 parentView.removeView(customView);
+            }else if(view == mCopyView){
+                //copyItem(customView); // customView 를 바꿔주면 되는군
+
+                ViewGroup parentView = (ViewGroup) customView.getParent();
+                int index = parentView.indexOfChild(customView); // 위치 인덱스
+
+                FormAbstract layout = new FormCopyFactory.Builder(mContext,mType)
+                        .Question(mEditQuestion.getText().toString())
+                        .LinearSpinnerPosition(beginSpinner.getSelectedItemPosition(),endSpinner.getSelectedItemPosition())
+                        .LabelText(beginLabel.getText().toString(),endLabel.getText().toString())
+                        .RequiredSwitchBool(mSwitch.isChecked())
+                        .build()
+                        .createCopyForm();
+
+                // FormAbstract 로 cast 되도 데이터만 전해진다면
+                parentView.addView(layout, index+1);
+
+//                remove_BaseFormActivity.AddcopiedLayouts(index, layout);
             }
         }
     }
-    public class ItemSelectListener implements AdapterView.OnItemSelectedListener{
+    public class ItemSelectListener implements AdapterView.OnItemSelectedListener {
+        private boolean spinner1steventprevent = false;
         @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-            if(selected){
-                selected=false;
-            }else{
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            if (position == 2 || position == 5 || position == 8) {
+                view.setBackgroundResource(0);
+            }
+            if (spinner1steventprevent) {
+                //changeItemTypeDynamically(position); // 스피너를 통한 항목 바꾸기
                 FormAbstract layout=FormFactory.getInstance(mContext,position).createForm();
-                parentView=(ViewGroup)customView.getParent();
+                ViewGroup parentView=(ViewGroup)customView.getParent();
                 int indexOfChild=parentView.indexOfChild(customView);
                 parentView.addView(layout,indexOfChild);
                 parentView.removeView(customView);
+            }else{
+                spinner1steventprevent = true;
             }
         }
         @Override
-        public void onNothingSelected(AdapterView<?> adapterView) { }
+        public void onNothingSelected(AdapterView<?> adapterView) {
+            // when happen? but must override
+            Log.d("mawang", "spinner nothing ");
+        }
     }
 }

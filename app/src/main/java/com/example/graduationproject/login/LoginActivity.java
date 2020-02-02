@@ -156,8 +156,10 @@ public class LoginActivity extends AppCompatActivity {
                             // 로그인 성공
                             FirebaseUser user=firebaseAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
-                            Intent intent=new Intent(LoginActivity.this, MainTempActivity.class);
+                            Intent intent=new Intent(LoginActivity.this, MainTempActivity.class); // new
                             intent.putExtra("userEmail",user.getEmail());
+                            intent.putExtra("userName",user.getDisplayName());
+                            intent.putExtra("userImage",user.getPhotoUrl());
                             startActivity(intent);
                         } else {
                             // 로그인 실패
