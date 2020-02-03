@@ -37,32 +37,70 @@ import androidx.core.app.ActivityCompat;
 public class FormTypeImage extends FormAbstract{
     private Context mContext;
     private int mType;
-    private int formComponent_id;
+
     private LayoutInflater mInflater;
-    private EditText mEditQuestion;
-    private ImageView mAttachedImage;
-    private ImageButton mDeleteView;
-    private Button btnImageAdd;
     private View customView;
-    private ViewGroup parentView;
+
+    private EditText mEditQuestion;
+    private Button btnImageAdd;
+    private ImageView mAttachedImage;
+    private ImageButton mCopyView;
+    private ImageButton mDeleteView;
+
     private File file;
     private Uri uri;
     private Activity activity;
+    private int formComponent_id;
+
     public FormTypeImage(Context context, int type) {
         super(context, type);
         mContext=context;
         this.mType=type;
+
         activity=(Activity)mContext;
+
         mInflater=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         customView=mInflater.inflate(R.layout.form_type_image,this,true);
+
         mEditQuestion=(EditText)findViewById(R.id.editQuestion);
-        mDeleteView=(ImageButton)findViewById(R.id.delete_view);
-        mAttachedImage=(ImageView)findViewById(R.id.attached_image);
         btnImageAdd=(Button)findViewById(R.id.btnImageAdd);
-        mDeleteView.setOnClickListener(new ClickListener());
+        mAttachedImage=(ImageView)findViewById(R.id.attached_image);
+        mCopyView=(ImageButton)findViewById(R.id.copy_view);
+        mDeleteView=(ImageButton)findViewById(R.id.delete_view);
+
         btnImageAdd.setOnClickListener(new ClickListener());
+        mCopyView.setOnClickListener(new ClickListener());
+        mDeleteView.setOnClickListener(new ClickListener());
 
     }
+    public FormTypeImage(FormCopyFactory fcf) {
+        super(fcf.getmContext(), fcf.getmType());
+        mContext = fcf.getmContext();
+        this.mType = fcf.getmType();
+
+        activity=(Activity)mContext;
+
+        mInflater=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        customView=mInflater.inflate(R.layout.form_type_image,this,true);
+
+        mEditQuestion=(EditText)findViewById(R.id.editQuestion);
+        btnImageAdd=(Button)findViewById(R.id.btnImageAdd);
+        mAttachedImage=(ImageView)findViewById(R.id.attached_image);
+        mCopyView=(ImageButton)findViewById(R.id.copy_view);
+        mDeleteView=(ImageButton)findViewById(R.id.delete_view);
+
+        mEditQuestion.setText(fcf.getEditQuestion_text());
+
+        btnImageAdd.setOnClickListener(new ClickListener());
+        mCopyView.setOnClickListener(new ClickListener());
+        mDeleteView.setOnClickListener(new ClickListener());
+
+        uri = fcf.getFileUri();
+        Glide.with(this).load(uri).into(mAttachedImage);
+        formComponent_id = fcf.getFormComponent_id();
+
+    }
+
     public String getImageToString(File file){
         Bitmap bitmap= BitmapFactory.decodeFile(file.getAbsolutePath());
         ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
@@ -149,26 +187,40 @@ public class FormTypeImage extends FormAbstract{
 
     public void setFormComponent_id(int id){
         formComponent_id=id;
-
     }
     public ImageView getmAttachedImage() {
         return mAttachedImage;
     }
     public void setDataUri(Uri uri){
         this.uri=uri;
+        file=new File(getImagePath(uri));
     }
 
     public class ClickListener implements OnClickListener{
         @Override
         public void onClick(View view) {
             if(view==mDeleteView){
-                parentView=(ViewGroup)customView.getParent();
+                ViewGroup parentView=(ViewGroup)customView.getParent();
                 parentView.removeView(customView);
+            }else if (view == mCopyView) {
+                ViewGroup parentView = (ViewGroup) customView.getParent();
+                int index = parentView.indexOfChild(customView); // 위치 인덱스
+
+                FormAbstract layout = new FormCopyFactory.Builder(mContext,mType)
+                        .Question(mEditQuestion.getText().toString())
+                        .FileUri(uri)
+                        .FormComponentId(index-1)  // setFormComponent_id 해주는거임. index는 원본을 가리키므로 -1 이다.
+                        .build()
+                        .createCopyForm();
+
+                parentView.addView(layout, index+1);
+
             }else if(view==btnImageAdd){
                 Intent broadcast=new Intent();
                 broadcast.setAction("com.example.graduationproject.FormTypeImage.IMAGE_ADD_BUTTON_CLICKED");
                 broadcast.putExtra("form_id",formComponent_id);
                 activity.sendBroadcast(broadcast);
+
                 Intent intent=new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);

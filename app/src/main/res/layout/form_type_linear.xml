@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -26,6 +27,7 @@
             android:layout_weight="3"
             android:layout_marginTop="7dp"/>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -34,56 +36,78 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:entries="@array/df_dgrid_SpinnerLeft"
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="to"/>
+            android:text="~"/>
         <Spinner
             android:id="@+id/end_spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:entries="@array/df_dgrid_SpinnerRight"
+            />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
         <EditText
             android:id="@+id/begin_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:hint="라벨(선택사항)"/>
+            android:layout_margin="5dp"
+            android:hint="라벨 (선택사항)"
+            android:singleLine="true"
+            />
+        <!--        android:id="@+id/labelLeft"-->
+        <!--        android:id="@+id/begin_label"-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="~"/>
         <EditText
             android:id="@+id/end_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:hint="라벨(선택사항)"/>
-
+            android:layout_margin="5dp"
+            android:hint="라벨 (선택사항)"
+            android:inputType="text"
+            />
+        <!--        android:id="@+id/labelRight"-->
+        <!--        android:id="@+id/end_label"-->
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right">
-
         <ImageButton
-            android:id="@+id/delete_view"
+            android:id="@+id/copy_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:clickable="true"
             android:background="#ffffff"
+            android:src="@drawable/copy"/>
+        <ImageButton
+            android:id="@+id/delete_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="5dp"
+            android:clickable="true"
+            android:background="#ffffff"
             android:src="@drawable/delete"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -97,3 +121,18 @@
     </LinearLayout>
 
 </LinearLayout>
+
+
+    <!--    android:text="to"-->
+
+
+
+
+
+
+
+
+
+
+
+

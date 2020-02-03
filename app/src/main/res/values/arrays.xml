@@ -1,17 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="formType">
+
+    <!--    <string-array name="formType">-->
+    <!--        <item>단답형</item>-->
+    <!--        <item>장문형</item>-->
+    <!--        <item>다중선택</item>-->
+    <!--        <item>체크박스</item>-->
+    <!--        <item>드롭다운</item>-->
+    <!--        <item>범위질문</item>-->
+    <!--        <item>그리드</item>-->
+    <!--        <item>날짜</item>-->
+    <!--        <item>시간</item>-->
+    <!--        <item>구획분할</item>-->
+    <!--        <item>이미지</item>-->
+    <!--        <item>동영상</item>-->
+    <!--    </string-array>-->
+
+    <string-array name="templateItemSpinner">
+
         <item>단답형</item>
         <item>장문형</item>
-        <item>다중선택</item>
+
+        <item>객관식 질문</item>
         <item>체크박스</item>
         <item>드롭다운</item>
-        <item>범위질문</item>
-        <item>그리드</item>
+
+
+        <item>직선 단계</item>
+        <item>객관식 그리드</item>
+        <item>체크박스 그리드</item>
+
         <item>날짜</item>
         <item>시간</item>
-        <item>구획분할</item>
-        <item>이미지</item>
-        <item>동영상</item>
+
+
     </string-array>
+
+    <string-array name="df_dgrid_SpinnerLeft">
+
+        <item>0</item>
+        <item>1</item>
+
+    </string-array>
+    <string-array name="df_dgrid_SpinnerRight">
+
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+
+    </string-array>
+
+    <string-array name="sortOption">
+        <item>전체</item>
+        <item>최신순</item>
+        <item>응답자순</item>
+    </string-array>
+
+
+
+
 </resources>

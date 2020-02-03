@@ -8,15 +8,11 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.graduationproject.NetworkManager;
@@ -40,7 +36,7 @@ public class BaseFormActivity extends AppCompatActivity {
             "Multiple Choice Grid","날짜","시간","구획분할","이미지"};
     private int[] imgTypes={R.drawable.shortanswer,R.drawable.longanswer,R.drawable.multiplechoice,
             R.drawable.checkbox,R.drawable.dropdown, R.drawable.linear_scale,R.drawable.img_grid,
-            R.drawable.date,R.drawable.time,R.drawable.divide_section,R.drawable.image};
+            R.drawable.date,R.drawable.time,R.drawable.divide_section,R.drawable.old_image};
     private ArrayList<FormAbstract> layouts;
     private ImageView mAttachedImage;
     private FormTypeImage formTypeImage;

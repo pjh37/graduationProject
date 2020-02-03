@@ -1,6 +1,7 @@
 package com.example.graduationproject.form;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,43 +24,112 @@ import java.util.ArrayList;
 public class FormTypeGrid extends FormAbstract {
     private Context mContext;
     private int mType;
+
     private LayoutInflater mInflater;
-    private ImageButton mDeleteView;
+    private View customView;
+
     private EditText mEditQuestion;
-    private Switch mSwitch;
     private Spinner spinner;
     private LinearLayout mAddedRowContainer;
-    private LinearLayout mAddedColContainer;
     private Button mBtnAddRow;
+    private LinearLayout mAddedColContainer;
     private Button mBtnAddCol;
-    private View customView;
-    private boolean selected;
-    private ViewGroup parentView;
+    private ImageButton mCopyView;
+    private ImageButton mDeleteView;
+    private Switch mSwitch;
+
+    private ArrayList<Option> rowTexts; // option text 저장할 것
+    private ArrayList<Option> colTexts; // option text 저장할 것
+
     public FormTypeGrid(Context context, int type) {
         super(context, type);
         mContext=context;
         this.mType=type;
+
         mInflater=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         customView=mInflater.inflate(R.layout.form_type_multiple_choice_grid,this,true);
-        mAddedRowContainer=(LinearLayout)findViewById(R.id.added_row_container);
-        mAddedColContainer=(LinearLayout)findViewById(R.id.added_col_container);
-        mBtnAddCol=(Button)findViewById(R.id.btnAddCol);
-        mBtnAddRow=(Button)findViewById(R.id.btnAddRow);
+
+        mEditQuestion = (EditText) findViewById(R.id.editQuestion);
+        spinner = (Spinner) findViewById(R.id.spinner);
+
+        mAddedRowContainer = (LinearLayout) findViewById(R.id.added_row_container);
+        mBtnAddRow = (Button) findViewById(R.id.btnAddRow);
+        mAddedColContainer = (LinearLayout) findViewById(R.id.added_col_container);
+        mBtnAddCol = (Button) findViewById(R.id.btnAddCol);
+        mCopyView = (ImageButton) findViewById(R.id.copy_view);
+        mDeleteView = (ImageButton) findViewById(R.id.delete_view);
+        mSwitch = (Switch) findViewById(R.id.required_switch);
+
+        String[] spinnerItems = getResources().getStringArray(R.array.templateItemSpinner);
+        CustomSpinnerAdapter spinnerAdapter = new CustomSpinnerAdapter(mContext, spinnerItems);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setSelection(mType); // 스피너 선택된 것 표시
+        spinner.setOnItemSelectedListener(new ItemSelectListener());
+
         mBtnAddCol.setOnClickListener(new ClickListener());
         mBtnAddRow.setOnClickListener(new ClickListener());
-        spinner=(Spinner)findViewById(R.id.spinner);
-        mDeleteView=(ImageButton)findViewById(R.id.delete_view);
+        mCopyView.setOnClickListener(new ClickListener());
         mDeleteView.setOnClickListener(new ClickListener());
-        mEditQuestion=(EditText)findViewById(R.id.editQuestion);
-        mSwitch=(Switch)findViewById(R.id.required_switch);
-        ArrayList<String> list=new ArrayList<>();
-        for(String str : getResources().getStringArray(R.array.formType)){list.add(str);}
-        CustomSpinnerAdapter spinnerAdapter=new CustomSpinnerAdapter(mContext,list);
-        spinner.setAdapter(spinnerAdapter);
-        spinner.setOnItemSelectedListener(new ItemSelectListener());
-        spinner.setSelection(6);
-        selected=true;
+
+        rowTexts = new ArrayList<>();
+        colTexts = new ArrayList<>();
+
     }
+    public FormTypeGrid(FormCopyFactory fcf) {
+        super(fcf.getmContext(), fcf.getmType());
+        mContext = fcf.getmContext();
+        this.mType = fcf.getmType();
+
+        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        customView = mInflater.inflate(R.layout.form_type_multiple_choice_grid, this, true);
+        mEditQuestion = (EditText) findViewById(R.id.editQuestion);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        mAddedRowContainer = (LinearLayout) findViewById(R.id.added_row_container);
+        mBtnAddRow = (Button) findViewById(R.id.btnAddRow);
+        mAddedColContainer = (LinearLayout) findViewById(R.id.added_col_container);
+        mBtnAddCol = (Button) findViewById(R.id.btnAddCol);
+        mCopyView = (ImageButton) findViewById(R.id.copy_view);
+        mDeleteView = (ImageButton) findViewById(R.id.delete_view);
+        mSwitch = (Switch) findViewById(R.id.required_switch);
+
+        mEditQuestion.setText(fcf.getEditQuestion_text());
+
+        String[] spinnerItems = getResources().getStringArray(R.array.templateItemSpinner);
+        CustomSpinnerAdapter spinnerAdapter = new CustomSpinnerAdapter(mContext, spinnerItems);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setSelection(fcf.getmType()); // 처음에 한 번 호출
+        spinner.setOnItemSelectedListener(new ItemSelectListener());
+
+        mBtnAddCol.setOnClickListener(new ClickListener());
+        mBtnAddRow.setOnClickListener(new ClickListener());
+        mCopyView.setOnClickListener(new ClickListener());
+        mDeleteView.setOnClickListener(new ClickListener());
+
+        mSwitch.setChecked(fcf.isRequired_switch_bool());
+
+        rowTexts = new ArrayList<>();
+        colTexts = new ArrayList<>();
+        rowTexts.addAll(fcf.getOptRowTexts());  // 깊은 복사
+        colTexts.addAll(fcf.getOptColTexts());  // 깊은 복사
+        int i = 0;
+        for(Option o : rowTexts)
+        {
+            Option option = new Option(mContext, mType,mAddedRowContainer.getChildCount() + 1,o.getOption(),rowTexts); // need
+            mAddedRowContainer.addView(option);
+            rowTexts.set(i,option); // 안하면 수정된 텍스트들이 반영이 안됨
+            i++;
+        }
+        i = 0;
+        for(Option o : colTexts)
+        {
+            Option option = new Option(mContext, mType,o.getOption(),colTexts); // need
+            mAddedColContainer.addView(option);
+            colTexts.set(i,option); // 안하면 수정된 텍스트들이 반영이 안됨
+            i++;
+        }
+
+    }
+
 
     @Override
     public JSONObject getJsonObject() {
@@ -85,53 +155,81 @@ public class FormTypeGrid extends FormAbstract {
     }
 
     @Override
-    public void formComponentSetting(FormComponentVO vo) {
+    public void formComponentSetting(FormComponentVO vo) { // 무슨 용도지?
         mEditQuestion.setText(vo.getQuestion());
         mSwitch.setChecked(vo.isRequired_switch());
-        for(int i=0;i<vo.getAddedColOption().size();i++){
-            Option option=new Option(mContext,mType);
-            option.setOption(vo.getAddedColOption().get(i));
-            mAddedColContainer.addView(option);
-        }
+
         for(int i=0;i<vo.getAddedRowOption().size();i++){
-            Option option=new Option(mContext,mType);
+            Option option = new Option(mContext, mType, mAddedRowContainer.getChildCount() + 1,rowTexts);
             option.setOption(vo.getAddedRowOption().get(i));
             mAddedRowContainer.addView(option);
         }
-        
+
+        for(int i=0;i<vo.getAddedColOption().size();i++){
+            Option option=new Option(mContext,mType,colTexts);
+            option.setOption(vo.getAddedColOption().get(i));
+            mAddedColContainer.addView(option);
+        }
     }
 
-    public class ClickListener implements OnClickListener{
+    public class ClickListener implements OnClickListener {
         @Override
         public void onClick(View view) {
-            if(view==mDeleteView){
-                parentView=(ViewGroup)customView.getParent();
+            if (view == mDeleteView) {
+                ViewGroup parentView = (ViewGroup) customView.getParent();
                 parentView.removeView(customView);
-            }else if(view==mBtnAddCol){
-                Option option=new Option(mContext,mType);
-                mAddedColContainer.addView(option);
-            }else if(view==mBtnAddRow){
-                Option option=new Option(mContext,mType);
+            }
+            else if(view == mCopyView){
+                ViewGroup parentView = (ViewGroup) customView.getParent();
+                int index = parentView.indexOfChild(customView); // 위치 인덱스
+
+                FormAbstract layout = new FormCopyFactory.Builder(mContext,mType)
+                        .Question(mEditQuestion.getText().toString())
+                        .OptRowTexts(rowTexts) //  option class
+                        .OptColTexts(colTexts) //  option class
+                        .RequiredSwitchBool(mSwitch.isChecked())
+                        .build()
+                        .createCopyForm();
+
+                parentView.addView(layout, index+1);
+//                remove_BaseFormActivity.AddcopiedLayouts(index, layout);
+            }
+            else if (view == mBtnAddRow)
+            {
+                Option option = new Option(mContext, mType, mAddedRowContainer.getChildCount() + 1,rowTexts);
                 mAddedRowContainer.addView(option);
+                rowTexts.add(option);
+
+            } else if (view == mBtnAddCol) {
+                Option option = new Option(mContext, mType,colTexts);
+                mAddedColContainer.addView(option);
+                colTexts.add(option);
             }
         }
     }
-    public class ItemSelectListener implements AdapterView.OnItemSelectedListener{
+    public class ItemSelectListener implements AdapterView.OnItemSelectedListener {
+        private boolean spinner1steventprevent = false;
         @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-            if(selected){
-                selected=false;
-            }else{
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            if (position == 2 || position == 5 || position == 8) {
+                view.setBackgroundResource(0);
+            }
+            if (spinner1steventprevent) {
+                //changeItemTypeDynamically(position); // 스피너를 통한 항목 바꾸기
                 FormAbstract layout=FormFactory.getInstance(mContext,position).createForm();
-                parentView=(ViewGroup)customView.getParent();
+                ViewGroup parentView=(ViewGroup)customView.getParent();
                 int indexOfChild=parentView.indexOfChild(customView);
                 parentView.addView(layout,indexOfChild);
                 parentView.removeView(customView);
-
+            }else{
+                spinner1steventprevent = true;
             }
         }
         @Override
-        public void onNothingSelected(AdapterView<?> adapterView) { }
+        public void onNothingSelected(AdapterView<?> adapterView) {
+            // when happen? but must override
+            Log.d("mawang", "spinner nothing ");
+        }
     }
 
 

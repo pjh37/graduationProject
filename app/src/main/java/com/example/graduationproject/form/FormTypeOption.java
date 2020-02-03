@@ -26,61 +26,157 @@ import java.util.ArrayList;
 public class FormTypeOption extends FormAbstract {
     private Context mContext;
     private int mType;
+
     private LayoutInflater mInflater;
-    private EditText mEditQuestion;
-    private ImageButton mDeleteView;
-    private TextView mTxtDescription;
-    private Button mBtnAddOption;
-    private Switch mSwitch;
-    private LinearLayout mAddOptionContainer;
     private View customView;
+
+    private EditText mEditQuestion;
     private Spinner spinner;
-    private boolean selected;
-    private ViewGroup parentView;
-    public FormTypeOption(Context context, int type){
-        super(context,type);
-        mContext=context;
-        this.mType=type;
-        mInflater=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        customView=mInflater.inflate(R.layout.form_type_option,this,true);
-        selected=true;
-        init();
-    }
-    public void init(){
-        mEditQuestion=(EditText)findViewById(R.id.editQuestion);
-        mSwitch=(Switch)findViewById(R.id.required_switch);
-        mTxtDescription=(TextView)findViewById(R.id.txtDescription);
-        mDeleteView=(ImageButton)findViewById(R.id.delete_view);
-        mBtnAddOption=(Button)findViewById(R.id.btnAddOption);
-        mAddOptionContainer=(LinearLayout)findViewById(R.id.add_option_container);
-        mBtnAddOption.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Option option=new Option(mContext,mType);
-                mAddOptionContainer.addView(option);
-                Log.v("테스트","mAddOptionContainer child : "+mAddOptionContainer.getChildCount());
-            }
-        });
-        spinner=(Spinner)findViewById(R.id.spinner);
-        ArrayList<String> list=new ArrayList<>();
-        for(String str : getResources().getStringArray(R.array.formType)){list.add(str);}
-        CustomSpinnerAdapter spinnerAdapter=new CustomSpinnerAdapter(mContext,list);
+    private Button mBtnAddOption;
+    private Switch mSwitchEtc;
+    private ImageButton mCopyView;
+    private ImageButton mDeleteView;
+    private Switch mSwitch;  // 필수응답 유무
 
+    private LinearLayout mAddOptionContainer;
+    private LinearLayout mEtcOptionContainer;
+
+    private ArrayList<Option> rowTexts; // option text 저장할 것
+
+    public FormTypeOption(Context context, int type) {
+        super(context, type);
+        mContext = context;
+        this.mType = type;
+
+        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        customView = mInflater.inflate(R.layout.form_type_option, this, true);
+
+        mEditQuestion = (EditText) findViewById(R.id.editQuestion);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        mAddOptionContainer = (LinearLayout) findViewById(R.id.add_option_container);
+        mEtcOptionContainer = (LinearLayout) findViewById(R.id.etc_option_container);
+        mBtnAddOption = findViewById(R.id.btnAddOption);
+        mSwitchEtc = findViewById(R.id.etc_switch);
+        mCopyView = (ImageButton) findViewById(R.id.copy_view);
+        mDeleteView = (ImageButton) findViewById(R.id.delete_view);
+        mSwitch = (Switch) findViewById(R.id.required_switch);
+
+        String[] spinnerItems = getResources().getStringArray(R.array.templateItemSpinner);
+        CustomSpinnerAdapter spinnerAdapter = new CustomSpinnerAdapter(mContext, spinnerItems);
         spinner.setAdapter(spinnerAdapter);
-        spinner.setOnItemSelectedListener(new ItemSelectListener());
         spinner.setSelection(mType);
+        spinner.setOnItemSelectedListener(new ItemSelectListener());
 
+        mBtnAddOption.setOnClickListener(new ClickListener());
+
+        if (mType == FormType.DROPDOWN) { // 드롭다운은 필요없음
+            TextView mTextEtc = findViewById(R.id.etc_text);
+            mTextEtc.setVisibility(GONE);
+            mSwitchEtc.setVisibility(GONE);
+        } else {
+            mSwitchEtc.setOnClickListener(new View.OnClickListener() {
+                boolean IsFisrt = true; // 한개만 생성
+                public void onClick(View view) {
+                    boolean on = mSwitchEtc.isChecked();
+                    if (on) {
+//                    Log.d("mawang", "Switch on = " + on);
+                        mEtcOptionContainer.setVisibility(VISIBLE);
+                        if (IsFisrt) {
+                            Option option = new Option(mContext, mType, true);
+                            mEtcOptionContainer.addView(option);
+                            IsFisrt = false;
+                        }
+                    } else {
+//                    Log.d("mawang", "Switch off = " + on);
+//                    mEtcOptionContainer.removeViewAt(0);
+                        mEtcOptionContainer.setVisibility(GONE);
+                    }
+                }
+            });
+        }
+
+        mCopyView.setOnClickListener(new ClickListener());
         mDeleteView.setOnClickListener(new ClickListener());
 
-        if(mType==FormType.MULTIPLECHOICE){
-            mTxtDescription.setText("multiple choice");
-        }else if(mType==FormType.CHECKBOXES){
-            mTxtDescription.setText("checkbox");
-        }else if(mType==FormType.DROPDOWN){
-            mTxtDescription.setText("dropdown");
-        }
-    }
+        rowTexts = new ArrayList<>();
 
+    }
+    public FormTypeOption(FormCopyFactory fcf) {
+        super(fcf.getmContext(), fcf.getmType());
+        mContext = fcf.getmContext();
+        this.mType = fcf.getmType();
+
+        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        customView = mInflater.inflate(R.layout.form_type_option, this, true);
+
+        mEditQuestion = (EditText) findViewById(R.id.editQuestion);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        mAddOptionContainer = (LinearLayout) findViewById(R.id.add_option_container);
+        mEtcOptionContainer = (LinearLayout) findViewById(R.id.etc_option_container);
+        mBtnAddOption = findViewById(R.id.btnAddOption);
+        mSwitchEtc = findViewById(R.id.etc_switch);
+        mCopyView = (ImageButton) findViewById(R.id.copy_view);
+        mDeleteView = (ImageButton) findViewById(R.id.delete_view);
+        mSwitch = (Switch) findViewById(R.id.required_switch);
+
+        mEditQuestion.setText(fcf.getEditQuestion_text());
+        String[] spinnerItems = getResources().getStringArray(R.array.templateItemSpinner);
+        CustomSpinnerAdapter spinnerAdapter = new CustomSpinnerAdapter(mContext, spinnerItems);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setSelection(fcf.getmType()); // 처음에 한 번 호출
+        spinner.setOnItemSelectedListener(new ItemSelectListener());
+
+        mBtnAddOption.setOnClickListener(new ClickListener());
+
+        rowTexts = new ArrayList<>();
+        rowTexts.addAll(fcf.getOptRowTexts());  // 깊은 복사
+        int i = 0;
+        for(Option o : rowTexts)
+        {
+            Option option = new Option(mContext, mType,o.getOption(),rowTexts); // need
+            mAddOptionContainer.addView(option);
+            rowTexts.set(i,option); // 안하면 수정된 텍스트들이 반영이 안됨
+            i++;
+        }
+
+        if (mType == FormType.DROPDOWN) { // 드롭다운은 필요없음
+            TextView mTextEtc = findViewById(R.id.etc_text);
+            mTextEtc.setVisibility(GONE);
+            mSwitchEtc.setVisibility(GONE);
+        } else { // 하지만 객관식,체크박스 는 필요함
+            mSwitchEtc.setChecked(fcf.isEtc_switch_bool());
+
+            if(mSwitchEtc.isChecked()){ // 기타옵션 추가되어있다면 바로 부착
+                mEtcOptionContainer.setVisibility(VISIBLE);
+                Option option = new Option(mContext, mType, true);
+                mEtcOptionContainer.addView(option);
+            }
+
+            mSwitchEtc.setOnClickListener(new View.OnClickListener() {
+                boolean IsFisrt = !mSwitchEtc.isChecked(); // 기타옵션이 추가되어 복사된건지 확인
+                public void onClick(View view) {
+                    boolean on = mSwitchEtc.isChecked();
+                    if (on) {
+                        mEtcOptionContainer.setVisibility(VISIBLE);
+                        if (IsFisrt) { // 제대로 안되면 etc 두 개 됨
+                            Option option = new Option(mContext, mType, true);
+                            mEtcOptionContainer.addView(option);
+                            IsFisrt = false;
+                        }
+                    } else {
+//                    mEtcOptionContainer.removeViewAt(0);
+                        mEtcOptionContainer.setVisibility(GONE);
+                    }
+                }
+            });
+            mSwitchEtc.setOnClickListener(new ClickListener());
+        }
+
+        mCopyView.setOnClickListener(new ClickListener());
+        mDeleteView.setOnClickListener(new ClickListener());
+        mSwitch.setChecked(fcf.isRequired_switch_bool());
+
+    }
 
     @Override
     public JSONObject getJsonObject(){
@@ -107,36 +203,66 @@ public class FormTypeOption extends FormAbstract {
         mEditQuestion.setText(vo.getQuestion());
         mSwitch.setChecked(vo.isRequired_switch());
         for(int i=0;i<vo.getAddedOption().size();i++){
-            Option option=new Option(mContext,mType);
+            Option option=new Option(mContext,mType,rowTexts);
             mAddOptionContainer.addView(option);
             option.setOption(vo.getAddedOption().get(i));
         }
-        //mParentContainer.addView(mContainer);
     }
+
     public class ClickListener implements OnClickListener{
         @Override
         public void onClick(View view) {
-            if(view==mDeleteView){
-                ViewGroup parentView=(ViewGroup)customView.getParent();
+            if (view == mDeleteView) {
+                ViewGroup parentView = (ViewGroup) customView.getParent();
                 parentView.removeView(customView);
+            }else if(view == mCopyView){
+                ViewGroup parentView = (ViewGroup) customView.getParent();
+                int index = parentView.indexOfChild(customView); // 위치 인덱스
+
+                FormAbstract layout = new FormCopyFactory.Builder(mContext,mType)
+                        .Question(mEditQuestion.getText().toString())
+                        .OptRowTexts(rowTexts) //  option class
+                        .EtcSwitchBool(mSwitchEtc.isChecked())
+                        .RequiredSwitchBool(mSwitch.isChecked())
+                        .build()
+                        .createCopyForm();
+
+                // FormAbstract 로 cast 되도 데이터만 전해진다면
+                parentView.addView(layout, index+1);
+//                remove_BaseFormActivity.AddcopiedLayouts(index, layout);
+            } else if (view == mBtnAddOption)
+            {
+                Option option = new Option(mContext, mType,rowTexts);
+                mAddOptionContainer.addView(option);
+                rowTexts.add(option);
+
             }
+
         }
     }
-    public class ItemSelectListener implements AdapterView.OnItemSelectedListener{
+    public class ItemSelectListener implements AdapterView.OnItemSelectedListener {
+        private boolean spinner1steventprevent = false;
         @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-            if(selected){
-                selected=false;
-            }else{
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            if (position == 2 || position == 5 || position == 8) {
+                view.setBackgroundResource(0);
+            }
+            if (spinner1steventprevent) {
+                //changeItemTypeDynamically(position); // 스피너를 통한 항목 바꾸기
                 FormAbstract layout=FormFactory.getInstance(mContext,position).createForm();
-                parentView=(ViewGroup)customView.getParent();
+                ViewGroup parentView=(ViewGroup)customView.getParent();
                 int indexOfChild=parentView.indexOfChild(customView);
                 parentView.addView(layout,indexOfChild);
                 parentView.removeView(customView);
+            }else{
+                spinner1steventprevent = true;
             }
         }
         @Override
-        public void onNothingSelected(AdapterView<?> adapterView) { }
+        public void onNothingSelected(AdapterView<?> adapterView) {
+            // when happen? but must override
+            Log.d("mawang", "spinner nothing ");
+        }
     }
 
 }

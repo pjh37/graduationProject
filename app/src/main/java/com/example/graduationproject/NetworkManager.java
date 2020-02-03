@@ -81,7 +81,7 @@ public class NetworkManager {
             JSONArray jsonArray=jsonObject.getJSONArray("formComponents");
             for(int i=0;i<jsonArray.length();i++){
                 JSONObject jsonObject1=jsonArray.getJSONObject(i);
-                if(jsonObject1.getInt("type")==10){
+                if(jsonObject1.getInt("type")==12){
                     File file=(File)jsonObject1.get("real_file_data");
                     builder.addFormDataPart(String.valueOf(jsonObject1.getInt("real_file_name")),file.getName(), RequestBody.create(file, MediaType.parse("image/jpeg")));
                 }
