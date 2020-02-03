@@ -14,8 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-
-        <activity android:name=".MainTempActivity"></activity>
+        <activity android:name=".service.WordleClickedActivity"></activity>
+        <activity android:name=".MainTempActivity" />
         <activity android:name=".UploadedFormEditableActivity" />
         <activity android:name=".result.IndividualResultActivity" />
         <activity android:name=".result.ResultActivity" />
@@ -31,9 +31,9 @@
             </intent-filter>
         </activity>
         <activity
-           android:name=".service.ServiceTabActivity"
-           android:label="@string/title_activity_service_tab"
-           android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:name=".service.ServiceTabActivity"
+            android:label="@string/title_activity_service_tab"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ServiceSelectActivicy" />
 
         <meta-data

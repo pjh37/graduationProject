@@ -10,6 +10,13 @@
 <script src="d3.js"></script>
 <script src="d3.layout.cloud.js"></script>
 <script>
+function alertClickText(data){
+    var browserInfo = navigator.userAgent;
+    if(browserInfo.indexOf("Android")>-1){
+        window.GetWord.getClickedWord(data);
+    }
+}
+
 function wordCloud(data) {
     var fill = d3.scale.category20();
     var layout = d3.layout.cloud()
@@ -39,7 +46,12 @@ function wordCloud(data) {
           .attr("transform", function(d) {
             return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
           })
-          .text(function(d) { return d.text; });
+          .text(function(d) { return d.text; })
+          .on("click",function(d){
+                alertClickText(d.text);
+           });
     }
-}</script>
+}
+
+</script>
 </body>

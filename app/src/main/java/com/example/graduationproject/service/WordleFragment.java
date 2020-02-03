@@ -1,6 +1,7 @@
 package com.example.graduationproject.service;
 
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -9,9 +10,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
+import android.os.Handler;
+import android.webkit.JavascriptInterface;
+
 
 import com.example.graduationproject.R;
 
@@ -20,9 +27,28 @@ import com.example.graduationproject.R;
  */
 public class WordleFragment extends Fragment {
 
-    String[] wordCloud = new String[]{ "Donut", "Eclair", "Froyo", "Gingerbread", "Honeycomb",
-            "Ice Cream Sandwich", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow"};
+    String[] wordCloud = new String[]{ "IT/전자기기", "식품", "의류", "부동산", "뉴스/정치",
+            "Ice Cream Sandwich", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow",
+            "Oreo", "AndroidX", "CheckMate"};
 
+    private class AndroidBridge{
+        final public Handler handler = new Handler();
+
+        @JavascriptInterface
+        public void getClickedWord(final String arg){
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(),arg, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getContext(),WordleClickedActivity.class);
+                    intent.putExtra("Keyword",arg);
+                    startActivity(intent);
+
+                }
+            });
+
+        }
+    }
     public WordleFragment() {
         // Required empty public constructor
     }
@@ -34,6 +60,7 @@ public class WordleFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_wordle, container, false);
         WebView d3 = (WebView) root.findViewById(R.id.d3_cloud);
+        d3.addJavascriptInterface(new AndroidBridge(), "GetWord");
 
         WebSettings ws = d3.getSettings();
         ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
@@ -56,14 +83,18 @@ public class WordleFragment extends Fragment {
                 }
                 sb.append("])");
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    d3.evaluateJavascript(sb.toString(), null);
-                } else {
-                    d3.loadUrl("javascript:" + sb.toString());
-                }
+                d3.evaluateJavascript(sb.toString(), null);
+
             }
         });
 
+        d3.setOnTouchListener(new OnClickWithOnTouchListener(root.getContext(), new OnClickWithOnTouchListener.OnClickListener() {
+            @Override
+            public void onClick() {
+                //Toast.makeText(getContext(),"WebViewClickTest",Toast.LENGTH_SHORT).show();
+
+            }
+        }));
         return root;
     }
 

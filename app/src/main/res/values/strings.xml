@@ -10,7 +10,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="baseUrl">http://192.168.35.42:8001/</string>
+    <string name="baseUrl">http://pjh.cafe24app.com/</string>
 
     <!--http://pjh.cafe24app.com/  -->
     <!--http://192.168.35.42:8001/ -->
