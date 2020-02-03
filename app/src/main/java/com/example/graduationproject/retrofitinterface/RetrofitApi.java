@@ -9,7 +9,7 @@ public class RetrofitApi {
     public static RetrofitService getService(){
 
         retrofit=new Retrofit.Builder()
-                .baseUrl("http://192.168.35.42:8001/")
+                .baseUrl("http://pjh.cafe24app.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         RetrofitService service=retrofit.create(RetrofitService.class);

@@ -2,21 +2,19 @@ package com.example.graduationproject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.graduationproject.mainActivityViwePager.SurveyDTO;
 import com.example.graduationproject.result.ResultActivity;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
-import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class UploadedSurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -87,12 +85,15 @@ public class UploadedSurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position){
         UploadedSurveyDTO vo=datas.get(position);
         ((ViewHolder)holder).txtTitle.setText(vo.getTitle());
-        ((ViewHolder)holder).txtResponse.setText(vo.getResponseCnt()+" response");
+        ((ViewHolder)holder).txtResponse.setText(vo.getResponse_cnt()+" response");
         ((ViewHolder)holder).txtTime.setText(vo.getTime());
     }
     @Override
     public int getItemCount() {
         return datas.size();
     }
-
+    public void addItem(ArrayList<UploadedSurveyDTO> data){
+        datas.addAll(data);
+        notifyDataSetChanged();
+    }
 }

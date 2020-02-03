@@ -25,7 +25,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.graduationproject.form.BaseFormActivity;
 import com.example.graduationproject.form.FormActivity;
 import com.example.graduationproject.form.FormDTO;
 import com.example.graduationproject.mainActivityViwePager.MainVPAdapter;
@@ -198,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                         UploadedSurveyDTO uploadedSurveyDTO=new UploadedSurveyDTO();
                         uploadedSurveyDTO.set_id(jsonObject.getInt("_id"));
                         uploadedSurveyDTO.setTitle(formDTO.getTitle());
-                        uploadedSurveyDTO.setResponseCnt(jsonObject.getInt("response_cnt"));
+                        uploadedSurveyDTO.setResponse_cnt(jsonObject.getInt("response_cnt"));
                         uploadedSurveyDTO.setTime(getTime(jsonObject.getString("time")));
                         datas.add(uploadedSurveyDTO);
                     }

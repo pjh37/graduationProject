@@ -3,7 +3,7 @@ package com.example.graduationproject;
 public class UploadedSurveyDTO {
     private int _id;
     private String title;
-    private int responseCnt;
+    private int response_cnt;
     private String time;
 
     public int get_id() {
@@ -22,12 +22,12 @@ public class UploadedSurveyDTO {
         this.title = title;
     }
 
-    public int getResponseCnt() {
-        return responseCnt;
+    public int getResponse_cnt() {
+        return response_cnt;
     }
 
-    public void setResponseCnt(int responseCnt) {
-        this.responseCnt = responseCnt;
+    public void setResponse_cnt(int response_cnt) {
+        this.response_cnt = response_cnt;
     }
 
     public String getTime() {

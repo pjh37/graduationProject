@@ -98,7 +98,7 @@ public class UploadedFormEditableActivity extends AppCompatActivity {
                 if(res.equals("error")){
                     Toast.makeText(getApplicationContext(),"요청 실패",Toast.LENGTH_SHORT).show();
                 }else{
-                    Intent intent=new Intent(getApplicationContext(), FormActivity.class);
+                    Intent intent=new Intent(UploadedFormEditableActivity.this, FormActivity.class);
                     intent.putExtra("form_id",form_id);
                     intent.putExtra("json",res);
                     startActivity(intent);
