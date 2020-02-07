@@ -59,7 +59,9 @@ public class MainVPMySurveyFragment extends Fragment {
     private ProgressBar progressBar;
     private boolean isFinish;
     private ArrayList<UploadedSurveyDTO> datas;
+
     public MainVPMySurveyFragment(){}
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -71,6 +73,7 @@ public class MainVPMySurveyFragment extends Fragment {
         url=getString(R.string.baseUrl);
         datas=new ArrayList<>();
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -87,12 +90,14 @@ public class MainVPMySurveyFragment extends Fragment {
         responseWaitSurveyRecycleView.addItemDecoration(new DividerItemDecoration(getContext(),1));
         return rootView;
     }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         getResponseWaitSurvey(userEmail);
         new LoadTask().execute();
     }
+
     public class ClickListener implements View.OnClickListener{
         @Override
         public void onClick(View view) {

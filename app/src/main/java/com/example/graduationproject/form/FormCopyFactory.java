@@ -128,6 +128,9 @@ public class FormCopyFactory {
             case FormType.CHECKBOXGRID:
                 return new FormTypeGrid(this);
 
+            case FormType.ADDSECTION:
+                return new FormTypeSection(this);
+
             case FormType.SUBTEXT:
                 return new FormTypeSubText(this);
 

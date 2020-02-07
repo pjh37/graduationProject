@@ -9,6 +9,12 @@
     android:background="@drawable/border"
     android:backgroundTint="#117FD6"
     >
+    <ImageView
+        android:id="@+id/drag_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/drag_handle"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,11 +23,19 @@
             android:id="@+id/editTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
+            android:layout_weight="9"
             android:hint="Section Title"
             android:textColorHint="#ffffff"
             android:textSize="30dp"
             />
+        <ImageButton
+            android:id="@+id/copy_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#117FD6"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/copy"/>
         <ImageButton
             android:id="@+id/delete_view"
             android:layout_width="0dp"

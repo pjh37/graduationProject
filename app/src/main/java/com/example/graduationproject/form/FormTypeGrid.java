@@ -9,12 +9,14 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 
 import com.example.graduationproject.CustomSpinnerAdapter;
 import com.example.graduationproject.R;
+import com.jmedeisis.draglinearlayout.DragLinearLayout;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -180,8 +182,8 @@ public class FormTypeGrid extends FormAbstract {
                 parentView.removeView(customView);
             }
             else if(view == mCopyView){
-                ViewGroup parentView = (ViewGroup) customView.getParent();
-                int index = parentView.indexOfChild(customView); // 위치 인덱스
+                DragLinearLayout parentView = (DragLinearLayout) customView.getParent();
+                int index = parentView.indexOfChild(customView);
 
                 FormAbstract layout = new FormCopyFactory.Builder(mContext,mType)
                         .Question(mEditQuestion.getText().toString())
@@ -191,8 +193,9 @@ public class FormTypeGrid extends FormAbstract {
                         .build()
                         .createCopyForm();
 
-                parentView.addView(layout, index+1);
-//                remove_BaseFormActivity.AddcopiedLayouts(index, layout);
+                ViewGroup customlayout = (ViewGroup) layout.getChildAt(0);
+                ImageView dragHandle = (ImageView)customlayout.getChildAt(0);
+                parentView.addDragView(layout, dragHandle, index + 1);
             }
             else if (view == mBtnAddRow)
             {
@@ -215,12 +218,13 @@ public class FormTypeGrid extends FormAbstract {
                 view.setBackgroundResource(0);
             }
             if (spinner1steventprevent) {
-                //changeItemTypeDynamically(position); // 스피너를 통한 항목 바꾸기
-                FormAbstract layout=FormFactory.getInstance(mContext,position).createForm();
-                ViewGroup parentView=(ViewGroup)customView.getParent();
-                int indexOfChild=parentView.indexOfChild(customView);
-                parentView.addView(layout,indexOfChild);
-                parentView.removeView(customView);
+                DragLinearLayout parentView = (DragLinearLayout) customView.getParent();
+                int index = parentView.indexOfChild(customView);
+                FormAbstract layout = FormFactory.getInstance(mContext, position).createForm(); // position is formType
+                ViewGroup customlayout = (ViewGroup) layout.getChildAt(0); // xml 얻어옴
+                ImageView dragHandle = (ImageView)customlayout.getChildAt(0);
+                parentView.addDragView(layout, dragHandle, index);
+                parentView.removeDragView(customView);
             }else{
                 spinner1steventprevent = true;
             }

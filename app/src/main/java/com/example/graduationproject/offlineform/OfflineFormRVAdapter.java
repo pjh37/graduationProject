@@ -89,6 +89,7 @@ public class OfflineFormRVAdapter extends RecyclerView.Adapter<RecyclerView.View
     public int getItemCount() {
         return formItem.size();
     }
+
     public void addItem(ArrayList<FormItem> data){
         formItem.addAll(data);
         notifyDataSetChanged();

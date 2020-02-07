@@ -52,6 +52,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
+    // drag & drop
+    implementation 'com.jmedeisis:draglinearlayout:1.1.0'
+
     //kakao login sdk
     implementation group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
 

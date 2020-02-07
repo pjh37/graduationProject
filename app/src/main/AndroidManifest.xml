@@ -14,12 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
+
         <activity android:name=".mainActivityViwePager.moreViewActivity"></activity>
         <activity android:name=".MainTempActivity" />
         <activity android:name=".UploadedFormEditableActivity" />
         <activity android:name=".result.IndividualResultActivity" />
         <activity android:name=".result.ResultActivity" />
-        <activity android:name=".form.BaseFormActivity" />
+<!--        <activity android:name=".form.BaseFormActivity" />-->
         <activity android:name=".form.FormActivity" />
         <activity android:name=".offlineform.OfflineFormActivity" />
         <activity android:name=".MainActivity" />

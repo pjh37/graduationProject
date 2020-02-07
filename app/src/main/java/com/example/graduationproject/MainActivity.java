@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private boolean isFinish;
     private MainVPAdapter mainVPAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
