@@ -124,7 +124,7 @@ public class moreViewActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             Log.v("테스트","LoadTask 호출");
-            offlineFormAdapter.addItem(offlineSurveyDatas);
+            //offlineFormAdapter.addItem(offlineSurveyDatas);
             progressBar.setVisibility(View.GONE);
             super.onPostExecute(aVoid);
         }

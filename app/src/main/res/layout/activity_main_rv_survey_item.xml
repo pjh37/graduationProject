@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:backgroundTint="#FCFCFC"
+    android:background="?android:attr/selectableItemBackground"
+    android:backgroundTint="#ffffff"
     android:elevation="10dp">
     <TextView
         android:id="@+id/txtTitle"

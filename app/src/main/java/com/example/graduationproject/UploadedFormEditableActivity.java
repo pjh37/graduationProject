@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.graduationproject.form.FormActivity;
+import com.example.graduationproject.result.ResultActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,6 +31,7 @@ import java.io.IOException;
 
 public class UploadedFormEditableActivity extends AppCompatActivity {
     private int form_id;
+    private String userEmail;
     private Switch mStatusSwitch;
     private boolean isFinish=false;
     private ProgressBar progressBar;
@@ -41,6 +43,7 @@ public class UploadedFormEditableActivity extends AppCompatActivity {
         setContentView(R.layout.activity_uploaded_form_editable);
         Intent intent=getIntent();
         form_id=intent.getIntExtra("form_id",-1);
+        userEmail=intent.getStringExtra("userEmail");
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar=getSupportActionBar();
@@ -68,17 +71,23 @@ public class UploadedFormEditableActivity extends AppCompatActivity {
     public void onClick(View v){
         switch (v.getId()){
             case R.id.btnEdit:{
-                //Intent intent=new Intent(this, FormActivity.class);
                 editRequest();
                 break;
             }
             case R.id.btnPreview:{
-                Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.baseUrl)+"survey/"+form_id));
-                startActivity(intent);
+                previewRequest();
                 break;
             }
             case R.id.btnDelete:{
                 deleteRequest();
+                break;
+            }
+            case R.id.btnResult:{
+                resultRequest();
+                break;
+            }
+            case R.id.btnShare:{
+                shareRequest();
                 break;
             }
         }
@@ -135,6 +144,26 @@ public class UploadedFormEditableActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    public void resultRequest(){
+        Intent intent =new Intent(this, ResultActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("form_id",form_id);
+        intent.putExtra("userEmail",userEmail);
+        startActivity(intent);
+    }
+    public void shareRequest(){
+        Intent intent=new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT,getString(R.string.baseUrl)+"survey/"+form_id);
+        Intent chooser=Intent.createChooser(intent,"공유");
+        chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(chooser);
+    }
+    public void previewRequest(){
+        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.baseUrl)+"survey/"+form_id));
+        startActivity(intent);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
