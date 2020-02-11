@@ -5,7 +5,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.graduationproject"
-        minSdkVersion 23
+        minSdkVersion 26
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -57,6 +57,12 @@ dependencies {
 
     //kakao login sdk
     implementation group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
+
+    //komoran 3.3.4
+    implementation ('com.github.shin285:KOMORAN:3.3.4'){
+        exclude group: 'com.github.shineware', module: 'commons'
+        exclude group: 'com.github.shineware', module: 'aho-corasick'
+    }
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

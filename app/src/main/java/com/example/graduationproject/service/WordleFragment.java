@@ -21,17 +21,37 @@ import android.webkit.JavascriptInterface;
 
 
 import com.example.graduationproject.R;
+import com.example.graduationproject.mainActivityViwePager.RequestType;
+import com.example.graduationproject.mainActivityViwePager.SurveyDTO;
+import com.example.graduationproject.retrofitinterface.RetrofitApi;
+
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class WordleFragment extends Fragment {
 
+
+    /*
     String[] wordCloud = new String[]{ "IT/전자기기", "식품", "의류", "부동산", "뉴스/정치",
             "Ice Cream Sandwich", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow",
             "Oreo", "AndroidX", "CheckMate"};
 
-    private class AndroidBridge{
+     */
+
+    private String[] wordCloud;
+    private ArrayList<SurveyDTO> datas = new ArrayList<>();
+    private ArrayList<String> extractedTitles = new ArrayList<>();
+    private KoreanPhraseExtractorApi koreanPhraseExtractor;
+    private int pageCount = 1;
+    private WebView d3;
+    private boolean isFinish = false;
+    private boolean isWordReady = false;
+    private View root;
+
+    private class AndroidBridge{ // webview - android 통신
         final public Handler handler = new Handler();
 
         @JavascriptInterface
@@ -58,44 +78,117 @@ public class WordleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View root = inflater.inflate(R.layout.fragment_wordle, container, false);
-        WebView d3 = (WebView) root.findViewById(R.id.d3_cloud);
-        d3.addJavascriptInterface(new AndroidBridge(), "GetWord");
+        getSurveyTitles();
 
-        WebSettings ws = d3.getSettings();
-        ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
-        ws.setJavaScriptEnabled(true);
-        ws.setLoadWithOverviewMode(true);
-        ws.setUseWideViewPort(true);
-
-        d3.loadUrl("file:///android_asset/d3.html");
-        d3.setWebViewClient(new WebViewClient() {
+        new Thread(new Runnable() {
             @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                StringBuffer sb = new StringBuffer();
-                sb.append("wordCloud([");
-                for (int i = 0; i < wordCloud.length; i++) {
-                    sb.append("'").append(wordCloud[i]).append("'");
-                    if (i < wordCloud.length - 1) {
-                        sb.append(",");
+            public void run() {
+                while(!isFinish){ }
+                if(isFinish){
+                    extractedTitles = extractTitleFromSurveyDTO(datas);
+                    getActivity().runOnUiThread(()->{
+                        Toast.makeText(getContext(), Integer.toString(extractedTitles.size()),Toast.LENGTH_LONG).show();
+                    });
+
+                    koreanPhraseExtractor = new KoreanPhraseExtractorApi(extractedTitles);
+                    ArrayList<String> str = koreanPhraseExtractor.extractPhrase();
+
+                    wordCloud = new String[str.size()];
+                    int i = 0;
+                    for(String string : str){
+                        wordCloud[i++] = string;
                     }
+
+                    isWordReady = true;
                 }
-                sb.append("])");
-
-                d3.evaluateJavascript(sb.toString(), null);
-
             }
+        }).start();
+
+        root = inflater.inflate(R.layout.fragment_wordle, container, false);
+
+        return root;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(!isWordReady){ }
+                if(isWordReady){
+                    getActivity().runOnUiThread(()->{
+                        d3 = (WebView) root.findViewById(R.id.d3_cloud);
+                        d3.addJavascriptInterface(new AndroidBridge(), "GetWord");
+                        WebSettings ws = d3.getSettings();
+                        ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+                        ws.setJavaScriptEnabled(true);
+                        ws.setLoadWithOverviewMode(true);
+                        ws.setUseWideViewPort(true);
+
+                        d3.setOnTouchListener(new OnClickWithOnTouchListener(root.getContext(), new OnClickWithOnTouchListener.OnClickListener() {
+                            @Override
+                            public void onClick() {
+                                //Toast.makeText(getContext(),"WebViewClickTest",Toast.LENGTH_SHORT).show();
+
+                            }
+                        }));
+
+                        d3.loadUrl("file:///android_asset/d3.html");
+                        d3.setWebViewClient(new WebViewClient() {
+                            @Override
+                            public void onPageFinished(WebView view, String url) {
+                                super.onPageFinished(view, url);
+                                StringBuffer sb = new StringBuffer();
+                                sb.append("wordCloud([");
+                                for (int i = 0; i < wordCloud.length; i++) {
+                                    sb.append("'").append(wordCloud[i]).append("'");
+                                    if (i < wordCloud.length - 1) {
+                                        sb.append(",");
+                                    }
+                                }
+                                sb.append("])");
+
+                                d3.evaluateJavascript(sb.toString(), null);
+
+                            }
+                        });
+                    });
+                }
+            }
+        }).start();
+
+    }
+
+    public void getSurveyTitles(){
+        RetrofitApi.getService().getSurveyList("all",pageCount).enqueue(new retrofit2.Callback<ArrayList<SurveyDTO>>() {
+            @Override
+            public void onResponse(retrofit2.Call<ArrayList<SurveyDTO>> call, retrofit2.Response<ArrayList<SurveyDTO>> response) {
+                if(!response.body().isEmpty()){
+                    datas.addAll(response.body());
+                    //Toast.makeText(getContext(), Integer.toString(datas.size()),Toast.LENGTH_LONG).show();
+                    pageCount++;
+                    getSurveyTitles();
+                }
+                else {isFinish = true;}
+            }
+            @Override
+            public void onFailure(retrofit2.Call<ArrayList<SurveyDTO>> call, Throwable t) {}
         });
 
-        d3.setOnTouchListener(new OnClickWithOnTouchListener(root.getContext(), new OnClickWithOnTouchListener.OnClickListener() {
-            @Override
-            public void onClick() {
-                //Toast.makeText(getContext(),"WebViewClickTest",Toast.LENGTH_SHORT).show();
+    }
 
-            }
-        }));
-        return root;
+    public ArrayList<String> extractTitleFromSurveyDTO(ArrayList<SurveyDTO> datas){
+        ArrayList<String> arrayList = new ArrayList<>();
+        String node;
+
+        for(int position = 0; position  < datas.size(); position++){
+            node = datas.get(position).getTitle();
+            arrayList.add(node);
+        }
+
+        return arrayList;
     }
 
 }
