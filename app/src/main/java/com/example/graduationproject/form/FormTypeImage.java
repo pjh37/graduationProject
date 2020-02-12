@@ -21,6 +21,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.graduationproject.R;
+import com.jmedeisis.draglinearlayout.DragLinearLayout;
 
 import org.json.JSONObject;
 
@@ -167,7 +168,7 @@ public class FormTypeImage extends FormAbstract{
             jsonObject.put("media_file", uri.toString());
             jsonObject.put("real_file_data",file);
             jsonObject.put("real_file_name",formComponent_id);
-            Log.v("테스트","getJsonObject 이미지 파일 : "+getImageToString(file));
+//            Log.v("테스트","getJsonObject 이미지 파일 : "+getImageToString(file));
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -203,24 +204,27 @@ public class FormTypeImage extends FormAbstract{
                 ViewGroup parentView=(ViewGroup)customView.getParent();
                 parentView.removeView(customView);
             }else if (view == mCopyView) {
-                ViewGroup parentView = (ViewGroup) customView.getParent();
-                int index = parentView.indexOfChild(customView); // 위치 인덱스
+                DragLinearLayout parentView = (DragLinearLayout) customView.getParent();
+                int index = parentView.indexOfChild(customView);
 
                 FormAbstract layout = new FormCopyFactory.Builder(mContext,mType)
                         .Question(mEditQuestion.getText().toString())
                         .FileUri(uri)
-                        .FormComponentId(index-1)  // setFormComponent_id 해주는거임. index는 원본을 가리키므로 -1 이다.
+                        .FormComponentId(index+1)  // setFormComponent_id , 복사되는건 원본 뒤에 생기니까 +1
                         .build()
                         .createCopyForm();
 
-                parentView.addView(layout, index+1);
+                ViewGroup customlayout = (ViewGroup) layout.getChildAt(0);
+                ImageView dragHandle = (ImageView)customlayout.getChildAt(0);
+                parentView.addDragView(layout, dragHandle, index + 1);
 
             }else if(view==btnImageAdd){
-                Intent broadcast=new Intent();
-                broadcast.setAction("com.example.graduationproject.FormTypeImage.IMAGE_ADD_BUTTON_CLICKED");
-                broadcast.putExtra("form_id",formComponent_id);
-                activity.sendBroadcast(broadcast);
+//                Intent broadcast=new Intent();
+//                broadcast.setAction("com.example.graduationproject.FormTypeImage.IMAGE_ADD_BUTTON_CLICKED");
+//                broadcast.putExtra("form_id",formComponent_id);
+//                activity.sendBroadcast(broadcast);
 
+                FormActivity.set_FormTypeImage_class(FormTypeImage.this);
                 Intent intent=new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);

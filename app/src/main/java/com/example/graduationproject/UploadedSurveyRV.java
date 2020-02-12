@@ -67,6 +67,7 @@ public class UploadedSurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHold
     public int getItemCount() {
         return datas.size();
     }
+
     public void addItem(ArrayList<UploadedSurveyDTO> data){
         datas.addAll(data);
         notifyDataSetChanged();

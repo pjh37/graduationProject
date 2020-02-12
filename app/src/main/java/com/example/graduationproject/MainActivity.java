@@ -7,91 +7,95 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.graduationproject.form.FormActivity;
-import com.example.graduationproject.form.FormDTO;
 import com.example.graduationproject.mainActivityViwePager.MainVPAdapter;
 import com.example.graduationproject.offlineform.OfflineFormActivity;
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.Gson;
+import com.google.android.material.tabs.TabLayout;
 
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-
 
 public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle toggle;
+
     RecyclerView uploadedSurveyRV;
-    RecyclerView.Adapter  uploadedSurveyAdapter;
+    RecyclerView.Adapter uploadedSurveyAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<UploadedSurveyDTO> datas;
-    public  String userEmail;
+
     private String url;
     private ProgressBar progressBar;
     private boolean isFinish;
+
+    public String userEmail;
+    public String userName;
+    public Uri userImage;
+
+    private ViewPager viewPager;
     private MainVPAdapter mainVPAdapter;
+    private TabLayout mTabLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        url=getString(R.string.baseUrl);
-        Intent intent=getIntent();
-        userEmail=intent.getStringExtra("userEmail");
-        drawerLayout=(DrawerLayout)findViewById(R.id.main_drawer);
-        progressBar=(ProgressBar)findViewById(R.id.progress);
-        isFinish=false;
-        toggle=new ActionBarDrawerToggle(this,drawerLayout,R.string.drawer_open,R.string.drawer_close);
-        datas=new ArrayList<>();
-        uploadedSurveyRV=(RecyclerView)findViewById(R.id.response_wait_list);
-        layoutManager=new LinearLayoutManager(getApplicationContext());
-        uploadedSurveyRV.addItemDecoration(new ItemDecorate());
-        uploadedSurveyRV.setLayoutManager(layoutManager);
 
-
-        Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Forms");
         setSupportActionBar(toolbar);
-        ActionBar actionBar=getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.navigation);
+
+        url=getString(R.string.baseUrl);
+        isFinish=false;
+        datas=new ArrayList<>();
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.main_drawer);
+        progressBar=(ProgressBar)findViewById(R.id.progress);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        mTabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
+
+        Intent intent = getIntent();
+        userEmail = intent.getStringExtra("userEmail");
+        userName = intent.getStringExtra("userName");
+        userImage = intent.getExtras().getParcelable("userImage");
+
         NavigationView navigationView=(NavigationView)findViewById(R.id.navigationView);
+        View NavHeader = navigationView.getHeaderView(0); // LinearLayout
+        TextView txtUserID = NavHeader.findViewById(R.id.txtUserID);
+        txtUserID.setText(userName);
+        ImageView imvUserImg = NavHeader.findViewById(R.id.imvUserImg);
+        Glide.with(this).load(userImage).into(imvUserImg);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 menuItem.setChecked(false);
-                TextView txtUserID=(TextView)findViewById(R.id.txtUserID);
-                txtUserID.setText(userEmail);
                 drawerLayout.closeDrawer(GravityCompat.START);
-                switch (menuItem.getItemId()){
+
+                switch (menuItem.getItemId()) {
                     case R.id.offline: {
                         Intent intent = new Intent(getApplicationContext(), OfflineFormActivity.class);
-                        intent.putExtra("userEmail",userEmail);
+                        intent.putExtra("userEmail", userEmail);
                         startActivity(intent);
                         break;
                     }
@@ -100,39 +104,48 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                     case R.id.notification: {
-
+                        Toast.makeText(getApplicationContext(), "notification 미완성", Toast.LENGTH_SHORT).show();
+                        break;
                     }
-                    case R.id.help:{
-
+                    case R.id.help: {
+                        Toast.makeText(getApplicationContext(), "help 미완성", Toast.LENGTH_SHORT).show();
+                        break;
                     }
                     case R.id.share: {
-                        Intent intent=new Intent();
+                        Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_SEND);
                         intent.setType("text/plain");
-                        intent.putExtra(Intent.EXTRA_TEXT,getString(R.string.baseUrl)+"survey/6");
-                        Intent chooser=Intent.createChooser(intent,"공유");
+                        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.baseUrl) + "survey/6");
+                        Intent chooser = Intent.createChooser(intent, "공유");
                         startActivity(chooser);
-                         break;
+                        break;
                     }
                 }
                 return true;
             }
         });
-    }
+        Bundle args = new Bundle();
+        args.putString("userEmail", userEmail);
+        mainVPAdapter = new MainVPAdapter(getSupportFragmentManager(), args);
+        viewPager.setAdapter(mainVPAdapter);
+        viewPager.setCurrentItem(0);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        datas.clear();
-        getMySurveyList(userEmail);
-    }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-    public String getTime(String str){
-        long now=Long.valueOf(str);
-        Date date=new Date(now);
-        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy MM월 dd hh:mm:ss");
-        String time = simpleDate.format(date);
-        return time;
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
     @Override
     public void onBackPressed() {
@@ -150,88 +163,15 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         }
-
         return super.onOptionsItemSelected(item);
     }
-    public void getMySurveyList(String userEmail){
-        progressBar.setVisibility(View.VISIBLE);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(!isFinish){ }
-                if(isFinish){
-                    runOnUiThread(()->{ progressBar.setVisibility(View.GONE); });
-                }
 
-            }
-        }).start();
-        OkHttpClient client=new OkHttpClient();
-        RequestBody requestbody=new MultipartBody.Builder().
-                setType(MultipartBody.FORM)
-                .addFormDataPart("userEmail",userEmail)
-                .build();
-        okhttp3.Request request=new okhttp3.Request.Builder()
-                .url(url+"user/forms")
-                .header("Content-Type", "multipart/form-data")
-                .post(requestbody)
-                .build();
-        client.newCall(request).enqueue(new Callback(){
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                //toastMessage("폼 전송 실패");
-                Log.v("테스트","폼 전송 실패");
-            }
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                //toastMessage("폼 전송 완료");
-                //Log.v("테스트","받은 폼 : "+response.body().string());
-                isFinish=true;
-
-                String res=response.body().string();
-                try{
-                    JSONArray jsonArray=new JSONArray(res);
-                    Gson gson=new Gson();
-                    for(int i=0;i<jsonArray.length();i++){
-                        JSONObject jsonObject=jsonArray.getJSONObject(i);
-                        FormDTO formDTO=gson.fromJson(jsonObject.getString("json"),FormDTO.class);
-                        UploadedSurveyDTO uploadedSurveyDTO=new UploadedSurveyDTO();
-                        uploadedSurveyDTO.set_id(jsonObject.getInt("_id"));
-                        uploadedSurveyDTO.setTitle(formDTO.getTitle());
-                        uploadedSurveyDTO.setResponse_cnt(jsonObject.getInt("response_cnt"));
-                        uploadedSurveyDTO.setTime(getTime(jsonObject.getString("time")));
-                        datas.add(uploadedSurveyDTO);
-                    }
-                    Log.v("테스트",datas.size()+"");
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            uploadedSurveyAdapter=new UploadedSurveyRV(getApplicationContext(),userEmail,datas);
-                            uploadedSurveyRV.setAdapter(uploadedSurveyAdapter);
-                        }
-                    });
-
-
-                }catch (Exception e){
-                    e.printStackTrace();
-                    Log.v("테스트","받은 폼 error: "+e.getMessage());
-                }
-
-            }
-        });
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        isFinish=false;
-    }
-
-    public void onClick(View v){
-        switch (v.getId()){
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.bottom_menu:
-                Intent intent=new Intent(this, FormActivity.class);
-                intent.putExtra("userEmail",userEmail);
-                overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+                Intent intent = new Intent(this, FormActivity.class);
+                intent.putExtra("userEmail", userEmail);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 startActivity(intent);
                 break;
         }

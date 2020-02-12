@@ -8,6 +8,12 @@
     android:background="@drawable/border"
     android:backgroundTint="#FFFFFF"
     >
+    <ImageView
+        android:id="@+id/drag_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/drag_handle"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:hint="Sub Title"
-            android:textColorHint="#111111"
+            android:textColorHint="#555454"
             android:textSize="20dp"
             android:inputType="text"
             />
@@ -46,7 +52,8 @@
         android:id="@+id/editDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#111111"
+
         android:hint="설명(선택사항)"
-        android:textColorHint="#111111"/>
+        android:textColorHint="#555454"
+        />
 </LinearLayout>

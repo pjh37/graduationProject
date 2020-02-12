@@ -37,24 +37,33 @@ public class UploadedFormEditableActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TextView txtStatus;
     private OkHttpClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_uploaded_form_editable);
+
         Intent intent=getIntent();
         form_id=intent.getIntExtra("form_id",-1);
+
         userEmail=intent.getStringExtra("userEmail");
+
+
+
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar=getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
+
         client=new OkHttpClient();
+
         progressBar=(ProgressBar)findViewById(R.id.progress);
         mStatusSwitch=(Switch)findViewById(R.id.status_switch);
         mStatusSwitch.setChecked(true);
         txtStatus=(TextView)findViewById(R.id.txtStatus);
         txtStatus.setTextColor(Color.GREEN);
+
         mStatusSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean check) {
@@ -68,6 +77,7 @@ public class UploadedFormEditableActivity extends AppCompatActivity {
             }
         });
     }
+
     public void onClick(View v){
         switch (v.getId()){
             case R.id.btnEdit:{

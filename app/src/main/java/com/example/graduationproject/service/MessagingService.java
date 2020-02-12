@@ -9,9 +9,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 
-import com.example.graduationproject.MainTempActivity;
+import com.example.graduationproject.MainActivity;
 import com.example.graduationproject.R;
-import com.google.firebase.messaging.RemoteMessage;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -29,7 +28,7 @@ public class MessagingService extends Service {
     }
 
     private void sendNotification(String messageBody){
-        Intent intent=new Intent(this, MainTempActivity.class);
+        Intent intent=new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent=PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT);
         String channelId=getString(R.string.notification_channel_id);

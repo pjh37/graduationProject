@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.graduationproject.R;
+import com.jmedeisis.draglinearlayout.DragLinearLayout;
 
 import org.json.JSONObject;
 
@@ -89,8 +91,8 @@ public class FormTypeSubText extends FormAbstract {
                 ViewGroup parentView = (ViewGroup) customView.getParent();
                 parentView.removeView(customView);
             } else if (view == mCopyView) {
-                ViewGroup parentView = (ViewGroup) customView.getParent();
-                int index = parentView.indexOfChild(customView); // 위치 인덱스
+                DragLinearLayout parentView = (DragLinearLayout) customView.getParent();
+                int index = parentView.indexOfChild(customView);
 
                 FormAbstract layout = new FormCopyFactory.Builder(mContext, mType)
                         .Question(mEditTitle.getText().toString())
@@ -98,7 +100,9 @@ public class FormTypeSubText extends FormAbstract {
                         .build()
                         .createCopyForm();
 
-                parentView.addView(layout, index + 1);
+                ViewGroup customlayout = (ViewGroup) layout.getChildAt(0);
+                ImageView dragHandle = (ImageView)customlayout.getChildAt(0);
+                parentView.addDragView(layout, dragHandle, index + 1);
             }
         }
     }
