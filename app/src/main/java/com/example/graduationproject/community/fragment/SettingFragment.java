@@ -15,7 +15,7 @@ public class SettingFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup rootView=(ViewGroup)inflater.inflate(R.layout.friends_fragment,container,false);
+        ViewGroup rootView=(ViewGroup)inflater.inflate(R.layout.community_fragment_setting,container,false);
         return rootView;
     }
 

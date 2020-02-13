@@ -39,6 +39,7 @@ import com.kakao.usermgmt.LoginButton;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "로그인연동에러";//에러나면 하드코딩해서 이메일 넘길것!!!
     private static final int RC_SIGN_IN=1;
+    private LoginSession loginSession;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth firebaseAuth;
     private SharedPreferences mPref;
@@ -61,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         checkPermission();
+        loginSession=(LoginSession)getApplication();
         btnGoSurvey=(Button)findViewById(R.id.btnGoSurvey);
         btnGoCommunity=(Button)findViewById(R.id.btnGoCommunity);
         btnLogin=(SignInButton)findViewById(R.id.sign_in_button);
@@ -107,6 +109,9 @@ public class LoginActivity extends AppCompatActivity {
         if(mPref.getBoolean("isAutoLogin",false)){
             chkAutoLogin.setChecked(true);
         }
+        userEmail=loginSession.getUserEmail();
+        userName=loginSession.getUserName();
+        userImage=loginSession.getUserImage();
     }
 
     public void onClick(View v){
@@ -163,7 +168,8 @@ public class LoginActivity extends AppCompatActivity {
                             // 로그인 성공
                             FirebaseUser user=firebaseAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
-                            loginSuccess(user.getEmail(),user.getDisplayName(),user.getPhotoUrl());
+                            loginSession.setSession(user.getEmail(),user.getDisplayName(),user.getPhotoUrl());
+                            loginSuccess();
                         } else {
                             // 로그인 실패
                             Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
@@ -172,14 +178,12 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
-    private void loginSuccess(String userEmail, String userName, Uri userImage){
+    private void loginSuccess(){
         btnGoSurvey.setVisibility(View.VISIBLE);
         btnGoCommunity.setVisibility(View.VISIBLE);
         btnLogin.setVisibility(View.GONE);
         autoLogin.setVisibility(View.GONE);
-        this.userEmail=userEmail;
-        this.userName=userName;
-        this.userImage=userImage;
+
     }
     private void goToSurvey(){
         Intent intent=new Intent(LoginActivity.this, MainActivity.class); // new
