@@ -61,7 +61,10 @@
         <item>최신순</item>
         <item>응답자순</item>
     </string-array>
-
+    <string-array name="requestOption">
+        <item>최신순</item>
+        <item>오래된순</item>
+    </string-array>
 
 
 

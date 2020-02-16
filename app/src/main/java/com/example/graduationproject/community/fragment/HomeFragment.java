@@ -15,7 +15,7 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup rootView=(ViewGroup)inflater.inflate(R.layout.community_fragment_friend,container,false);
+        ViewGroup rootView=(ViewGroup)inflater.inflate(R.layout.community_fragment_home,container,false);
         return rootView;
     }
 

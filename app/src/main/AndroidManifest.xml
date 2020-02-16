@@ -17,7 +17,8 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:name=".login.LoginSession"
         android:usesCleartextTraffic="true">
-        <activity android:name=".community.CommunityMainActivity"></activity>
+        <activity android:name=".community.CommunityMainActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".mainActivityViwePager.moreViewActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".UploadedFormEditableActivity" />
