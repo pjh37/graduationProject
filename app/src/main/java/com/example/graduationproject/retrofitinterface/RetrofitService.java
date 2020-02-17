@@ -20,6 +20,9 @@ public interface RetrofitService {
     @GET("form/{type}/{pages}")
     Call<ArrayList<SurveyDTO>> getSurveyList(@Path("type") String type, @Path("pages")Integer page);
 
+    @GET("form/{keyword}")
+    Call<ArrayList<SurveyDTO>> getKeywordSurveyList(@Path("keyword") String keyword);
+
     @FormUrlEncoded
     @POST("upload")
     Call<FormDTO>  formUpload(@Field("params")String userID,

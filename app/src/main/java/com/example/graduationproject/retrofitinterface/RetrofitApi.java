@@ -4,6 +4,7 @@ import com.example.graduationproject.R;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import android.content.Context;
 
 public class RetrofitApi {
     private static Retrofit retrofit=null;

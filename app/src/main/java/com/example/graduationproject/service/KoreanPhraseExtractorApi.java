@@ -1,5 +1,8 @@
 package com.example.graduationproject.service;
 
+// 키워드를 추출하는 클래스
+// komoran api 를 사용합니다.
+
 import java.util.ArrayList;
 
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
@@ -9,14 +12,11 @@ import kr.co.shineware.nlp.komoran.model.Token;
 import java.util.List;
 
 
-
-
 public class KoreanPhraseExtractorApi {
 
     private ArrayList<String> gettedTitleList;
     private String madeTitleString = "";
     private ArrayList<String> resultList;
-    private List<Token> tokenList;
 
     public KoreanPhraseExtractorApi(ArrayList<String> arrayList){
         gettedTitleList = arrayList;
@@ -34,7 +34,7 @@ public class KoreanPhraseExtractorApi {
     }
 
     public ArrayList<String> extractPhrase(){
-        Komoran komoran = new Komoran(DEFAULT_MODEL.LIGHT);
+        Komoran komoran = new Komoran(DEFAULT_MODEL.LIGHT); // FULL 로 하지 않도록 주의.
         makeListToString();
         String test = madeTitleString;
 
@@ -44,7 +44,5 @@ public class KoreanPhraseExtractorApi {
 
         return resultList;
     }
-
-
 
 }

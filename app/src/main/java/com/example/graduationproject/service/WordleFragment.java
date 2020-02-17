@@ -33,14 +33,6 @@ import java.util.ArrayList;
  */
 public class WordleFragment extends Fragment {
 
-
-    /*
-    String[] wordCloud = new String[]{ "IT/전자기기", "식품", "의류", "부동산", "뉴스/정치",
-            "Ice Cream Sandwich", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow",
-            "Oreo", "AndroidX", "CheckMate"};
-
-     */
-
     private String[] wordCloud;
     private ArrayList<SurveyDTO> datas = new ArrayList<>();
     private ArrayList<String> extractedTitles = new ArrayList<>();
@@ -69,15 +61,13 @@ public class WordleFragment extends Fragment {
 
         }
     }
-    public WordleFragment() {
-        // Required empty public constructor
-    }
+    public WordleFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
+        // 서버에 등록된 설문조사의 정보를 받아옵니다.
         getSurveyTitles();
 
         new Thread(new Runnable() {
@@ -86,9 +76,6 @@ public class WordleFragment extends Fragment {
                 while(!isFinish){ }
                 if(isFinish){
                     extractedTitles = extractTitleFromSurveyDTO(datas);
-                    getActivity().runOnUiThread(()->{
-                        Toast.makeText(getContext(), Integer.toString(extractedTitles.size()),Toast.LENGTH_LONG).show();
-                    });
 
                     koreanPhraseExtractor = new KoreanPhraseExtractorApi(extractedTitles);
                     ArrayList<String> str = koreanPhraseExtractor.extractPhrase();
@@ -113,6 +100,8 @@ public class WordleFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
+        // Word Cloud 띄워주는 스레드
+        // asset 폴더의 d3.html 참조
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -161,6 +150,8 @@ public class WordleFragment extends Fragment {
 
     }
 
+    // 서버에 등록된 설문의 pageCount 를 어디까지 상한을 둬야할지는 후에 테스트에서 실험해야할 듯.
+    // 서버에서 연산을 해주는 방법도 고려해 볼 수 있습니다.
     public void getSurveyTitles(){
         RetrofitApi.getService().getSurveyList("all",pageCount).enqueue(new retrofit2.Callback<ArrayList<SurveyDTO>>() {
             @Override
@@ -174,7 +165,7 @@ public class WordleFragment extends Fragment {
                 else {isFinish = true;}
             }
             @Override
-            public void onFailure(retrofit2.Call<ArrayList<SurveyDTO>> call, Throwable t) {}
+            public void onFailure(retrofit2.Call<ArrayList<SurveyDTO>> call, Throwable t) {Toast.makeText(getContext(), "fail",Toast.LENGTH_LONG).show();}
         });
 
     }

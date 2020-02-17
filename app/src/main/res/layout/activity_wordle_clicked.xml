@@ -19,4 +19,12 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/wordle_recyclerView"
+        android:background="#EEE9E9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
