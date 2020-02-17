@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/border"
+    android:background="?android:attr/selectableItemBackground"
     android:backgroundTint="#FCFCFC"
     android:elevation="10dp">
     <TextView
@@ -18,19 +18,7 @@
         android:textStyle="bold"
         android:textColor="#000000"
         android:text="default"/>
-    <Button
-        android:id="@+id/btnSurveyResult"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="10dp"
-        android:background="@drawable/corner_border"
-        android:backgroundTint="#2359F7"
-        android:text="결과보기"
-        android:textColor="#ffffff"
-        android:onClick="onClick"
-        />
+
 
     <TextView
         android:id="@+id/txtResponse"
@@ -50,14 +38,5 @@
         app:layout_constraintTop_toBottomOf="@id/txtResponse"
         app:layout_constraintLeft_toLeftOf="parent"
         android:text="default"/>
-    <ImageButton
-        android:id="@+id/btnShare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@drawable/ic_share_black_24dp"
-        android:backgroundTint="#979393"
-        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

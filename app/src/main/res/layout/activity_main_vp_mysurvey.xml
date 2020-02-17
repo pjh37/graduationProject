@@ -32,10 +32,12 @@
                 android:text="작성중인 설문"
                 android:textColor="#050505"/>
             <TextView
+                android:id="@+id/moreOfflineView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_margin="5dp"
+                android:clickable="true"
                 android:text="더보기>"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/offlineSurveyRecycleView"
@@ -61,10 +63,12 @@
                 android:text="응답 대기 설문"
                 android:textColor="#050505"/>
             <TextView
+                android:id="@+id/moreMySurveyView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_margin="5dp"
+                android:clickable="true"
                 android:text="더보기>"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/responseWaitSurveyRecycleView"

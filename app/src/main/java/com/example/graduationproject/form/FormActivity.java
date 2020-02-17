@@ -11,12 +11,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +27,7 @@ import com.example.graduationproject.NetworkManager;
 import com.example.graduationproject.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
+import com.jmedeisis.draglinearlayout.DragLinearLayout;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,7 +41,7 @@ import androidx.appcompat.widget.Toolbar;
 
 
 public class FormActivity extends AppCompatActivity {
-    private LinearLayout container;
+//    private LinearLayout container;
     private EditText editTitle;
     private EditText editDescription;
     private ArrayList<DialogVO> datas;
@@ -72,14 +76,16 @@ public class FormActivity extends AppCompatActivity {
     private Animation fab_open, fab_close, fab_clock, fab_anticlock;
     Boolean isOpen = false;
 
-    private FormTypeImage formTypeImage;
+    private static FormTypeImage formTypeImage;
     private static final int REQUEST_CODE = 10;
+
+    private DragLinearLayout container;
+    ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_form);
-
         init();
     }
     public void init(){
@@ -95,7 +101,6 @@ public class FormActivity extends AppCompatActivity {
 
         formSaveManager= FormSaveManager.getInstance(this);
 
-        container=(LinearLayout)findViewById(R.id.container);
         editTitle=(EditText)findViewById(R.id.editTitle);
         editDescription=(EditText)findViewById(R.id.editDescription);
 
@@ -108,7 +113,7 @@ public class FormActivity extends AppCompatActivity {
         }
 
         load();
-        registerReceiver(FormTypeImageBroadcastReceiver,new IntentFilter("com.example.graduationproject.FormTypeImage.IMAGE_ADD_BUTTON_CLICKED"));
+//        registerReceiver(FormTypeImageBroadcastReceiver,new IntentFilter("com.example.graduationproject.FormTypeImage.IMAGE_ADD_BUTTON_CLICKED"));
 
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
@@ -131,14 +136,18 @@ public class FormActivity extends AppCompatActivity {
                 }
             }
         });
+
+        container = (DragLinearLayout) findViewById(R.id.container);
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
+        container.setContainerScrollView(scrollView);
     }
-    BroadcastReceiver FormTypeImageBroadcastReceiver=new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int formTypeImageIndex=intent.getIntExtra("form_id",-1);
-            formTypeImage= ((FormTypeImage)(container.getChildAt(formTypeImageIndex+2)));
-        }
-    };
+//    BroadcastReceiver FormTypeImageBroadcastReceiver=new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            int formTypeImageIndex=intent.getIntExtra("form_id",-1);
+//            formTypeImage= ((FormTypeImage)(container.getChildAt(formTypeImageIndex+2)));
+//        }
+//    };
     public String getTime(){
         return String.valueOf(System.currentTimeMillis());
     }
@@ -210,7 +219,10 @@ public class FormActivity extends AppCompatActivity {
                                         ((FormTypeImage) temp).setFormComponent_id(i);
                                     }
                                     temp.formComponentSetting(forms.get(i));
-                                    container.addView(temp);
+                                    ViewGroup customlayout = (ViewGroup) temp.getChildAt(0); // 이미 부모 존재
+                                    ImageView dragHandle = (ImageView)customlayout.findViewById(R.id.drag_view);
+                                    //container.addView(temp); 이렇게 하면 다시 로드할 경우 드래그 안됨
+                                    container.addDragView(temp, dragHandle);
                                 }
                             }catch (Exception e){
                                 e.printStackTrace();
@@ -273,10 +285,13 @@ public class FormActivity extends AppCompatActivity {
             case R.id.fab_pic: {
                 FormAbstract layout = FormFactory.getInstance(FormActivity.this, FormType.IMAGE)
                         .createForm();
-                if(layout instanceof FormTypeImage){
-                    ((FormTypeImage) layout).setFormComponent_id(container.getChildCount()-2);
-                }
-                container.addView(layout);
+
+                ((FormTypeImage) layout).setFormComponent_id(container.getChildCount()-2);
+
+                ViewGroup customlayout = (ViewGroup) layout.getChildAt(0); // 이미 부모 존재
+                ImageView dragHandle = (ImageView)customlayout.findViewById(R.id.drag_view);
+
+                container.addDragView(layout, dragHandle);
                 fab_close();
                 break;
             }
@@ -317,10 +332,9 @@ public class FormActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 FormAbstract layout=FormFactory.getInstance(FormActivity.this,i).createForm();
-                if(layout instanceof FormTypeImage){
-                    ((FormTypeImage) layout).setFormComponent_id(container.getChildCount()-2);
-                }
-                container.addView(layout);
+                ViewGroup customlayout = (ViewGroup) layout.getChildAt(0); // 이미 부모 존재
+                ImageView dragHandle = (ImageView)customlayout.findViewById(R.id.drag_view);
+                container.addDragView(layout, dragHandle);
             }
         });
         builder.show();
@@ -361,11 +375,11 @@ public class FormActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(FormTypeImageBroadcastReceiver);
-    }
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        unregisterReceiver(FormTypeImageBroadcastReceiver);
+//    }
 
     public void fab_open() {
         fab1_video.startAnimation(fab_open);
@@ -393,5 +407,8 @@ public class FormActivity extends AppCompatActivity {
         fab3_item.setClickable(false);
 
         isOpen = false;
+    }
+    public static void set_FormTypeImage_class(FormTypeImage fti){
+        formTypeImage = fti;
     }
 }

@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.graduationproject.R;
 import com.example.graduationproject.form.FormActivity;
 import com.example.graduationproject.form.FormSaveManager;
+import com.example.graduationproject.mainActivityViwePager.SurveyDTO;
 
 import java.util.ArrayList;
 
@@ -87,5 +88,10 @@ public class OfflineFormRVAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public int getItemCount() {
         return formItem.size();
+    }
+
+    public void addItem(ArrayList<FormItem> data){
+        formItem.addAll(data);
+        notifyDataSetChanged();
     }
 }

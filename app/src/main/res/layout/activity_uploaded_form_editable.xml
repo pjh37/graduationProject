@@ -56,6 +56,54 @@
             android:layout_height="1px"
             android:background="#706E6E"/>
         <LinearLayout
+            android:id="@+id/btnResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:onClick="onClick">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/template"
+                android:backgroundTint="#474646"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="2"
+                android:textColor="#111111"
+                android:text="설문 결과"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#706E6E"/>
+        <LinearLayout
+            android:id="@+id/btnShare"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:onClick="onClick">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/ic_share_black_24dp"
+                android:backgroundTint="#474646"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="2"
+                android:textColor="#111111"
+                android:text="설문요청"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#706E6E"/>
+        <LinearLayout
             android:id="@+id/btnEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,7 +121,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="2"
                 android:textColor="#111111"
-                android:text="Edit Form"/>
+                android:text="편집하기"/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"
@@ -97,7 +145,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="2"
                 android:textColor="#111111"
-                android:text="Preview Form"/>
+                android:text="미리보기"/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"
@@ -120,7 +168,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="2"
                 android:textColor="#111111"
-                android:text="Delete Form"/>
+                android:text="설문삭제"/>
         </LinearLayout>
     </LinearLayout>
     <ProgressBar

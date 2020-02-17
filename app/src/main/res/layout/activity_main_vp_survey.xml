@@ -28,7 +28,7 @@
         android:id="@+id/allSurveyRecycleView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#EEE9E9"
+        android:background="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@id/spinner_container"
         app:layout_constraintBottom_toBottomOf="parent"
         />

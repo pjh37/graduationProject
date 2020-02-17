@@ -6,26 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.example.graduationproject.R;
-import com.example.graduationproject.UploadedSurveyDTO;
-import com.example.graduationproject.UploadedSurveyRV;
-import com.example.graduationproject.form.FormAbstract;
-import com.example.graduationproject.form.FormDTO;
-import com.example.graduationproject.form.FormFactory;
-import com.example.graduationproject.offlineform.FormItem;
 import com.example.graduationproject.retrofitinterface.RetrofitApi;
-import com.example.graduationproject.retrofitinterface.RetrofitService;
-import com.google.gson.Gson;
 
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,12 +22,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class MainVPSurveyFragment extends Fragment {
     private Spinner spinner;
@@ -60,7 +40,7 @@ public class MainVPSurveyFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         datas=new ArrayList<>();
-
+        isFinish=false;
         pageNum=1;
         spinnerCount=0;
     }

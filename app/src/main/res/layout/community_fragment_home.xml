@@ -3,8 +3,10 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
-        android:id="@+id/spinner_item"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"/>
+        android:text="키워드 선택은 여기서 해주세요"
+        android:textColor="#0C0C0C"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="300dp"/>
 </LinearLayout>
