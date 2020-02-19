@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import retrofit2.Call;
+import retrofit2.Response;
 
 import android.Manifest;
 import android.content.Intent;
@@ -20,7 +22,8 @@ import android.widget.Toast;
 
 import com.example.graduationproject.MainActivity;
 import com.example.graduationproject.R;
-import com.example.graduationproject.community.CommunityMainActivity;
+import com.example.graduationproject.community.activity.CommunityMainActivity;
+import com.example.graduationproject.retrofitinterface.RetrofitApi;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -183,6 +186,16 @@ public class LoginActivity extends AppCompatActivity {
         btnGoCommunity.setVisibility(View.VISIBLE);
         btnLogin.setVisibility(View.GONE);
         autoLogin.setVisibility(View.GONE);
+        RetrofitApi.getService().userRegister(LoginSession.getUserEmail()).enqueue(new retrofit2.Callback<Boolean>(){
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if(response.body()!=null){
+                    Log.v("테스트","유저 저장 완료");
+                }
+            }
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) { }
+        });
 
     }
     private void goToSurvey(){

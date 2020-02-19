@@ -1,9 +1,10 @@
 package com.example.graduationproject.community.model;
 
-public class FriendDTO {
+import java.io.Serializable;
+
+public class FriendDTO implements Serializable {
     private String userEmail;
     private String profileImageUrl;
-
     public String getUserEmail() {
         return userEmail;
     }
@@ -19,4 +20,6 @@ public class FriendDTO {
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }
+
+
 }

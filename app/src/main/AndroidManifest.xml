@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
+        android:name=".login.LoginSession"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,10 +16,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        android:name=".login.LoginSession"
         android:usesCleartextTraffic="true">
-        <activity android:name=".community.CommunityMainActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name=".community.activity.SearchResultActivity"></activity>
+        <activity
+            android:name=".community.activity.CommunityMainActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".mainActivityViwePager.moreViewActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".UploadedFormEditableActivity" />

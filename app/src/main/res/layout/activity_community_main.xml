@@ -4,23 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".community.CommunityMainActivity">
+    tools:context=".community.activity.CommunityMainActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#EEECEC"
-        android:textAlignment="center"
+        android:background="#FFFFFF"
+
         app:layout_constraintTop_toTopOf="parent">
         <TextView
+            android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="검색"
             android:textSize="18dp"
-            android:textColor="#161616"/>
+            android:textColor="#0A0A0A"
+            android:layout_gravity="left"/>
         <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/MySearchViewStyle"
             android:layout_gravity="right"
             />
     </androidx.appcompat.widget.Toolbar>
