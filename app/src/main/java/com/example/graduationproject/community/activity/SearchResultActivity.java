@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.graduationproject.R;
 import com.example.graduationproject.community.adapter.FriendAdapter;
+import com.example.graduationproject.community.adapter.SearchAdapter;
 import com.example.graduationproject.community.model.FriendDTO;
 import com.example.graduationproject.retrofitinterface.RetrofitApi;
 
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 
 public class SearchResultActivity extends AppCompatActivity {
     RecyclerView recyclerView;
-    FriendAdapter adapter;
+    SearchAdapter adapter;
     Toolbar toolbar;
     private SearchView searchView;
     private RecyclerView.LayoutManager layoutManager;
@@ -54,7 +55,7 @@ public class SearchResultActivity extends AppCompatActivity {
     }
     public void searchType(String type){
         if(type.equals("friend")){
-            adapter=new FriendAdapter(this,datas);
+            adapter=new SearchAdapter(this,datas);
             recyclerView.setAdapter(adapter);
             getProfile();
         }

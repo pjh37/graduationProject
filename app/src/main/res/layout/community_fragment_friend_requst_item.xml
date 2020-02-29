@@ -7,9 +7,8 @@
     android:layout_margin="10dp">
     <ImageView
         android:id="@+id/profile_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_margin="5dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:background="#FFFFFF"
         />
     <TextView
@@ -21,14 +20,27 @@
         android:text="defalut"
         android:textColor="#0A0A0A"/>
     <Button
-        android:id="@+id/btnFriendDelete"
+        android:id="@+id/btnGrant"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginRight="15dp"
+        android:layout_alignBottom="@id/profile_image"
+        android:layout_toLeftOf="@id/btnReject"
+        android:layout_margin="5dp"
+        android:text="수락"
+        android:textColor="#ffffff"
+        android:background="@drawable/normal_border"
+        android:backgroundTint="#6678EC"
+        />
+    <Button
+        android:id="@+id/btnReject"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginRight="15dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@id/profile_image"
         android:layout_margin="5dp"
-        android:text="친구삭제"
+        android:text="거절"
         android:textColor="#ffffff"
         android:background="@drawable/normal_border"
         android:backgroundTint="#EE9191"

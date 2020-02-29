@@ -21,14 +21,14 @@
         android:text="defalut"
         android:textColor="#0A0A0A"/>
     <Button
-        android:id="@+id/btnFriendDelete"
+        android:id="@+id/btnFriendRequest"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginRight="15dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_margin="5dp"
-        android:text="친구삭제"
+        android:text="친구요청"
         android:textColor="#ffffff"
         android:background="@drawable/normal_border"
         android:backgroundTint="#EE9191"

@@ -33,10 +33,18 @@ public interface RetrofitService {
     Call<Boolean> userRegister(@Path("userEmail") String userEmail);
 
     @GET("user/{userEmail}/{state}")
-    Call<FriendDTO> getFriendList(@Path("userEmail") String userEmail,@Path("state") Integer state);
+    Call<ArrayList<FriendDTO>> getFriendList(@Path("userEmail") String userEmail,@Path("state") Integer state);
 
     @FormUrlEncoded
-    @POST("friendRequest")
+    @POST("friend/select")
+    Call<ArrayList<FriendDTO>> friendSelect(@FieldMap HashMap<String, Object> param);
+
+    @FormUrlEncoded
+    @POST("friend/update")
+    Call<Boolean> friendUpdate(@FieldMap HashMap<String, Object> param);
+
+    @FormUrlEncoded
+    @POST("friend/request")
     Call<Boolean> friendRequest(@FieldMap HashMap<String, Object> param);
 
     @FormUrlEncoded

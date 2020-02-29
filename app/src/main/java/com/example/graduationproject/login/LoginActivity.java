@@ -42,7 +42,7 @@ import com.kakao.usermgmt.LoginButton;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "로그인연동에러";//에러나면 하드코딩해서 이메일 넘길것!!!
     private static final int RC_SIGN_IN=1;
-    private LoginSession loginSession;
+    private Session session;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth firebaseAuth;
     private SharedPreferences mPref;
@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         checkPermission();
-        loginSession=(LoginSession)getApplication();
+        session =(Session)getApplication();
         btnGoSurvey=(Button)findViewById(R.id.btnGoSurvey);
         btnGoCommunity=(Button)findViewById(R.id.btnGoCommunity);
         btnLogin=(SignInButton)findViewById(R.id.sign_in_button);
@@ -112,9 +112,9 @@ public class LoginActivity extends AppCompatActivity {
         if(mPref.getBoolean("isAutoLogin",false)){
             chkAutoLogin.setChecked(true);
         }
-        userEmail=loginSession.getUserEmail();
-        userName=loginSession.getUserName();
-        userImage=loginSession.getUserImage();
+        userEmail= session.getUserEmail();
+        userName= session.getUserName();
+        userImage= session.getUserImage();
     }
 
     public void onClick(View v){
@@ -171,7 +171,7 @@ public class LoginActivity extends AppCompatActivity {
                             // 로그인 성공
                             FirebaseUser user=firebaseAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
-                            loginSession.setSession(user.getEmail(),user.getDisplayName(),user.getPhotoUrl());
+                            session.setSession(user.getEmail(),user.getDisplayName(),user.getPhotoUrl());
                             loginSuccess();
                         } else {
                             // 로그인 실패
@@ -186,7 +186,7 @@ public class LoginActivity extends AppCompatActivity {
         btnGoCommunity.setVisibility(View.VISIBLE);
         btnLogin.setVisibility(View.GONE);
         autoLogin.setVisibility(View.GONE);
-        RetrofitApi.getService().userRegister(LoginSession.getUserEmail()).enqueue(new retrofit2.Callback<Boolean>(){
+        RetrofitApi.getService().userRegister(Session.getUserEmail()).enqueue(new retrofit2.Callback<Boolean>(){
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                 if(response.body()!=null){

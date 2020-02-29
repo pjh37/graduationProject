@@ -2,8 +2,9 @@ package com.example.graduationproject.login;
 
 import android.app.Application;
 import android.net.Uri;
+import android.widget.Toast;
 
-public class LoginSession extends Application {
+public class Session extends Application {
     private static String userEmail;
     private static String userName;
     private static Uri userImage;
@@ -27,5 +28,11 @@ public class LoginSession extends Application {
 
     public static Uri getUserImage() {
         return userImage;
+    }
+    public static String getTime(){
+        return String.valueOf(System.currentTimeMillis());
+    }
+    public  void showToast(String msg){
+        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
     }
 }
