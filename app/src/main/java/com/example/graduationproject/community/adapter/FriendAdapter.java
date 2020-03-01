@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.graduationproject.R;
 import com.example.graduationproject.community.model.FriendDTO;
@@ -43,6 +44,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendHold
         }else{
             Glide.with(mContext)
                     .load(mContext.getString(R.string.baseUrl)+"user/profile/"+items.get(position).getProfileImageUrl()+".jpg")
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
         }
 

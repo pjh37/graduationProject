@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.graduationproject.R;
 import com.example.graduationproject.community.model.FriendDTO;
@@ -50,6 +51,7 @@ public class InviteAdapter extends RecyclerView.Adapter<InviteAdapter.InviteHold
         }else{
             Glide.with(holder.itemView.getContext())
                     .load(mContext.getString(R.string.baseUrl)+"user/profile/"+items.get(position).getProfileImageUrl()+".jpg")
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
         }
         holder.btnGrant.setOnClickListener(new InviteAdapter.ClickListener(holder,items.get(position).getUserEmail()));
