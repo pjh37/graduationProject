@@ -43,11 +43,11 @@ public SearchHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) 
 public void onBindViewHolder(@NonNull SearchHolder holder, int position) {
         if(items.get(position).getProfileImageUrl()==null){
         Glide.with(mContext)
-        .load(Uri.parse(items.get(position).getProfileImageUrl()))
+        .load(R.drawable.profile)
         .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
         }else{
         Glide.with(mContext)
-        .load(R.drawable.custom_item)
+        .load(mContext.getString(R.string.baseUrl)+"user/profile/"+items.get(position).getProfileImageUrl()+".jpg")
         .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
         }
         holder.btnFriendRequest.setOnClickListener(new ClickListener(items.get(position).getUserEmail()));

@@ -38,11 +38,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendHold
     public void onBindViewHolder(@NonNull FriendHolder holder, int position) {
         if(items.get(position).getProfileImageUrl()==null){
             Glide.with(mContext)
-                    .load(Uri.parse(items.get(position).getProfileImageUrl()))
+                    .load(R.drawable.profile)
                     .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
         }else{
             Glide.with(mContext)
-                    .load(R.drawable.custom_item)
+                    .load(mContext.getString(R.string.baseUrl)+"user/profile/"+items.get(position).getProfileImageUrl()+".jpg")
                     .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
         }
 

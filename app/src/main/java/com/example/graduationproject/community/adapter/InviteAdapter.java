@@ -45,11 +45,11 @@ public class InviteAdapter extends RecyclerView.Adapter<InviteAdapter.InviteHold
     public void onBindViewHolder(@NonNull InviteHolder holder, int position) {
         if(items.get(position).getProfileImageUrl()==null){
             Glide.with(holder.itemView.getContext())
-                    .load(Uri.parse(items.get(position).getProfileImageUrl()))
+                    .load(R.drawable.profile)
                     .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
         }else{
             Glide.with(holder.itemView.getContext())
-                    .load(R.drawable.custom_item)
+                    .load(mContext.getString(R.string.baseUrl)+"user/profile/"+items.get(position).getProfileImageUrl()+".jpg")
                     .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
         }
         holder.btnGrant.setOnClickListener(new InviteAdapter.ClickListener(holder,items.get(position).getUserEmail()));
