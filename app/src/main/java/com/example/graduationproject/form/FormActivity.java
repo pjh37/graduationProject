@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.graduationproject.NetworkManager;
 import com.example.graduationproject.R;
+import com.example.graduationproject.login.Session;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.jmedeisis.draglinearlayout.DragLinearLayout;
@@ -169,7 +170,7 @@ public class FormActivity extends AppCompatActivity {
 
         int formCnt=container.getChildCount()-2;
         try {
-            jsonObject.put("userEmail", userEmail);
+            jsonObject.put("userEmail", Session.getUserEmail());
             jsonObject.put("title",editTitle.getText().toString());
             jsonObject.put("description",editDescription.getText().toString());
             JSONArray jsonArray=new JSONArray();

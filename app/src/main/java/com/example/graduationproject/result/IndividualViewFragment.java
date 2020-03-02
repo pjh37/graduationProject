@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import com.example.graduationproject.R;
 import com.example.graduationproject.UploadedSurveyDTO;
+import com.example.graduationproject.login.Session;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -77,7 +78,7 @@ public class IndividualViewFragment extends Fragment {
         OkHttpClient client=new OkHttpClient();
         RequestBody requestbody=new MultipartBody.Builder().
                 setType(MultipartBody.FORM)
-                .addFormDataPart("userEmail",userEmail)
+                .addFormDataPart("userEmail", Session.getUserEmail())
                 .addFormDataPart("form_id",String.valueOf(form_id))
                 .build();
         okhttp3.Request request=new okhttp3.Request.Builder()
@@ -99,7 +100,7 @@ public class IndividualViewFragment extends Fragment {
                         .replace("}\"","}")
                         .replace("\"{","{");
 
-                //Log.v("테스트",res);
+                Log.v("테스트",res);
                 try {
 
                     JSONArray jsonArray=new JSONArray(res);
@@ -145,11 +146,34 @@ public class IndividualViewFragment extends Fragment {
                         Iterator<String>  iterator=gridParser.keySet().iterator();
                         while(iterator.hasNext()){
                             String key=iterator.next();
+                            Log.v("테스트","iterator.hasNext()"+key);
+                            Log.v("테스트","gridParser.get(key)"+gridParser.get(key).toString());
                             individualViewDTO.setResult(Integer.valueOf(key),gridParser.get(key));
                         }
                         individualViewDTO.setIndex(i+1);
                         individualViewDTO.setTime(time);
+                        ///수정중------------------------------------------------
+                        keys=jsonObjResult.keys();
 
+                        while(keys.hasNext()){
+                            String key=keys.next();
+                            Object json=jsonObjResult.get(key);
+
+                            if(json instanceof JSONArray){
+                                JSONArray multiAnswerJson=(JSONArray)json;
+                                ArrayList<String> multiAnswer=new ArrayList<>();
+                                for(int k=0;k<multiAnswerJson.length();k++){
+                                    multiAnswer.add(multiAnswerJson.getString(k));
+                                }
+                                individualViewDTO.setResult(Integer.valueOf(key),multiAnswer);
+                            }else{
+                                ArrayList<String> multiAnswer=new ArrayList<>();
+                                multiAnswer.add(String.valueOf(json));
+                                individualViewDTO.setResult(Integer.valueOf(key),multiAnswer);
+                            }
+                        }
+                        ///수정중------------------------------------------------
+                        /*
                         for(int j=0;j<jsonObjResult.length();j++){
                             Object json=jsonObjResult.get(String.valueOf(j));
 
@@ -166,7 +190,7 @@ public class IndividualViewFragment extends Fragment {
                                 individualViewDTO.setResult(j,multiAnswer);
                             }
                         }
-
+                        */
                         datas.add(individualViewDTO);
 
                     }

@@ -16,6 +16,7 @@ import com.example.graduationproject.UploadedSurveyDTO;
 import com.example.graduationproject.UploadedSurveyRV;
 import com.example.graduationproject.form.FormDTO;
 import com.example.graduationproject.form.FormSaveManager;
+import com.example.graduationproject.login.Session;
 import com.example.graduationproject.offlineform.FormItem;
 import com.example.graduationproject.offlineform.OfflineFormRVAdapter;
 import com.google.gson.Gson;
@@ -95,7 +96,7 @@ public class MainVPMySurveyFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        getResponseWaitSurvey(userEmail);
+        getResponseWaitSurvey(Session.getUserEmail());
         new LoadTask().execute();
     }
 
@@ -187,7 +188,7 @@ public class MainVPMySurveyFragment extends Fragment {
         OkHttpClient client=new OkHttpClient();
         RequestBody requestbody=new MultipartBody.Builder().
                 setType(MultipartBody.FORM)
-                .addFormDataPart("userEmail",userEmail)
+                .addFormDataPart("userEmail", Session.getUserEmail())//userEmail 부분 교체
                 .build();
         okhttp3.Request request=new okhttp3.Request.Builder()
                 .url(url+"user/forms")

@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.graduationproject.R;
+import com.example.graduationproject.login.Session;
 import com.google.android.material.tabs.TabLayout;
 
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +51,7 @@ public class ResultActivity extends AppCompatActivity {
         viewPager=(ViewPager)findViewById(R.id.viewPager);
         mTabLayout=(TabLayout)findViewById(R.id.tabs);
         Bundle args=new Bundle();
-        args.putString("userEmail",userEmail);
+        args.putString("userEmail", Session.getUserEmail());
         args.putInt("form_id",form_id);
         pagerAdapter=new ResultViewPagerAdapter(getSupportFragmentManager(),args);
         viewPager.setAdapter(pagerAdapter);
