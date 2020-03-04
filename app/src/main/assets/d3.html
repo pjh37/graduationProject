@@ -7,51 +7,77 @@
     <meta name="viewport" content="width=device-width, user-scalable=no">
 </head>
 <body>
-<script src="d3.js"></script>
-<script src="d3.layout.cloud.js"></script>
-<script>
-function alertClickText(data){
-    var browserInfo = navigator.userAgent;
-    if(browserInfo.indexOf("Android")>-1){
-        window.GetWord.getClickedWord(data);
-    }
-}
+    <script src="d3.js"></script>
+    <script src="d3.layout.cloud.js"></script>
+    <script src="jquery.js"></script>
+    <script>
+        function alertClickText(data){
+            var browserInfo = navigator.userAgent;
+            if(browserInfo.indexOf("Android")>-1){
+                window.GetWord.getClickedWord(data);
+            }
+        }
 
-function wordCloud(data) {
-    var fill = d3.scale.category20();
-    var layout = d3.layout.cloud()
-        .size([400, 500 ])
-        .words(data.map(function(d) {
-          return {text: d, size: 10 + Math.random() * 40};
-        }))
-        .padding(5)
-        .rotate(function() { return ~~(Math.random() * 2) * 90; })
-        .font("Impact")
-        .fontSize(function(d) { return d.size; })
-        .on("end", draw);
-    layout.start();
-    function draw(words) {
-      d3.select("body").append("svg")
-          .attr("width", layout.size()[0])
-          .attr("height", layout.size()[1])
-        .append("g")
-          .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-        .selectAll("text")
-          .data(words)
-        .enter().append("text")
-          .style("font-size", function(d) { return d.size + "px"; })
-          .style("font-family", "Impact")
-          .style("fill", function(d, i) { return fill(i); })
-          .attr("text-anchor", "middle")
-          .attr("transform", function(d) {
-            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-          })
-          .text(function(d) { return d.text; })
-          .on("click",function(d){
-                alertClickText(d.text);
-           });
-    }
-}
+        /**   Tilt TEST 중
+         * rotateY(degree1), skewX(degree2), skewY(degree3) 를 조정하여 tilt 시각적 효과
+         * degree2와 degree3 의 값은 degree1의 값의 반으로 설정
+         * degree1과 degree3의 부호는 반대로 설정
+         */
 
-</script>
+        var holder;
+        var degree = 0;
+        var timeInterval = 10;
+
+        function wordCloud(data) {
+            var fill = d3.scale.category20();
+            var layout = d3.layout.cloud()
+                .size([400, 500])
+                .words(data.map(function (d) {
+                    return { text: d, size: 10 + Math.random() * 40 };
+                }))
+                .padding(5)
+                .rotate(function () { return ~~(Math.random() * 2) * 90; })
+                .font("Impact")
+                .fontSize(function (d) { return d.size; })
+                .on("end", draw);
+            layout.start();
+            function draw(words) {
+                holder = d3.select("body")
+                    .append("svg")
+                    .attr("class", "cloudPanel")
+                    .attr("width", layout.size()[0])
+                    .attr("height", layout.size()[1])
+                    .attr("style", function () {
+                        return "-webkit-transform: perspective(500) rotateY(-"+degree+"deg);";
+                    });
+
+                holder.append("g")
+                        .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+                    .selectAll("text")
+                        .data(words)
+                    .enter().append("text").attr("class","textObj")
+                        .style("font-size", function (d) { return d.size + "px"; })
+                        .style("font-family", "Impact")
+                        .style("fill", function (d, i) { return fill(i); })
+                        .attr("text-anchor", "middle")
+                        .attr("transform", function (d) {
+                            return "translate(" + [d.x, d.y] + ") rotate(" + d.rotate + ")";
+                        })
+                        .text(function (d) { return d.text; })
+                        .on("click",function(d){
+                            alertClickText(d.text);
+                        });
+            }
+        }
+
+        function update(n) {
+            d3.select(".cloudPanel")
+                .attr("style", "-webkit-transform: perspective(500) rotateY(" + n*0.8 + "deg);");
+            d3.selectAll(".textObj")
+                .attr("transform", function (d) {
+                    return "translate(" + [d.x, d.y] + ") rotate(" + d.rotate + ") skewX(" + -n/2 + ") skewY(" + n/2 + ")";
+                });
+
+        }
+    </script>
 </body>

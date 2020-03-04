@@ -33,6 +33,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".service.WordleClickedActivity"/>
         <activity
             android:name=".service.ServiceTabActivity"
             android:label="@string/title_activity_service_tab"

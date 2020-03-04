@@ -27,7 +27,7 @@ public class ServiceSelectActivicy extends AppCompatActivity {
     public void serviceSelectClick(View v){
         switch (v.getId()){
             case R.id.serviceSelect_Survey:{
-                Intent intent = new Intent(getApplicationContext(),MainTempActivity.class);
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                 intent.putExtra("userEmail",userEmail);
                 startActivity(intent);
                 break;

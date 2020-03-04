@@ -4,17 +4,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import com.example.graduationproject.R;
 import com.example.graduationproject.community.adapter.CommunityVPadapter;
+import com.example.graduationproject.community.fragment.HomeFragment;
 import com.google.android.material.tabs.TabLayout;
+
+import static com.example.graduationproject.community.fragment.HomeFragment.userSensorListner;
 
 public class CommunityMainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout mTabLayout;
     private CommunityVPadapter adapter;
     private String userEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,5 +56,12 @@ public class CommunityMainActivity extends AppCompatActivity {
         public void onTabReselected(TabLayout.Tab tab) {
 
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if(HomeFragment.mSensorManager != null && userSensorListner != null)
+            HomeFragment.mSensorManager.unregisterListener(userSensorListner);
     }
 }

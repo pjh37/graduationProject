@@ -34,7 +34,7 @@ public class KoreanPhraseExtractorApi {
     }
 
     public ArrayList<String> extractPhrase(){
-        Komoran komoran = new Komoran(DEFAULT_MODEL.LIGHT); // FULL 로 하지 않도록 주의.
+        Komoran komoran = new Komoran(DEFAULT_MODEL.FULL); // LIGHT : 분류 성능 떨어지지만 성능 이득
         makeListToString();
         String test = madeTitleString;
 
