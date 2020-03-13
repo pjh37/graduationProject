@@ -39,7 +39,7 @@ import retrofit2.Response;
 
 public class SettingFragment extends Fragment {
     static final int PICK_FROM_ALBUM=1;
-
+    static final int SETTING_FRAGMENT_FRIEND_ADAPTER=0;
     ImageView profileImage;
     ImageView imageAdd;
     RecyclerView recyclerView;
@@ -57,7 +57,7 @@ public class SettingFragment extends Fragment {
         recyclerView=(RecyclerView)rootView.findViewById(R.id.recyclerView);
         datas=new ArrayList<>();
         layoutManager= new LinearLayoutManager(getContext());
-        adapter=new FriendAdapter(getContext(),datas);
+        adapter=new FriendAdapter(getContext(),datas,SETTING_FRAGMENT_FRIEND_ADAPTER);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         return rootView;

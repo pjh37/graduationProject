@@ -33,4 +33,15 @@
         android:background="@drawable/normal_border"
         android:backgroundTint="#EE9191"
         />
+    <CheckBox
+        android:id="@+id/chkInviteChatRoom"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
+        android:background="@drawable/normal_border"
+        android:backgroundTint="#8F8787"
+        />
 </RelativeLayout>

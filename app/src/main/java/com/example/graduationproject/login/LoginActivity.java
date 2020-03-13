@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     private LinearLayout autoLogin;
     private String userEmail;
     private String userName;
-    private Uri userImage;
+    private String userImage;
     boolean fileReadPermission;
     boolean fileWritePermission;
     boolean internetPermission;
@@ -104,6 +104,9 @@ public class LoginActivity extends AppCompatActivity {
         if(!fileReadPermission||!fileWritePermission||!internetPermission){
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.INTERNET},100);
+        }
+        if(ContextCompat.checkSelfPermission(this,Manifest.permission.FOREGROUND_SERVICE)==PackageManager.PERMISSION_GRANTED){
+
         }
     }
     @Override
@@ -171,7 +174,9 @@ public class LoginActivity extends AppCompatActivity {
                             // 로그인 성공
                             FirebaseUser user=firebaseAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
-                            session.setSession(user.getEmail(),user.getDisplayName(),user.getPhotoUrl());
+                            session.setSession(user.getEmail(),user.getDisplayName(),String.valueOf(user.getPhotoUrl()));
+                            saveLoginInfo(user.getEmail(),user.getDisplayName(),user.getPhotoUrl());
+                            session.messageServiceStart();
                             loginSuccess();
                         } else {
                             // 로그인 실패
@@ -211,5 +216,13 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtra("userName",userName);
         intent.putExtra("userImage",userImage);
         startActivity(intent);
+    }
+    private void saveLoginInfo(String userEmail,String userName,Uri userImage){
+        SharedPreferences login_info=getSharedPreferences("loginConfig",0);
+        SharedPreferences.Editor editor=login_info.edit();
+        editor.putString("userEmail",userEmail);
+        editor.putString("userName",userName);
+        editor.putString("userImage",String.valueOf(userImage));
+        editor.commit();
     }
 }

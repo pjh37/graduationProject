@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,12 +22,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendHolder>{
-    private ArrayList<FriendDTO> items=new ArrayList<>();
+    private ArrayList<FriendDTO> items;
     private Context mContext;
+    private int type;
+    private static final int FRIEND_LIST=0;//단순 친구목록 , 옆에 친구 삭제 버튼이 함께한다
+    private static final int INVITE_LIST=1;//친구 삭제버튼이 사라지고 채팅방초대 체크박스가 활성화 된다
     private View itemView;
-    public FriendAdapter(Context context, ArrayList<FriendDTO> items){
+    public FriendAdapter(Context context, ArrayList<FriendDTO> items,int type){
         this.mContext=context;
         this.items=items;
+        this.type=type;
     }
     @NonNull
     @Override
@@ -49,6 +54,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendHold
         }
 
         holder.userEmail.setText(items.get(position).getUserEmail().split("@")[0]);
+        if(type==FRIEND_LIST){
+            holder.chkInviteChatRoom.setVisibility(View.GONE);
+        }else if(type==INVITE_LIST){
+            holder.btnFriendDelete.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -67,11 +77,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendHold
         TextView userEmail;
         ImageView profileImage;
         Button btnFriendDelete;
+        CheckBox chkInviteChatRoom;
         FriendHolder(View itemView){
             super(itemView);
             profileImage=(ImageView)itemView.findViewById(R.id.profile_image);
             userEmail=(TextView)itemView.findViewById(R.id.userEmail);
             btnFriendDelete=(Button)itemView.findViewById(R.id.btnFriendDelete);
+            chkInviteChatRoom=(CheckBox)itemView.findViewById(R.id.chkInviteChatRoom);
         }
     }
     class ClickListener implements View.OnClickListener{

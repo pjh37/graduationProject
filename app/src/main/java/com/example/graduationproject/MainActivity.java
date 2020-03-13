@@ -13,6 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.graduationproject.form.FormActivity;
+import com.example.graduationproject.login.Session;
 import com.example.graduationproject.mainActivityViwePager.MainVPAdapter;
 import com.example.graduationproject.offlineform.OfflineFormActivity;
 import com.google.android.material.navigation.NavigationView;
@@ -42,9 +44,11 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private boolean isFinish;
 
+    private Session session;
+
     public String userEmail;
     public String userName;
-    public Uri userImage;
+    public String userImage;
 
     private ViewPager viewPager;
     private MainVPAdapter mainVPAdapter;
@@ -54,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        session=(Session)getApplication();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Forms");
         setSupportActionBar(toolbar);
@@ -77,7 +81,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         userEmail = intent.getStringExtra("userEmail");
         userName = intent.getStringExtra("userName");
-        userImage = intent.getExtras().getParcelable("userImage");
+        userImage = intent.getStringExtra("userImage");
+        session.setSession(userEmail,userName,userImage);
+        //session.messageServiceStart();
+
+
+        Log.v("테스트","onCreate : "+userEmail);
 
         NavigationView navigationView=(NavigationView)findViewById(R.id.navigationView);
         View NavHeader = navigationView.getHeaderView(0); // LinearLayout
@@ -147,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -176,4 +186,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
+
 }

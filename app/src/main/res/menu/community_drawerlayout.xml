@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/group1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/mailbox"
+            android:title="쪽지함"
+            android:icon="@drawable/mailbox"
+
+            />
+        <item
+            android:id="@+id/chatroom"
+            android:title="채팅방"
+            android:icon="@drawable/chatroom"/>
+
+    </group>
+
+
+</menu>

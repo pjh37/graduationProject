@@ -3,7 +3,7 @@
     <string name="kakao_app_key">053549b2c82731621dbf53e58c360eac</string>
     <string name="drawer_open">open navigation drawer</string>
     <string name="drawer_close">close navigation drawer</string>
-    <string name="baseUrl">http://pjh.cafe24app.com/</string>
+    <string name="baseUrl">http://pjh.cafe24app.com/ </string>
     <string name="notification_channel_id">checkmate_msg</string>
     <string name="notification_channel_name">checkmate</string>
     <!--http://pjh.cafe24app.com/  -->

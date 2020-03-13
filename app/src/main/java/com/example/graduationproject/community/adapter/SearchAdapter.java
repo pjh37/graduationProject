@@ -38,7 +38,7 @@ public SearchAdapter(Context context, ArrayList<FriendDTO> items){
 public SearchHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.community_fragment_friend_search_item,parent,false);
         return new SearchHolder(itemView);
-        }
+}
 
 @Override
 public void onBindViewHolder(@NonNull SearchHolder holder, int position) {
@@ -52,9 +52,9 @@ public void onBindViewHolder(@NonNull SearchHolder holder, int position) {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
         .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
         }
-        holder.btnFriendRequest.setOnClickListener(new ClickListener(items.get(position).getUserEmail()));
         holder.userEmail.setText(items.get(position).getUserEmail().split("@")[0]);
-        }
+        holder.btnFriendRequest.setOnClickListener(new ClickListener(items.get(position).getUserEmail()));
+}
 
 @Override
 public int getItemCount() {
@@ -63,15 +63,16 @@ public int getItemCount() {
 public void setItems(ArrayList<FriendDTO> items){
         this.items=items;
         notifyDataSetChanged();
-        }
+}
 public void addItems(ArrayList<FriendDTO> items){
         this.items.addAll(items);
         notifyDataSetChanged();
-        }
+}
 class SearchHolder extends RecyclerView.ViewHolder{
     TextView userEmail;
     ImageView profileImage;
     Button btnFriendRequest;
+
     SearchHolder(View itemView){
         super(itemView);
         profileImage=(ImageView)itemView.findViewById(R.id.profile_image);
