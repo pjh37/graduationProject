@@ -1,10 +1,13 @@
 package com.example.graduationproject.retrofitinterface;
 
 import com.example.graduationproject.UploadedSurveyDTO;
+import com.example.graduationproject.community.model.ChatRoomDTO;
+import com.example.graduationproject.community.model.ChatRoomTempDTO;
 import com.example.graduationproject.community.model.FriendDTO;
 import com.example.graduationproject.form.FormDTO;
 import com.example.graduationproject.mainActivityViwePager.RequestType;
 import com.example.graduationproject.mainActivityViwePager.SurveyDTO;
+import com.example.graduationproject.messageservice.MessageDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +28,7 @@ import retrofit2.http.Path;
 
 public interface RetrofitService {
 
-
+    //설문 관련 요청
     @GET("form/{type}/{pages}")
     Call<ArrayList<SurveyDTO>> getSurveyList(@Path("type") String type, @Path("pages")Integer page);
 
@@ -45,6 +48,8 @@ public interface RetrofitService {
     @GET("user/{userEmail}/{state}")
     Call<ArrayList<FriendDTO>> getFriendList(@Path("userEmail") String userEmail,@Path("state") Integer state);
 
+
+    //커뮤니티 관련 요청
     @FormUrlEncoded
     @POST("friend/select")
     Call<ArrayList<FriendDTO>> friendSelect(@FieldMap HashMap<String, Object> param);
@@ -57,12 +62,14 @@ public interface RetrofitService {
     @POST("friend/request")
     Call<Boolean> friendRequest(@FieldMap HashMap<String, Object> param);
 
+    //채팅방,채팅 관련 요청
     @FormUrlEncoded
-    @POST("upload")
-    Call<FormDTO>  formUpload(@Field("params")String userID,
-                              @Field("params")String title,
-                              @Field("params")String description,
-                              @Field("params")String json,
-                              @Field("params")String time);
+    @POST("chat/create")
+    Call<Boolean> chatRoomCreateRequest(@FieldMap HashMap<String, Object> param);
 
+    @GET("chat/{roomKey}")
+    Call<ArrayList<MessageDTO>> getRoomMessage(@Path("roomKey") String roomKey);
+
+    @GET("chat/{userEmail}")
+    Call<ArrayList<ChatRoomTempDTO>> getRoomList(@Path("userEmail") String userEmail);
 }

@@ -1,27 +1,34 @@
 package com.example.graduationproject.messageservice;
 
 public class MessageDTO {
-    private String chatRoomID;
-    private int messageType;
+    private int _id;
+    private String roomKey;
     private String userEmail;
     private String message;
     private String date;
-    private String fileUrl;
-
-    public String getChatRoomID() {
-        return chatRoomID;
+    private int isRead;
+    public MessageDTO(int _id,String roomKey,String userEmail,String message,String date,int isRead){
+        this._id=_id;
+        this.roomKey=roomKey;
+        this.userEmail=userEmail;
+        this.message=message;
+        this.date=date;
+        this.isRead=isRead;
+    }
+    public int get_id() {
+        return _id;
     }
 
-    public void setChatRoomID(String chatRoomID) {
-        this.chatRoomID = chatRoomID;
+    public void set_id(int _id) {
+        this._id = _id;
     }
 
-    public int getMessageType() {
-        return messageType;
+    public String getRoomKey() {
+        return roomKey;
     }
 
-    public void setMessageType(int messageType) {
-        this.messageType = messageType;
+    public void setRoomKey(String roomKey) {
+        this.roomKey = roomKey;
     }
 
     public String getUserEmail() {
@@ -48,11 +55,4 @@ public class MessageDTO {
         this.date = date;
     }
 
-    public String getFileUrl() {
-        return fileUrl;
-    }
-
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl;
-    }
 }

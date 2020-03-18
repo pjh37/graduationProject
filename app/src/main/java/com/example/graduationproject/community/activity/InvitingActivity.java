@@ -11,6 +11,8 @@ import retrofit2.Response;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.graduationproject.R;
 import com.example.graduationproject.community.adapter.ChatRoomAdapter;
@@ -29,11 +31,14 @@ public class InvitingActivity extends AppCompatActivity {
     private ArrayList<FriendDTO> datas;
 
     private Toolbar toolbar;
+    private Button btnChatRoomCreate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inviting);
         toolbar=(Toolbar)findViewById(R.id.toolbar);
+        btnChatRoomCreate=(Button)findViewById(R.id.btnChatRoomCreate);
+        btnChatRoomCreate.setOnClickListener(new ClickListener());
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
@@ -65,6 +70,7 @@ public class InvitingActivity extends AppCompatActivity {
             public void onFailure(Call<ArrayList<FriendDTO>> call, Throwable t) { }
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -74,5 +80,31 @@ public class InvitingActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+    class ClickListener implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.btnChatRoomCreate:{
+                    chatRoomCreateRequest();
+                    break;
+                }
+            }
+        }
+    }
+    public void chatRoomCreateRequest(){
+        HashMap<String, Object> input = new HashMap<>();
+        input.put("userEmail", Session.getUserEmail());
+        input.put("friends",adapter.getCheckedFriends());
+        input.put("pk",Session.getUserEmail()+Session.getTime());
+
+        RetrofitApi.getService().chatRoomCreateRequest(input).enqueue(new retrofit2.Callback<Boolean>(){
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                finish();
+            }
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) { }
+        });
     }
 }

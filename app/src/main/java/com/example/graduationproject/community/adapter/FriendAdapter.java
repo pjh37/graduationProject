@@ -58,6 +58,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendHold
             holder.chkInviteChatRoom.setVisibility(View.GONE);
         }else if(type==INVITE_LIST){
             holder.btnFriendDelete.setVisibility(View.GONE);
+            holder.chkInviteChatRoom.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    items.get(position).setSelected(holder.chkInviteChatRoom.isChecked());
+                }
+            });
         }
     }
 
@@ -72,6 +78,15 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendHold
     public void addItems(ArrayList<FriendDTO> items){
         this.items.addAll(items);
         notifyDataSetChanged();
+    }
+    public ArrayList<String> getCheckedFriends(){
+        ArrayList<String> friends=new ArrayList<>();
+        for(int i=0;i<items.size();i++){
+            if(items.get(i).isSelected()){
+                friends.add(items.get(i).getUserEmail());
+            }
+        }
+        return friends;
     }
     class FriendHolder extends RecyclerView.ViewHolder{
         TextView userEmail;

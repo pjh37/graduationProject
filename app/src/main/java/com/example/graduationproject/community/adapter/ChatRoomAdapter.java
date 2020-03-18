@@ -13,6 +13,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.graduationproject.R;
 import com.example.graduationproject.community.model.ChatRoomDTO;
+import com.example.graduationproject.community.model.FriendDTO;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,6 +60,12 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public void addItems(ArrayList<ChatRoomDTO> items){
+        this.items.clear();
+        this.items.addAll(items);
+        notifyDataSetChanged();
     }
 
     class ChatRoomHolder extends RecyclerView.ViewHolder{

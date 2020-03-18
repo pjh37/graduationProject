@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".community.activity.ChatingActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomMenu"
+        android:background="#BEE7FF">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chatRecycleView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/bottomMenu"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:focusableInTouchMode="true">
+        <Button
+            android:id="@+id/fileSendBtn"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="#EED13E"
+            android:paddingTop="9dp"
+            android:drawableTop="@drawable/ic_add_black_24dp"
+            android:textColor="#FCFCFC"
+            android:textSize="18sp" />
+        <EditText
+            android:id="@+id/editSendMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="메세지를 입력하세요"
+
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="#FFFFFF"
+            android:inputType="textMultiLine"
+            android:maxLines="4" />
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="#F7E002"
+            android:paddingTop="9dp"
+            android:drawableTop="@drawable/ic_send_black_24dp"
+            android:textColor="#613030"
+            android:textSize="18sp"
+            android:onClick="onClick"/>
+
+    </LinearLayout>
+</RelativeLayout>

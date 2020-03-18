@@ -18,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".community.activity.InvitingActivity"></activity>
+        <activity android:name=".community.activity.ChatingActivity"></activity>
+        <activity android:name=".community.activity.InvitingActivity" />
         <activity android:name=".community.activity.ChatServiceActivity" />
         <activity android:name=".community.activity.SearchResultActivity" />
         <activity

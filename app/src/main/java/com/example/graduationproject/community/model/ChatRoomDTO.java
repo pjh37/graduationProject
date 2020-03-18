@@ -3,11 +3,20 @@ package com.example.graduationproject.community.model;
 import java.util.ArrayList;
 
 public class ChatRoomDTO {
+    private String roomKey;
     private ArrayList<String> userEmails;
     private String chatRoomImageUrl;
     private String userCnt;
     private String lastReceiveMessage;
     private String time;
+
+    public String getRoomKey() {
+        return roomKey;
+    }
+
+    public void setRoomKey(String roomKey) {
+        this.roomKey = roomKey;
+    }
 
     public ArrayList<String> getUserEmails() {
         return userEmails;

@@ -19,9 +19,13 @@ import com.example.graduationproject.login.Session;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 public class MessagingService extends Service {
-
+    Socket socket;
+    String url;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         startForegroundService();
@@ -40,7 +44,18 @@ public class MessagingService extends Service {
         Log.v("테스트","MessagingService onCreate 실행");
 
     }
+    private Emitter.Listener onConnected=new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            //socket.emit("connectComplete","jjjj1352");
+        }
+    };
+    private Emitter.Listener onMessageReceive=new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
 
+        }
+    };
     private void startForegroundService(){
         Log.v("테스트","startForegroundService 알림 실행");
         SharedPreferences login_info=getSharedPreferences("loginConfig",0);
