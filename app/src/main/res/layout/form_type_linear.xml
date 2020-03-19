@@ -121,7 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="Required"/>
+            android:text="필수"/>
         <Switch
             android:id="@+id/required_switch"
             android:layout_width="wrap_content"

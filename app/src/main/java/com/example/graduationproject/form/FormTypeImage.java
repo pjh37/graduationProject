@@ -48,10 +48,10 @@ public class FormTypeImage extends FormAbstract{
     private ImageButton mCopyView;
     private ImageButton mDeleteView;
 
-    private File file;
+    private File file; // 로컬 저장용
     private Uri uri;
     private Activity activity;
-    private int formComponent_id;
+    private int formComponent_id; // 원래는 image local file name 이다. 하지만 파일명으로 바꾸었다.
 
     public FormTypeImage(Context context, int type) {
         super(context, type);
@@ -102,20 +102,21 @@ public class FormTypeImage extends FormAbstract{
 
     }
 
-    public String getImageToString(File file){
-        Bitmap bitmap= BitmapFactory.decodeFile(file.getAbsolutePath());
-        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
-        byte[] imageBytes=byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(imageBytes,Base64.NO_WRAP);
-    }
-    public Bitmap getStringToImage(String encodedStr){
-        byte[] decodedByteArray=Base64.decode(encodedStr,Base64.NO_WRAP);
-        return BitmapFactory.decodeByteArray(decodedByteArray,0,decodedByteArray.length);
-    }
+//    public String getImageToString(File file){
+//        Bitmap bitmap= BitmapFactory.decodeFile(file.getAbsolutePath());
+//        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+//        byte[] imageBytes=byteArrayOutputStream.toByteArray();
+//        return Base64.encodeToString(imageBytes,Base64.NO_WRAP);
+//    }
+//    public Bitmap getStringToImage(String encodedStr){
+//        byte[] decodedByteArray=Base64.decode(encodedStr,Base64.NO_WRAP);
+//        return BitmapFactory.decodeByteArray(decodedByteArray,0,decodedByteArray.length);
+//    }
     public String getImagePath(Uri uri){
         Log.v("절대경로","uri : "+uri.toString());
         String filePath=null;
+        //어느쪽이 실행되는걸까? 대부분이 세그먼트식이네
         if(pathType(uri)){
             String docId= DocumentsContract.getDocumentId(uri);
             String[] split=docId.split(":");
@@ -169,6 +170,8 @@ public class FormTypeImage extends FormAbstract{
             jsonObject.put("real_file_data",file);
             jsonObject.put("real_file_name",formComponent_id);
 //            Log.v("테스트","getJsonObject 이미지 파일 : "+getImageToString(file));
+            Log.d("mawang", "FormTypeImage getJsonObject - file = " + file);
+            Log.d("mawang", "FormTypeImage getJsonObject - uri = " + uri);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -180,9 +183,10 @@ public class FormTypeImage extends FormAbstract{
     public void formComponentSetting(FormComponentVO vo) {
         mEditQuestion.setText(vo.getQuestion());
         this.uri=Uri.parse(vo.getMedia_file());
-        Glide.with(mContext).load(vo.getMedia_file()).into(mAttachedImage);
-        file=new File(getImagePath(Uri.parse(vo.getMedia_file())));
-
+//        Glide.with(mContext).load(vo.getMedia_file()).into(mAttachedImage);
+        Glide.with(mContext).load(uri).into(mAttachedImage);
+//        file=new File(getImagePath(Uri.parse(vo.getMedia_file())));
+        file = new File(getImagePath(uri));
     }
 
 
@@ -194,7 +198,8 @@ public class FormTypeImage extends FormAbstract{
     }
     public void setDataUri(Uri uri){
         this.uri=uri;
-        file=new File(getImagePath(uri));
+        file = new File(getImagePath(uri));
+        // 해줘야 생성시점에서도 file 이 null 이 아니다. update 도 해당되겠지
     }
 
     public class ClickListener implements OnClickListener{

@@ -2,15 +2,19 @@ package com.example.graduationproject.mainActivityViwePager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.graduationproject.MainActivity;
 import com.example.graduationproject.R;
 import com.example.graduationproject.UploadedFormEditableActivity;
+import com.example.graduationproject.result.ResultActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,43 +26,82 @@ import androidx.recyclerview.widget.RecyclerView;
 public class SurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private Context mContext;
     private ArrayList<SurveyDTO> datas;
+
     public SurveyRV(Context context, ArrayList<SurveyDTO> datas){
         this.mContext=context;
         this.datas=datas;
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView txtTitle;
-        TextView txtResponse;
+        TextView txtWriterName;
         TextView txtTime;
-        ImageButton btnShare;
+        TextView txtResponse;
+        Button resultBtn;
+        Button participateBtn;
+        ImageButton ibtnShare;
+
         public ViewHolder(View v){
             super(v);
             txtTitle=(TextView)v.findViewById(R.id.txtTitle);
-            txtResponse=(TextView)v.findViewById(R.id.txtResponse);
-            btnShare=(ImageButton)v.findViewById(R.id.btnShare);
-            txtTime=(TextView)v.findViewById(R.id.txtTime);
-            v.setOnClickListener(new View.OnClickListener() {
+            txtTitle = (TextView) v.findViewById(R.id.txtTitle);
+            txtWriterName = (TextView) v.findViewById(R.id.txtWriterName);
+            txtTime = (TextView) v.findViewById(R.id.txtTime);
+            txtResponse = (TextView) v.findViewById(R.id.txtResponse);
+            resultBtn = v.findViewById(R.id.btnSurveyResult);
+            participateBtn = v.findViewById(R.id.btnSurveyParticipate);
+            ibtnShare = v.findViewById(R.id.btnShare);
+
+            resultBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent =new Intent(mContext, UploadedFormEditableActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("form_id",datas.get(getAdapterPosition()).get_id());
-                    mContext.startActivity(intent);
+//                    Toast.makeText(view.getContext(),"resultBtn not yet",Toast.LENGTH_SHORT).show();
+                    resultRequest();
                 }
             });
-            btnShare.setOnClickListener(new View.OnClickListener() {
+            participateBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent=new Intent();
-                    intent.setAction(Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT,mContext.getString(R.string.baseUrl)+"survey/"+datas.get(getAdapterPosition()).get_id());
-                    Intent chooser=Intent.createChooser(intent,"공유");
-                    chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContext.startActivity(chooser);
+//                    Toast.makeText(view.getContext(),"participateBtn not yet",Toast.LENGTH_SHORT).show();
+                    previewRequest();
+                }
+            });
+            ibtnShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+//                    Toast.makeText(view.getContext(),"공유 not yet",Toast.LENGTH_SHORT).show();
+                    shareRequest();
                 }
             });
         }
+
+
+
+        public void resultRequest() {
+            Intent intent = new Intent(mContext, ResultActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("form_id", datas.get(getAdapterPosition()).get_id());
+            mContext.startActivity(intent);
+        }
+        public void previewRequest() {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mContext.getString(R.string.baseUrl) + "survey/" + datas.get(getAdapterPosition()).get_id()));
+            mContext.startActivity(intent);
+        }
+        public void shareRequest() {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, mContext.getString(R.string.baseUrl) + "survey/" + datas.get(getAdapterPosition()).get_id()); // 링크
+
+            Intent chooser = Intent.createChooser(intent, "공유"); // 다른앱으로 보내기
+            chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            mContext.startActivity(chooser);
+        }
+
+
+
+
     }
     @NonNull
     @Override
@@ -69,10 +112,11 @@ public class SurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     }
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position){
-        SurveyDTO vo=datas.get(position);
+        SurveyDTO vo = datas.get(position);
         ((ViewHolder)holder).txtTitle.setText(vo.getTitle());
-        ((ViewHolder)holder).txtResponse.setText(vo.getResponse_cnt()+" response");
+        ((ViewHolder) holder).txtWriterName.setText(MainActivity.getUserName());
         ((ViewHolder)holder).txtTime.setText(getTime(vo.getTime()));
+        ((ViewHolder) holder).txtResponse.setText(vo.getResponse_cnt() + " 참여"); //response
     }
     @Override
     public int getItemCount() {
@@ -85,12 +129,19 @@ public class SurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         String time = simpleDate.format(date);
         return time;
     }
-    public void addItem(ArrayList<SurveyDTO> data){
+    public void addDatas(ArrayList<SurveyDTO> data)
+    {
         datas.addAll(data);
         notifyDataSetChanged();
     }
-    public void clear(){
+
+    public void datasClear(){
         datas.clear();
         notifyDataSetChanged();
     }
+    public void setDatas(ArrayList<SurveyDTO> datas) {
+        this.datas = datas;
+        notifyDataSetChanged(); // work
+    }
+    public ArrayList<SurveyDTO> getDatas() {return datas;}
 }

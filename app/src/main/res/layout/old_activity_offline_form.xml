@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E9E9E9"
-    tools:context=".offlineform.OfflineFormActivity">
+    tools:context=".offlineform.old_OfflineFormActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"

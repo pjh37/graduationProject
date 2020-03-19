@@ -20,6 +20,7 @@ public class IndividualViewRV extends RecyclerView.Adapter<RecyclerView.ViewHold
     private Context mContext;
     private ArrayList<IndividualViewDTO> datas;
     private int form_id;
+
     public IndividualViewRV(Context context,ArrayList<IndividualViewDTO> datas,int form_id){
         this.mContext=context;
         this.datas=datas;
@@ -28,6 +29,7 @@ public class IndividualViewRV extends RecyclerView.Adapter<RecyclerView.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView txtIndex;
         TextView txtTime;
+
         public ViewHolder(View v){
             super(v);
             txtIndex=(TextView)v.findViewById(R.id.txtIndex);
@@ -61,5 +63,10 @@ public class IndividualViewRV extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemCount() {
         return datas.size();
+    }
+
+    public void setDatas(ArrayList<IndividualViewDTO> datas){
+        this.datas=datas;
+        notifyDataSetChanged();
     }
 }

@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private SharedPreferences mPref;
     private SharedPreferences.Editor editor;
-    LoginButton btnKaKaoLogin;
+    //LoginButton btnKaKaoLogin;
     CheckBox chkAutoLogin;
     private Button btnGoSurvey;
     private Button btnGoCommunity;
@@ -115,9 +115,14 @@ public class LoginActivity extends AppCompatActivity {
         if(mPref.getBoolean("isAutoLogin",false)){
             chkAutoLogin.setChecked(true);
         }
-        userEmail= session.getUserEmail();
-        userName= session.getUserName();
-        userImage= session.getUserImage();
+        // 로그인 누르기전에 실행되서,, null 값이다.
+        userEmail=session.getUserEmail();
+        userName=session.getUserName();
+        userImage=session.getUserImage();
+
+        Log.d("mawang", "LoginActivity onStart - userEmail = "+userEmail);
+        Log.d("mawang", "LoginActivity onStart - userName = "+userName);
+        Log.d("mawang", "LoginActivity onStart - userImage = "+userImage);
     }
 
     public void onClick(View v){
@@ -178,6 +183,11 @@ public class LoginActivity extends AppCompatActivity {
                             saveLoginInfo(user.getEmail(),user.getDisplayName(),user.getPhotoUrl());
                             session.messageServiceStart();
                             loginSuccess();
+
+                            // 로그인 후에 해야 값이 온다.
+                            userEmail= session.getUserEmail();
+                            userName= session.getUserName();
+                            userImage= session.getUserImage();
                         } else {
                             // 로그인 실패
                             Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();

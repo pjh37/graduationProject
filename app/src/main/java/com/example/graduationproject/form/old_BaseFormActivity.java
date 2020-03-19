@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class BaseFormActivity extends AppCompatActivity {
+public class old_BaseFormActivity extends AppCompatActivity {
     private static final int REQUEST_CODE=10;
     private String userEmail;
     private EditText editTitle;
@@ -113,7 +113,7 @@ public class BaseFormActivity extends AppCompatActivity {
         builder.setAdapter(dialog, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                FormAbstract layout=FormFactory.getInstance(BaseFormActivity.this,i).createForm();
+                FormAbstract layout=FormFactory.getInstance(old_BaseFormActivity.this,i).createForm();
                 layouts.add(layout);
                 if(layout instanceof FormTypeImage){
                     formTypeImage=((FormTypeImage) layout);
@@ -130,7 +130,7 @@ public class BaseFormActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==REQUEST_CODE){
             if(resultCode==RESULT_OK){
-                Glide.with(BaseFormActivity.this).load(data.getData()).into(formTypeImage.getmAttachedImage());
+                Glide.with(old_BaseFormActivity.this).load(data.getData()).into(formTypeImage.getmAttachedImage());
                 formTypeImage.setDataUri(data.getData());
             }
         }

@@ -38,7 +38,6 @@ public class Session extends Application {
     public static String getUserEmail() {
         return userEmail;
     }
-
     public static void setUserEmail(String userEmail) {
         Session.userEmail = userEmail;
     }
@@ -46,7 +45,6 @@ public class Session extends Application {
     public static String getUserName() {
         return userName;
     }
-
     public static void setUserName(String userName) {
         Session.userName = userName;
     }
@@ -54,13 +52,14 @@ public class Session extends Application {
     public static void setUserImage(String userImage) {
         Session.userImage = userImage;
     }
-
     public static String getUserImage() {
         return userImage;
     }
+
     public static String getTime(){
         return String.valueOf(System.currentTimeMillis());
     }
+
     public  void showToast(String msg){
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
     }
