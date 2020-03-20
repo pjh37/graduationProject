@@ -63,7 +63,7 @@ dependencies {
     implementation group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
 
     //komoran 3.3.4
-    implementation ('com.github.shin285:KOMORAN:3.3.4'){
+    implementation('com.github.shin285:KOMORAN:3.3.4') {
         exclude group: 'com.github.shineware', module: 'commons'
         exclude group: 'com.github.shineware', module: 'aho-corasick'
     }

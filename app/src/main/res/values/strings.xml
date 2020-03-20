@@ -13,6 +13,9 @@
     <string name="baseUrl">http://pjh.cafe24app.com/</string>
     <string name="notification_channel_id">checkmate_msg</string>
     <string name="notification_channel_name">checkmate</string>
+    <string name="appwidget_text">로그인 및 설정이 필요합니다</string>
+    <string name="add_widget">Add widget</string>
+    <string name="widget_set_expectValue">.widget.WidgetConfigActivity.SET_EXPECT_RESPONSE</string>
     <!--http://pjh.cafe24app.com/  -->
     <!--http://192.168.35.42:8001/ -->
     <!--http://203.229.46.199:8001/ -->

@@ -1,10 +1,5 @@
 package com.example.graduationproject.login;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,10 +13,14 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.graduationproject.MainActivity;
 import com.example.graduationproject.R;
 import com.example.graduationproject.community.CommunityMainActivity;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -183,12 +182,14 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
     private void loginSuccess(){
+
         btnGoSurvey.setVisibility(View.VISIBLE);
         btnGoCommunity.setVisibility(View.VISIBLE);
         btnLogin.setVisibility(View.GONE);
         autoLogin.setVisibility(View.GONE);
 
     }
+
     private void goToSurvey(){
         Intent intent=new Intent(LoginActivity.this, MainActivity.class); // new
         intent.putExtra("userEmail",userEmail);
