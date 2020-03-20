@@ -1,27 +1,17 @@
 package com.example.graduationproject.offlineform;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.graduationproject.R;
-import com.example.graduationproject.form.FormActivity;
 import com.example.graduationproject.form.FormSaveManager;
 
 import org.json.JSONObject;
@@ -30,17 +20,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class OfflineFormActivity extends AppCompatActivity {
+public class old_OfflineFormActivity extends AppCompatActivity {
     RecyclerView offlineForm;
     RecyclerView.Adapter  offlineFormAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<FormItem> formItem;
     private FormSaveManager formSaveManager;
     public String userEmail;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_offline_form);
+        setContentView(R.layout.old_activity_offline_form);
         Intent intent=getIntent();
         userEmail=intent.getStringExtra("userEmail");
         formSaveManager=FormSaveManager.getInstance(this);
@@ -69,7 +61,7 @@ public class OfflineFormActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             //offlineFormAdapter.notifyDataSetChanged();
-            offlineFormAdapter=new OfflineFormRVAdapter(OfflineFormActivity.this,formItem,userEmail);
+//            offlineFormAdapter=new OfflineFormRVAdapter(old_OfflineFormActivity.this,formItem,userEmail);
             offlineForm.setAdapter(offlineFormAdapter);
             offlineForm.setLayoutManager(layoutManager);
             super.onPostExecute(aVoid);

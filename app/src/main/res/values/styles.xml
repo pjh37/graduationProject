@@ -14,6 +14,7 @@
         <item name="colorControlNormal">@color/colorBackBtn</item>
     </style>
 
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -22,5 +23,11 @@
         <item name="android:textColor">#ffffff</item>
         <item name="android:typeface">monospace</item>
         <item name="android:background">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="MySearchViewStyle" parent="AppTheme">
+        <item name="searchIcon">@drawable/search</item>
+        <item name="closeIcon">@drawable/close</item>
+
     </style>
 </resources>

@@ -1,5 +1,12 @@
 package com.example.graduationproject.login;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import retrofit2.Call;
+import retrofit2.Response;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,14 +20,10 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import com.example.graduationproject.MainActivity;
 import com.example.graduationproject.R;
-import com.example.graduationproject.community.CommunityMainActivity;
+import com.example.graduationproject.community.activity.CommunityMainActivity;
+import com.example.graduationproject.retrofitinterface.RetrofitApi;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -37,15 +40,16 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.kakao.usermgmt.LoginButton;
 
 
+
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "로그인연동에러";//에러나면 하드코딩해서 이메일 넘길것!!!
     private static final int RC_SIGN_IN=1;
-    private LoginSession loginSession;
+    private Session session;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth firebaseAuth;
     private SharedPreferences mPref;
     private SharedPreferences.Editor editor;
-    LoginButton btnKaKaoLogin;
+    //LoginButton btnKaKaoLogin;
     CheckBox chkAutoLogin;
     private Button btnGoSurvey;
     private Button btnGoCommunity;
@@ -53,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     private LinearLayout autoLogin;
     private String userEmail;
     private String userName;
-    private Uri userImage;
+    private String userImage;
     boolean fileReadPermission;
     boolean fileWritePermission;
     boolean internetPermission;
@@ -63,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         checkPermission();
-        loginSession=(LoginSession)getApplication();
+        session =(Session)getApplication();
         btnGoSurvey=(Button)findViewById(R.id.btnGoSurvey);
         btnGoCommunity=(Button)findViewById(R.id.btnGoCommunity);
         btnLogin=(SignInButton)findViewById(R.id.sign_in_button);
@@ -103,6 +107,9 @@ public class LoginActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.INTERNET},100);
         }
+        if(ContextCompat.checkSelfPermission(this,Manifest.permission.FOREGROUND_SERVICE)==PackageManager.PERMISSION_GRANTED){
+
+        }
     }
     @Override
     public void onStart(){
@@ -110,9 +117,14 @@ public class LoginActivity extends AppCompatActivity {
         if(mPref.getBoolean("isAutoLogin",false)){
             chkAutoLogin.setChecked(true);
         }
-        userEmail=loginSession.getUserEmail();
-        userName=loginSession.getUserName();
-        userImage=loginSession.getUserImage();
+        // 로그인 누르기전에 실행되서,, null 값이다.
+        userEmail=session.getUserEmail();
+        userName=session.getUserName();
+        userImage=session.getUserImage();
+
+        Log.d("mawang", "LoginActivity onStart - userEmail = "+userEmail);
+        Log.d("mawang", "LoginActivity onStart - userName = "+userName);
+        Log.d("mawang", "LoginActivity onStart - userImage = "+userImage);
     }
 
     public void onClick(View v){
@@ -170,9 +182,15 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user=firebaseAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
 
-                            loginSession.setSession(user.getEmail(),user.getDisplayName(),user.getPhotoUrl());
+                            session.setSession(user.getEmail(),user.getDisplayName(),String.valueOf(user.getPhotoUrl()));
+                            saveLoginInfo(user.getEmail(),user.getDisplayName(),user.getPhotoUrl());
+                            session.messageServiceStart();
                             loginSuccess();
 
+                            // 로그인 후에 해야 값이 온다.
+                            userEmail= session.getUserEmail();
+                            userName= session.getUserName();
+                            userImage= session.getUserImage();
                         } else {
                             // 로그인 실패
                             Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
@@ -187,6 +205,16 @@ public class LoginActivity extends AppCompatActivity {
         btnGoCommunity.setVisibility(View.VISIBLE);
         btnLogin.setVisibility(View.GONE);
         autoLogin.setVisibility(View.GONE);
+        RetrofitApi.getService().userRegister(Session.getUserEmail()).enqueue(new retrofit2.Callback<Boolean>(){
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if(response.body()!=null){
+                    Log.v("테스트","유저 저장 완료");
+                }
+            }
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) { }
+        });
 
     }
 
@@ -203,5 +231,13 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtra("userName",userName);
         intent.putExtra("userImage",userImage);
         startActivity(intent);
+    }
+    private void saveLoginInfo(String userEmail,String userName,Uri userImage){
+        SharedPreferences login_info=getSharedPreferences("loginConfig",0);
+        SharedPreferences.Editor editor=login_info.edit();
+        editor.putString("userEmail",userEmail);
+        editor.putString("userName",userName);
+        editor.putString("userImage",String.valueOf(userImage));
+        editor.commit();
     }
 }

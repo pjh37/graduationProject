@@ -2,6 +2,7 @@ package com.example.graduationproject.result;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.graduationproject.R;
+import com.example.graduationproject.form.FormType;
 
 import java.util.ArrayList;
 
@@ -25,6 +27,7 @@ public class IndividualResultRV extends RecyclerView.Adapter<RecyclerView.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView txtQuestion;
         TextView txtAnswer;
+
         public ViewHolder(View v){
             super(v);
             txtQuestion=(TextView)v.findViewById(R.id.txtQuestion);
@@ -34,9 +37,33 @@ public class IndividualResultRV extends RecyclerView.Adapter<RecyclerView.ViewHo
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
-        View itemView= LayoutInflater.from(mContext).inflate(R.layout.activity_individual_result_item,parent,false);
-        ViewHolder viewHolder=new ViewHolder(itemView);
-        return viewHolder;
+        Log.d("mawang", "IndividualResultRV onCreateViewHolder - viewType = " + viewType);
+
+
+        if(viewType == FormType.ADDSECTION)
+        {
+            Log.d("mawang", "IndividualResultRV onCreateViewHolder - ADDSECTION ");
+            View sectionView = LayoutInflater.from(mContext).inflate(R.layout.activity_individual_result_item_section, parent, false);
+            ViewHolder viewHolder1 = new ViewHolder(sectionView);
+            return viewHolder1;
+        }
+        else if(viewType == FormType.SUBTEXT)
+        {
+            Log.d("mawang", "IndividualResultRV onCreateViewHolder - SUBTEXT ");
+            View subtextView = LayoutInflater.from(mContext).inflate(R.layout.activity_individual_result_item_subtext, parent, false);
+            ViewHolder viewHolder2 = new ViewHolder(subtextView);
+
+            return viewHolder2;
+        }
+        else
+        {
+            Log.d("mawang", "IndividualResultRV onCreateViewHolder - else ");
+            View itemView = LayoutInflater.from(mContext).inflate(R.layout.activity_individual_result_item, parent, false);
+            ViewHolder viewHolder = new ViewHolder(itemView);
+
+
+            return viewHolder;
+        }
     }
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position){
@@ -49,4 +76,17 @@ public class IndividualResultRV extends RecyclerView.Adapter<RecyclerView.ViewHo
     public int getItemCount() {
         return datas.size();
     }
+
+    public void setDatas(ArrayList<IndividualResultDTO> datas) {
+        this.datas = datas;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        return datas.get(position).getType();
+    }
+
+
 }

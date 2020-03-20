@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/chatRoom_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/custom_item"/>
+    <TextView
+        android:id="@+id/userEmails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:text="익명"
+        android:textSize="15sp"
+        android:textColor="#0A0A0A"
+        android:layout_toRightOf="@id/chatRoom_image"/>
+    <TextView
+        android:id="@+id/userCnt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:text="0"
+        android:textSize="15sp"
+        android:layout_toRightOf="@id/userEmails"/>
+    <TextView
+        android:id="@+id/lastReceivedMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_below="@id/userEmails"
+        android:layout_alignLeft="@id/userEmails"
+        android:text="content"/>
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="0월0일"
+        android:textSize="13sp"
+        android:layout_alignBaseline="@id/userEmails"/>
+</RelativeLayout>

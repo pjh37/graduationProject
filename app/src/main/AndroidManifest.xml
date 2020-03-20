@@ -6,9 +6,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-        android:name=".login.LoginSession"
+        android:name=".login.Session"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,32 +18,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".widget.WidgetConfigActivity">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
-            </intent-filter>
-        </activity>
 
-        <receiver android:name=".widget.HomeSurveyWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/home_survey_widget_info" />
-        </receiver>
-
+        <activity android:name=".community.activity.ChatingActivity"></activity>
+        <activity android:name=".community.activity.InvitingActivity" />
+        <activity android:name=".community.activity.ChatServiceActivity" />
+        <activity android:name=".community.activity.SearchResultActivity" />
         <activity
-            android:name=".community.CommunityMainActivity"
+            android:name=".community.activity.CommunityMainActivity"
             android:windowSoftInputMode="adjustPan" />
+
         <activity android:name=".mainActivityViwePager.moreViewActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".UploadedFormEditableActivity" />
         <activity android:name=".result.IndividualResultActivity" />
-        <activity android:name=".result.ResultActivity" /> <!-- <activity android:name=".form.BaseFormActivity" /> -->
+        <activity android:name=".result.ResultActivity" /> <!-- <activity android:name=".form.old_BaseFormActivity" /> -->
         <activity android:name=".form.FormActivity" />
-        <activity android:name=".offlineform.OfflineFormActivity" />
+        <activity android:name=".offlineform.old_OfflineFormActivity" />
         <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -57,7 +48,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ServiceSelectActivicy" />
 
-        <service android:name=".service.MessagingService">
+        <service android:name=".messageservice.MessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -67,6 +58,21 @@
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <activity android:name=".widget.WidgetConfigActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
+
+        <receiver android:name=".widget.HomeSurveyWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/home_survey_widget_info" />
+        </receiver>
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"

@@ -4,75 +4,54 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EBE9E9"
     >
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="#EBE9E9">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/profile_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
                 >
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:drawableLeft="@drawable/photo"
-                    android:drawableTint="#BBBBBB"
-                    android:text="커버 사진 추가"
-                    android:textColor="#ffffff"
-                    android:background="#252525"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-                <ImageView
-                    android:id="@+id/cover_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:background="#ffffff"
-                    android:backgroundTint="#252525"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-                <ImageView
-                    android:id="@+id/profile_image"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="100dp"
-                    android:background="@drawable/circle"
-                    android:backgroundTint="#66B9B5B5"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
 
-                    />
-                <ImageView
-                    android:id="@+id/imageAdd"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:background="@drawable/photo"
-                    app:layout_constraintBottom_toBottomOf="@id/profile_image"
-
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintHorizontal_bias="0.7"
-                    />
-                <Button
+                <RelativeLayout
+                    android:id="@+id/backView"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/normal_border"
-                    android:backgroundTint="#1A33C5"
-                    android:text="내 설문 관리"
-                    android:textColor="#ffffff"
-                    app:layout_constraintTop_toBottomOf="@id/imageAdd"
-                    />
+                    android:layout_height="400dp"
+                    android:layout_margin="20dp"
+                    android:elevation="20dp"
+                    android:background="#FFFFFF"
+                    android:backgroundTint="#ffffff"
+                    app:layout_constraintTop_toTopOf="parent"
+                    >
+                    <ImageView
+                        android:id="@+id/profile_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:elevation="21dp"
+                        android:background="#ffffff"
+                        android:backgroundTint="#ffffff"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="5dp"
+                        />
+                    <ImageView
+                        android:id="@+id/imageAdd"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:elevation="21dp"
+                        android:background="@drawable/photo"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        />
+
+                </RelativeLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -112,6 +91,7 @@
                         android:layout_gravity="right"/>
                 </LinearLayout>
                <androidx.recyclerview.widget.RecyclerView
+                   android:id="@+id/recyclerView"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:layout_below="@id/friend_layout"/>

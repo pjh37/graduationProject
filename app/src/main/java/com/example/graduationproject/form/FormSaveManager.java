@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import org.json.JSONObject;
 
 public class FormSaveManager {
-    private static final String DB_FORM="forms.db";
+    private static final String DB_FORM="checkmate.db";
     private static final String TABLE_FORMS="forms";
     private static final int DB_VERSION=1;
     private static FormSaveManager formSaveManager=null;

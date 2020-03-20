@@ -8,19 +8,20 @@ public class IndividualViewDTO implements Serializable {
     private int index;
 
     private String time;
-    private HashMap<Integer,ArrayList<String>> result;
+    private HashMap<Integer, ArrayList<String>> result;
+
+    //public ArrayList<Integer> keyArray; // 키 보관용
+
+
     public IndividualViewDTO(){
         result=new HashMap<>();
+        //keyArray = new ArrayList<>();
     }
 
-    public void setResult(HashMap<Integer, ArrayList<String>> result) {
-        this.result = result;
-    }
 
     public int getIndex() {
         return index;
     }
-
     public void setIndex(int index) {
         this.index = index;
     }
@@ -28,7 +29,6 @@ public class IndividualViewDTO implements Serializable {
     public String getTime() {
         return time;
     }
-
     public void setTime(String time) {
         this.time = time;
     }
@@ -36,8 +36,8 @@ public class IndividualViewDTO implements Serializable {
     public HashMap<Integer, ArrayList<String>> getResult() {
         return result;
     }
-
-    public void setResult(int key,ArrayList<String> value) {
+    public void setResult(int key, ArrayList<String> value) {
         this.result.put(key,value);
     }
+    public void setResult(HashMap<Integer, ArrayList<String>> result) {this.result = result;}
 }

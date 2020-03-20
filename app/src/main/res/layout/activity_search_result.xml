@@ -4,26 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E9E9E9"
-    tools:context=".offlineform.OfflineFormActivity">
+    tools:context=".community.activity.SearchResultActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#1C1D1D"
-        android:textAlignment="center"
-        >
+        android:background="#FFFFFF"
+
+        app:layout_constraintTop_toTopOf="parent">
         <TextView
+            android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Offline"
+            android:text="검색"
             android:textSize="18dp"
-            android:textColor="#ffffff"/>
+            android:textColor="#0A0A0A"
+            android:layout_gravity="left"/>
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/MySearchViewStyle"
+            android:layout_gravity="right"
+            />
     </androidx.appcompat.widget.Toolbar>
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleView"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
-        />
+        android:background="#ECE9E9"/>
 </RelativeLayout>
