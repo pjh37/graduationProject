@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.graduationproject.R;
 import com.example.graduationproject.UploadedSurveyDTO;
-import com.example.graduationproject.login.LoginSession;
+import com.example.graduationproject.login.Session;
 import com.example.graduationproject.retrofitinterface.RetrofitApi;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -49,7 +49,7 @@ public class WidgetConfigActivity extends AppCompatActivity {
     private static final String TAG = "로그인연동에러";
     private static final int RC_SIGN_IN=1;
     private BroadcastReceiver setExpectBR;
-    private LoginSession loginSession;
+    private Session loginSession;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth firebaseAuth;
     private ArrayList<UploadedSurveyDTO> data = new ArrayList<>();
@@ -99,7 +99,7 @@ public class WidgetConfigActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(getBaseContext(), 1));
         recyclerView.setAdapter(widgetListRV);
 
-        loginSession=(LoginSession)getApplication();
+        loginSession=(Session)getApplication();
 
         GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -162,7 +162,7 @@ public class WidgetConfigActivity extends AppCompatActivity {
                             FirebaseUser user=firebaseAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
 
-                            loginSession.setSession(user.getEmail(),user.getDisplayName(),user.getPhotoUrl());
+                            loginSession.setSession(user.getEmail(),user.getDisplayName(),String.valueOf(user.getPhotoUrl()));
 
                             Intent resultIntent = new Intent();
                             resultIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);

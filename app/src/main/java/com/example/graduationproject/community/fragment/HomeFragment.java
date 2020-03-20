@@ -49,7 +49,7 @@ public class HomeFragment extends Fragment {
     private View root;
 
     // 가속도, 자이로센서
-    // CommunityMainActivity 의 onDestroy에서 센서 해제
+    // CommunityMainActivity 파괴시 해제
     public static SensorManager mSensorManager = null;
     public static UserSensorListner userSensorListner = null;
     private Sensor mGyroscopeSensor = null;

@@ -39,7 +39,6 @@ public interface RetrofitService {
     @GET("Draftform/{userEmail}")
     Call<ArrayList<FormItem>> getDraftSurveyList(@Path("userEmail") String userEmail);
 
-
     @GET("search/{queryText}/{pages}")
     Call<ArrayList<FriendDTO>> getSearchResult(@Path("queryText") String queryText,@Path("pages")Integer page);
 
@@ -53,6 +52,8 @@ public interface RetrofitService {
     @GET("user/{userEmail}/{state}")
     Call<ArrayList<FriendDTO>> getFriendList(@Path("userEmail") String userEmail,@Path("state") Integer state);
 
+    @GET("search_keyword/{keyword}")
+    Call<ArrayList<SurveyDTO>> getKeywordSurveyList(@Path("keyword") String keyword);
 
     //커뮤니티 관련 요청
     @FormUrlEncoded

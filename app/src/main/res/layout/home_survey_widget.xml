@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/widget_progressBar_wrapper"
         android:layout_width="0dp"
-        android:layout_weight="4"
+        android:layout_weight="3"
         android:padding="8dp"
         android:layout_height="match_parent">
 
@@ -93,12 +93,13 @@
     </LinearLayout>
 
     <ImageView
-         android:id="@+id/homewidget_refresh"
-         android:layout_width="0dp"
-         android:layout_height="match_parent"
-         android:layout_weight="1"
-         android:layout_marginRight="10dp"
-         android:src="@drawable/ic_cached_white_18dp"/>
+        android:id="@+id/homewidget_refresh"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:padding="8dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/ic_cached_white_18dp"/>
 
 
 </LinearLayout>

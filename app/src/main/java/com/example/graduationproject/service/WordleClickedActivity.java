@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.graduationproject.R;
-import com.example.graduationproject.mainActivityViwePager.MainVPSurveyFragment;
+import com.example.graduationproject.mainActivityViwePager.MainVPAllSurveyFragment;
 import com.example.graduationproject.mainActivityViwePager.SurveyDTO;
 import com.example.graduationproject.mainActivityViwePager.SurveyRV;
 import com.example.graduationproject.retrofitinterface.RetrofitApi;
@@ -59,7 +59,7 @@ public class WordleClickedActivity extends AppCompatActivity {
             public void onResponse(retrofit2.Call<ArrayList<SurveyDTO>> call, retrofit2.Response<ArrayList<SurveyDTO>> response) {
                 isFinished = true;
                 if(response.isSuccessful()){
-                    surveyRV.addItem(response.body());
+                    surveyRV.addDatas(response.body());
                     Toast.makeText(getBaseContext(), Integer.toString(datas.size()),Toast.LENGTH_LONG).show();
                 }
                 else{
