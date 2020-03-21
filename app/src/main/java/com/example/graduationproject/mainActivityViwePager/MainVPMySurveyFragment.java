@@ -96,6 +96,7 @@ public class MainVPMySurveyFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
+        Log.v("유저이메일들어오나",Session.getUserEmail());
         getResponseWaitSurvey(Session.getUserEmail());
         new LoadTask().execute();
     }

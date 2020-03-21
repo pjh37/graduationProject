@@ -205,16 +205,16 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void goToSurvey(){
         Intent intent=new Intent(LoginActivity.this, MainActivity.class); // new
-        intent.putExtra("userEmail",userEmail);
-        intent.putExtra("userName",userName);
-        intent.putExtra("userImage",userImage);
+        intent.putExtra("userEmail",Session.getUserEmail());
+        intent.putExtra("userName",Session.getUserName());
+        intent.putExtra("userImage",Session.getUserImage());
         startActivity(intent);
     }
     private void goToCommunity(){
         Intent intent=new Intent(LoginActivity.this, CommunityMainActivity.class); // new
-        intent.putExtra("userEmail",userEmail);
-        intent.putExtra("userName",userName);
-        intent.putExtra("userImage",userImage);
+        intent.putExtra("userEmail",Session.getUserEmail());
+        intent.putExtra("userName",Session.getUserName());
+        intent.putExtra("userImage",Session.getUserImage());
         startActivity(intent);
     }
     private void saveLoginInfo(String userEmail,String userName,Uri userImage){

@@ -70,6 +70,6 @@ public interface RetrofitService {
     @GET("chat/{roomKey}")
     Call<ArrayList<MessageDTO>> getRoomMessage(@Path("roomKey") String roomKey);
 
-    @GET("chat/{userEmail}")
+    @GET("chat/rooms/{userEmail}")
     Call<ArrayList<ChatRoomTempDTO>> getRoomList(@Path("userEmail") String userEmail);
 }

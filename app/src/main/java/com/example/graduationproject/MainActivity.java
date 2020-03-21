@@ -82,7 +82,10 @@ public class MainActivity extends AppCompatActivity {
         userEmail = intent.getStringExtra("userEmail");
         userName = intent.getStringExtra("userName");
         userImage = intent.getStringExtra("userImage");
-        session.setSession(userEmail,userName,userImage);
+        Log.v("유저이메일들어오나","MainActivity : "+userEmail);
+        Session.setUserEmail(userEmail);
+        Session.setUserName(userName);
+        Session.setUserImage(userImage);
         //session.messageServiceStart();
 
 
@@ -134,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         Bundle args = new Bundle();
-        args.putString("userEmail", userEmail);
+        args.putString("userEmail", Session.getUserEmail());
         mainVPAdapter = new MainVPAdapter(getSupportFragmentManager(), args);
         viewPager.setAdapter(mainVPAdapter);
         viewPager.setCurrentItem(0);
