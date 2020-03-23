@@ -37,49 +37,45 @@ import okhttp3.Response;
 
 public class IndividualViewFragment extends Fragment {
     private RecyclerView individualViewRV;
-    private IndividualViewRV individualViewAdapter;
-
-    private ArrayList<IndividualViewDTO> datas = new ArrayList<>();
-
-    //    private String userEmail;
+    private RecyclerView.Adapter  individualViewAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private ArrayList<IndividualViewDTO> datas=new ArrayList<>();
+    private String userEmail;
     private int form_id;
     private String url;
 
+    public IndividualViewFragment(){}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         url=getString(R.string.baseUrl);
         if(getArguments()!=null) {
-//            userEmail = getArguments().getString("userEmail");
+            userEmail = getArguments().getString("userEmail");
             form_id = getArguments().getInt("form_id");
         }
 
-//        Log.v("테스트","args : "+userEmail+"   "+form_id);
+        Log.v("테스트","args : "+userEmail+"   "+form_id);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView=(ViewGroup)inflater.inflate(R.layout.activity_result_individual,container,false);
-
-        individualViewRV = (RecyclerView) rootView.findViewById(R.id.recycleView);
+        individualViewRV=(RecyclerView)rootView.findViewById(R.id.recycleView);
         individualViewRV.setLayoutManager(new LinearLayoutManager(getActivity()));
-        individualViewRV.addItemDecoration(new DividerItemDecoration(getContext(), 1));
-        individualViewAdapter = new IndividualViewRV(getContext(), datas, form_id);
-        individualViewRV.setAdapter(individualViewAdapter);
+        individualViewRV.addItemDecoration(new DividerItemDecoration(getContext(),1));
 
-        //Log.v("테스트","datas 크기 : "+datas.size());
         return rootView;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getSurveyResult(form_id);
+        getSurveyResult(userEmail,form_id);
     }
 
-    public void getSurveyResult(int form_id){
+    public void getSurveyResult(String userEmail, int form_id){
         OkHttpClient client=new OkHttpClient();
         RequestBody requestbody=new MultipartBody.Builder().
                 setType(MultipartBody.FORM)
@@ -91,6 +87,7 @@ public class IndividualViewFragment extends Fragment {
                 .header("Content-Type", "multipart/form-data")
                 .post(requestbody)
                 .build();
+
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -99,7 +96,6 @@ public class IndividualViewFragment extends Fragment {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String res=response.body().string();
-
                 res=res.replace ("\\", "")
                         .replace("\"[","[")
                         .replace("]\"","]")
@@ -110,28 +106,23 @@ public class IndividualViewFragment extends Fragment {
                 try {
 
                     JSONArray jsonArray=new JSONArray(res);
-                    Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse - 응답수 jsonArray.length() : " + jsonArray.length());
                     for(int i=0;i<jsonArray.length();i++){
-
                         IndividualViewDTO individualViewDTO=new IndividualViewDTO();
                         JSONObject jsonObject=jsonArray.getJSONObject(i);
                         JSONObject jsonObjResult=jsonObject.getJSONObject("surveyResult");
-
-                        //                        Log.d("mawang","IndividualViewFragment getSurveyResult onResponse -befo jsonObjResult : "+jsonObjResult);
-                        jsonObjResult.remove("form_id"); // 필요없으니
-                        jsonObjResult.remove("userEmail"); // 필요없으니
-                        Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse after - jsonObjResult : " + jsonObjResult);
-
+                        jsonObjResult.remove("form_id");
+                        jsonObjResult.remove("userEmail");
                         String time=jsonObject.getString("time");
-
+                        Log.v("테스트",time);
+                        Log.v("테스트",jsonObjResult.toString());
                         Iterator<String> keys= jsonObjResult.keys();
                         HashMap<String,ArrayList<String>> gridParser=new HashMap<>();
                         ArrayList<String> removeKeys=new ArrayList<>();
-
                         while(keys.hasNext()){
                             String key=keys.next();
-                            //                            Log.d("mawang","IndividualViewFragment getSurveyResult onResponse hasNext- key값 : "+key);
+                            Log.v("테스트","key값 : "+key);
                             if(key.split("-").length==2){
+
 
                                 String[] grids=key.split("-");
                                 String gridKey=grids[0];
@@ -141,44 +132,15 @@ public class IndividualViewFragment extends Fragment {
 
                                 if(gridParser.containsKey(gridKey)){
                                     gridParser.get(gridKey).add(gridVal);
-                                    //                                    Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse containsKey - gridParser : " + gridParser);
                                 }else{
                                     ArrayList<String> temp=new ArrayList<>();
                                     temp.add(gridVal);
                                     gridParser.put(gridKey,temp);
-                                    //                                    Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse else - gridParser : " + gridParser);
                                 }
 
-
-                            }else {
-
-                                int keyInt = Integer.parseInt(key);
-
-                                Object json = jsonObjResult.get(String.valueOf(keyInt)); // get value by key
-
-                                if (json instanceof JSONArray) { // when?
-                                    JSONArray multiAnswerJson = (JSONArray) json;
-                                    ArrayList<String> multiAnswer = new ArrayList<>();
-
-                                    for (int k = 0; k < multiAnswerJson.length(); k++) {
-                                        multiAnswer.add(multiAnswerJson.getString(k));
-                                    }
-
-                                    individualViewDTO.setResult(keyInt, multiAnswer);
-                                    Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse JSONArray- multiAnswerJson : " + multiAnswerJson);
-                                } else {
-                                    ArrayList<String> multiAnswer = new ArrayList<>();
-                                    multiAnswer.add(String.valueOf(json));
-                                    individualViewDTO.setResult(keyInt, multiAnswer);
-                                    Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse - multiAnswer : " + multiAnswer);
-                                }
 
                             }
-
-
                         }
-                        Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse - removeKeys : " + removeKeys);
-                        Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse - gridParser : " + gridParser);
                        for(int j=0;j<removeKeys.size();j++){
                            jsonObjResult.remove(removeKeys.get(j));
                        }
@@ -192,18 +154,53 @@ public class IndividualViewFragment extends Fragment {
                         }
                         individualViewDTO.setIndex(i+1);
                         individualViewDTO.setTime(time);
-                        Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse - jsonObjResult.length() : " + jsonObjResult.length());
-                        Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse - individualViewDTO HashMap : " + individualViewDTO.getResult());
+                        ///수정중------------------------------------------------
+                        keys=jsonObjResult.keys();
+
+                        while(keys.hasNext()){
+                            String key=keys.next();
+                            Object json=jsonObjResult.get(key);
+
+                            if(json instanceof JSONArray){
+                                JSONArray multiAnswerJson=(JSONArray)json;
+                                ArrayList<String> multiAnswer=new ArrayList<>();
+                                for(int k=0;k<multiAnswerJson.length();k++){
+                                    multiAnswer.add(multiAnswerJson.getString(k));
+                                }
+                                individualViewDTO.setResult(Integer.valueOf(key),multiAnswer);
+                            }else{
+                                ArrayList<String> multiAnswer=new ArrayList<>();
+                                multiAnswer.add(String.valueOf(json));
+                                individualViewDTO.setResult(Integer.valueOf(key),multiAnswer);
+                            }
+                        }
+                        ///수정중------------------------------------------------
+                        /*
+                        for(int j=0;j<jsonObjResult.length();j++){
+                            Object json=jsonObjResult.get(String.valueOf(j));
+
+                            if(json instanceof JSONArray){
+                                JSONArray multiAnswerJson=(JSONArray)json;
+                                ArrayList<String> multiAnswer=new ArrayList<>();
+                                for(int k=0;k<multiAnswerJson.length();k++){
+                                    multiAnswer.add(multiAnswerJson.getString(k));
+                                }
+                                individualViewDTO.setResult(j,multiAnswer);
+                            }else{
+                                ArrayList<String> multiAnswer=new ArrayList<>();
+                                multiAnswer.add(String.valueOf(json));
+                                individualViewDTO.setResult(j,multiAnswer);
+                            }
+                        }
+                        */
                         datas.add(individualViewDTO);
 
                     }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //                            individualViewAdapter=new IndividualViewRV(getContext(),datas,form_id);
-//                            individualViewRV.setAdapter(individualViewAdapter);
-
-                            individualViewAdapter.setDatas(datas);
+                            individualViewAdapter=new IndividualViewRV(getContext(),datas,form_id);
+                            individualViewRV.setAdapter(individualViewAdapter);
                         }
                     });
 

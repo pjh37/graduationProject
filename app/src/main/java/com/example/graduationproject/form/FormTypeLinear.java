@@ -119,18 +119,18 @@ public class FormTypeLinear extends FormAbstract{
             jsonObject.put("type",mType);
             jsonObject.put("question",mEditQuestion.getText().toString());
 
-            jsonObject.put("beginIndex",beginSpinner.getSelectedItemPosition());
+            jsonObject.put("begin",beginSpinner.getSelectedItemPosition());
+            jsonObject.put("end",endSpinner.getSelectedItemPosition());
 
-            // 선택안하면 default 가 0값임 그래서 해줘야함
-            if(endSpinner.getSelectedItemPosition()==0){
-                jsonObject.put("endIndex",2);
-            }else{
-                jsonObject.put("endIndex",endSpinner.getSelectedItemPosition()+2);
-            }
+//            if (labelLeft.getText().toString().trim().length() > 0) {
+//                jsonObject.put("begin_label",beginLabel.getText().toString());
+//            }
+//            if (labelRight.getText().toString().trim().length() > 0) {
+//                jsonObject.put("end_label",endLabel.getText().toString());
+//            }
 
-
-            jsonObject.put("beingLabel",beginLabel.getText().toString());
-            jsonObject.put("endLabel",endLabel.getText().toString());
+            jsonObject.put("begin_label",beginLabel.getText().toString());
+            jsonObject.put("end_label",endLabel.getText().toString());
 
             jsonObject.put("required_switch",mSwitch.isChecked());
 
@@ -145,11 +145,8 @@ public class FormTypeLinear extends FormAbstract{
     public void formComponentSetting(FormComponentVO vo) {
         mEditQuestion.setText(vo.getQuestion());
         mSwitch.setChecked(vo.isRequired_switch());
-
-        beginSpinner.setSelection(vo.getBeginIndex());
-        endSpinner.setSelection(vo.getEndIndex());
-        beginLabel.setText(vo.getBeingLabel());
-        endLabel.setText(vo.getEndLabel());
+        beginSpinner.setSelection(vo.getBegin());
+        endSpinner.setSelection(vo.getEnd());
     }
     public class ClickListener implements OnClickListener{
         @Override

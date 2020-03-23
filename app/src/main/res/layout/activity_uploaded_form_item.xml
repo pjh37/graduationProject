@@ -2,100 +2,41 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/border"
+    android:background="?android:attr/selectableItemBackground"
     android:backgroundTint="#FCFCFC"
-    android:elevation="10dp"
-    android:orientation="vertical">
-
+    android:elevation="10dp">
     <TextView
         android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="title"
-        android:textColor="#000000"
-        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:gravity="center"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        />
+        android:layout_margin="10dp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:text="default"/>
 
-    <!--    android:onClick="onClick"-->
 
     <TextView
-        android:id="@+id/txtWriterName"
+        android:id="@+id/txtResponse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="name"
-        android:gravity="center"
-        android:textColor="#000000"
-        android:textStyle="bold"
+        android:layout_margin="10dp"
         app:layout_constraintTop_toBottomOf="@id/txtTitle"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        />
-
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:text="0 response"/>
     <TextView
         android:id="@+id/txtTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="time"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/txtWriterName"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@id/txtResponse"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        />
+        android:text="default"/>
 
-
-    <Button
-        android:id="@+id/btnSurveyResult"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/corner_border"
-
-        android:backgroundTint="#2359F7"
-        android:text="결과보기"
-
-        android:textColor="#ffffff"
-        app:layout_constraintBottom_toTopOf="@+id/txtResponse"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txtResponse"
-        android:layout_width="45dp"
-        android:layout_height="23dp"
-
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
-        android:gravity="center"
-        android:text="0 참여"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/btnShare"
-        app:layout_constraintTop_toBottomOf="@id/btnSurveyResult" />
-
-    <ImageButton
-        android:id="@+id/btnShare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_share_black_24dp"
-        android:backgroundTint="#979393"
-
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,7 @@ public class FormItem {
     public int get_id() {
         return _id;
     }
+
     public void set_id(int _id) {
         this._id = _id;
     }
@@ -15,6 +16,7 @@ public class FormItem {
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -22,6 +24,7 @@ public class FormItem {
     public String getTime() {
         return time;
     }
+
     public void setTime(String time) {
         this.time = time;
     }

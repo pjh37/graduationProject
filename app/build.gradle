@@ -55,6 +55,9 @@ dependencies {
 
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
+    //MpAndroidChart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+
     // drag & drop
     implementation 'com.jmedeisis:draglinearlayout:1.1.0'
 

@@ -112,17 +112,13 @@
             android:layout_marginLeft="5dp"
             android:background="#ffffff"
             android:src="@drawable/delete"/>
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#2196F3"
-            />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
 
-            android:text="필수"/>
+            android:text="Required"/>
         <Switch
             android:id="@+id/required_switch"
             android:layout_width="wrap_content"

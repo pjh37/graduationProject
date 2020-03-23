@@ -10,6 +10,7 @@ import retrofit2.Response;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +34,7 @@ public class ChatServiceActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ChatRoomAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<ChatRoomDTO> datas=new ArrayList<>();
+    private ArrayList<ChatRoomDTO> datas;
     private HashMap<String,ArrayList<String>> rooms;
     private Button btnChatRoomCreate;
     private Toolbar toolbar;
@@ -44,6 +45,7 @@ public class ChatServiceActivity extends AppCompatActivity {
         //채팅 서버와 연결 테스트
         MessageManager.getInstance(this).connect();
         rooms=new HashMap<>();
+        datas=new ArrayList<>();
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -57,12 +59,12 @@ public class ChatServiceActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         adapter=new ChatRoomAdapter(this,datas);
         recyclerView.setAdapter(adapter);
+        getChatRoomList();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        getChatRoomList();
     }
 
     class ClickListener implements View.OnClickListener{
@@ -83,8 +85,9 @@ public class ChatServiceActivity extends AppCompatActivity {
         RetrofitApi.getService().getRoomList(userEmail).enqueue(new retrofit2.Callback<ArrayList<ChatRoomTempDTO>>(){
             @Override
             public void onResponse(Call<ArrayList<ChatRoomTempDTO>> call, Response<ArrayList<ChatRoomTempDTO>> response) {
-                if(response.isSuccessful()){
+                if(response.body()!=null){
                     ArrayList<ChatRoomTempDTO> res=response.body();
+
                     for(int i=0;i<res.size();i++){
                         if(rooms.containsKey(res.get(i).getRoomKey())){
                             rooms.get(res.get(i).getRoomKey()).add(res.get(i).getUserEmail());
@@ -101,9 +104,12 @@ public class ChatServiceActivity extends AppCompatActivity {
                         room.setUserCnt(String.valueOf(rooms.get(roomKey).size()));
                         room.setUserEmails(rooms.get(roomKey));
                         room.setChatRoomImageUrl(rooms.get(roomKey).get(0));
+                        Log.v("테스트","roomKeys"+room.getUserEmails());
                         datas.add(room);
                     }
-                    adapter.addItems(datas);
+                    Log.v("테스트","datas "+datas.size());
+                    adapter.addData(datas);
+
                 }
             }
             @Override

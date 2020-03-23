@@ -1,7 +1,7 @@
 package com.example.graduationproject;
 
 public class UploadedSurveyDTO {
-    private int _id; // db id
+    private int _id;
     private String title;
     private int response_cnt;
     private String time;

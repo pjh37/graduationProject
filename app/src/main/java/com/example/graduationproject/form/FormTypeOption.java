@@ -44,7 +44,6 @@ public class FormTypeOption extends FormAbstract {
     private LinearLayout mEtcOptionContainer;
 
     private ArrayList<Option> rowTexts; // option text 저장할 것
-    boolean EtcIsFisrt = true; //etc 한개만 생성
 
     public FormTypeOption(Context context, int type) {
         super(context, type);
@@ -78,16 +77,16 @@ public class FormTypeOption extends FormAbstract {
             mSwitchEtc.setVisibility(GONE);
         } else {
             mSwitchEtc.setOnClickListener(new View.OnClickListener() {
-                //boolean IsFisrt = true; // 한개만 생성
+                boolean IsFisrt = true; // 한개만 생성
                 public void onClick(View view) {
                     boolean on = mSwitchEtc.isChecked();
                     if (on) {
 //                    Log.d("mawang", "Switch on = " + on);
                         mEtcOptionContainer.setVisibility(VISIBLE);
-                        if (EtcIsFisrt) {
+                        if (IsFisrt) {
                             Option option = new Option(mContext, mType, true);
                             mEtcOptionContainer.addView(option);
-                            EtcIsFisrt = false;
+                            IsFisrt = false;
                         }
                     } else {
 //                    Log.d("mawang", "Switch off = " + on);
@@ -185,21 +184,14 @@ public class FormTypeOption extends FormAbstract {
         Log.v("테스트","mAddOptionContainer child : "+mAddOptionContainer.getChildCount());
         JSONObject jsonObject=new JSONObject();
         try{
-            jsonObject.put("type", mType);
-            jsonObject.put("question", mEditQuestion.getText().toString());
-
-            JSONArray jsonArray = new JSONArray();
-            for (int i = 0; i < mAddOptionContainer.getChildCount(); i++) {
-//                jsonArray.put(i, ((Option) mAddOptionContainer.getChildAt(i)).getOption());
-                jsonArray.put(((Option) mAddOptionContainer.getChildAt(i)).getOption()); // text 들
+            jsonObject.put("type",mType);
+            jsonObject.put("question",mEditQuestion.getText().toString());
+            jsonObject.put("required_switch",mSwitch.isChecked());
+            JSONArray jsonArray=new JSONArray();
+            for(int i=0;i<mAddOptionContainer.getChildCount();i++){
+                jsonArray.put(i,((Option)mAddOptionContainer.getChildAt(i)).getOption());
             }
-            jsonObject.put("addedOption", jsonArray);
-
-            jsonObject.put("OptionEtc_switch", mSwitchEtc.isChecked());
-            // 기타 text는 웹에서만 입력가능이기 때문에 보낼필요 없다.
-//            jsonObject.put("OptionEtc_text", ((Option) mEtcOptionContainer.getChildAt(0)).getOption());
-
-            jsonObject.put("required_switch", mSwitch.isChecked());
+            jsonObject.put("addedOption",jsonArray);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -215,16 +207,6 @@ public class FormTypeOption extends FormAbstract {
             Option option=new Option(mContext,mType,rowTexts);
             mAddOptionContainer.addView(option);
             option.setOption(vo.getAddedOption().get(i));
-        }
-
-        mSwitchEtc.setChecked(vo.isOptionEtc_switch());
-
-        if(mSwitchEtc.isChecked()){
-            mEtcOptionContainer.setVisibility(VISIBLE);
-            Option option = new Option(mContext, mType, true); // boolean 아무거나 상관없음
-            //option.setOption("etc test"); //etc 입력은 웹서버에서만 가능
-            mEtcOptionContainer.addView(option);
-            EtcIsFisrt = false;
         }
     }
 

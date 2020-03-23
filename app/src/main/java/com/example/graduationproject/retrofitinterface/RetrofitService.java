@@ -8,7 +8,6 @@ import com.example.graduationproject.form.FormDTO;
 import com.example.graduationproject.mainActivityViwePager.RequestType;
 import com.example.graduationproject.mainActivityViwePager.SurveyDTO;
 import com.example.graduationproject.messageservice.MessageDTO;
-import com.example.graduationproject.offlineform.FormItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,10 +34,6 @@ public interface RetrofitService {
 
     @GET("form/{userEmail}")
     Call<ArrayList<UploadedSurveyDTO>> getSurveyList(@Path("userEmail") String userEmail);
-
-    @GET("Draftform/{userEmail}")
-    Call<ArrayList<FormItem>> getDraftSurveyList(@Path("userEmail") String userEmail);
-
 
     @GET("search/{queryText}/{pages}")
     Call<ArrayList<FriendDTO>> getSearchResult(@Path("queryText") String queryText,@Path("pages")Integer page);
@@ -75,6 +70,6 @@ public interface RetrofitService {
     @GET("chat/{roomKey}")
     Call<ArrayList<MessageDTO>> getRoomMessage(@Path("roomKey") String roomKey);
 
-    @GET("chat/{userEmail}")
+    @GET("chat/rooms/{userEmail}")
     Call<ArrayList<ChatRoomTempDTO>> getRoomList(@Path("userEmail") String userEmail);
 }
