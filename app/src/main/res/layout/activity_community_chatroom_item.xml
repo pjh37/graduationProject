@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:padding="10dp">
 
     <ImageView
@@ -15,30 +14,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dp"
-        android:layout_marginRight="3dp"
-        android:text=""
-        android:ellipsize="end"
-        android:singleLine="true"
+        android:text="익명"
         android:textSize="15sp"
         android:textColor="#0A0A0A"
-
         android:layout_toRightOf="@id/chatRoom_image"/>
     <TextView
         android:id="@+id/userCnt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dp"
-        android:text="0명"
+        android:text="0"
         android:textSize="15sp"
-        android:layout_toRightOf="@id/chatRoom_image"
-        android:layout_below="@id/userEmails"
-        />
+        android:layout_toRightOf="@id/userEmails"/>
     <TextView
         android:id="@+id/lastReceivedMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:layout_below="@id/userCnt"
+        android:layout_below="@id/userEmails"
         android:layout_alignLeft="@id/userEmails"
         android:text="content"/>
     <TextView

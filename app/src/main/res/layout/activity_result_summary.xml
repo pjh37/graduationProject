@@ -1,29 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/transfer_layout">
-
-    <LinearLayout
-        android:id="@+id/topRow"
+    android:background="#C4BFBE">
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Spinner
-            android:id="@+id/summary_spinner"
-            android:background="@drawable/spinner_background"
-            android:layout_centerHorizontal="true"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"/>
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/frag_container_"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_marginTop="200dp"
+        android:text="This is summary view"/>
+</RelativeLayout>

@@ -19,11 +19,12 @@ import androidx.viewpager.widget.PagerAdapter;
 public class ResultViewPagerAdapter extends FragmentStatePagerAdapter {
     private SummaryViewFragment summaryViewFragment;
     private IndividualViewFragment individualViewFragment;
+
     public ResultViewPagerAdapter(FragmentManager fm, Bundle args){
         super(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
        this.summaryViewFragment=new SummaryViewFragment();
        this.individualViewFragment=new IndividualViewFragment();
-        summaryViewFragment.setArguments(args);
+
         individualViewFragment.setArguments(args);
     }
     @NonNull

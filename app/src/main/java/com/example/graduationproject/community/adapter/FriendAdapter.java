@@ -16,9 +16,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.graduationproject.R;
 import com.example.graduationproject.community.model.FriendDTO;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -82,18 +79,14 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendHold
         this.items.addAll(items);
         notifyDataSetChanged();
     }
-    public JSONArray getCheckedFriends(){
+    public ArrayList<String> getCheckedFriends(){
         ArrayList<String> friends=new ArrayList<>();
-        JSONArray jsonArray=new JSONArray();
         for(int i=0;i<items.size();i++){
             if(items.get(i).isSelected()){
-                //friends.add(items.get(i).getUserEmail());
-                jsonArray.put(items.get(i).getUserEmail());
+                friends.add(items.get(i).getUserEmail());
             }
         }
-        //임시 테스트용
-        jsonArray.put("jjjj1352@naver.com");
-        return jsonArray;
+        return friends;
     }
     class FriendHolder extends RecyclerView.ViewHolder{
         TextView userEmail;

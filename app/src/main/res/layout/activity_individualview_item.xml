@@ -9,7 +9,7 @@
         android:layout_height="50dp"
         android:layout_weight="1"
         android:background="#E6DBDB"
-        android:text="10"
+        android:text="index"
         android:padding="15dp"/>
     <TextView
         android:id="@+id/txtTime"
@@ -17,6 +17,6 @@
         android:layout_height="50dp"
         android:layout_weight="5"
         android:background="#FFFFFF"
-        android:text="1033333333333333333333333333333333"
+        android:text="time"
         android:padding="15dp"/>
 </LinearLayout>

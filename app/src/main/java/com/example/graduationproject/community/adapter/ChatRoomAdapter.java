@@ -1,7 +1,6 @@
 package com.example.graduationproject.community.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +23,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRoomHolder>{
-    private final ArrayList<ChatRoomDTO> items;
+    private ArrayList<ChatRoomDTO> items;
     private Context mContext;
     private View itemView;
 
     public ChatRoomAdapter(Context context, ArrayList<ChatRoomDTO> items){
         this.mContext=context;
         this.items=items;
-        Log.v("테스트","ChatRoomAdapter this.items.size : "+this.items.size());
     }
 
     @NonNull
@@ -46,19 +44,17 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
         Glide.with(holder.itemView.getContext())
                 .load(mContext.getString(R.string.baseUrl)+"user/profile/"+items.get(position).getUserEmails().get(0)+".jpg")
                 .error(R.drawable.profile)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .apply(new RequestOptions().circleCrop()).into(holder.chatRoomImage);
-        int len = items.get(position).getUserEmails().size()>2 ? 2 : items.get(position).getUserEmails().size();
+        int len = items.get(position).getUserEmails().size()>3 ? 3 : items.get(position).getUserEmails().size();
 
         for(int i=0;i<len-1;i++){
-            holder.userEmails.append(items.get(position).getUserEmails().get(i).split("@")[0]+",");
+            holder.userEmails.append(items.get(position).getUserEmails().get(i)+",");
         }
-
-        holder.userEmails.append(items.get(position).getUserEmails().get(len-1).split("@")[0]);
+        holder.userEmails.append(items.get(position).getUserEmails().get(len-1));
         holder.userCnt.setText(items.get(position).getUserCnt());
-        //holder.time.setText(getTime(items.get(position).getTime()));
-        holder.time.setText("0.0.0.0");
+        holder.time.setText(getTime(items.get(position).getTime()));
         holder.lastReceivedMessage.setText("구현중...");
-        Log.v("테스트","onBindViewHolder this.items.size : "+this.items.size());
     }
 
     @Override
@@ -66,10 +62,9 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
         return items.size();
     }
 
-    public void addData(ArrayList<ChatRoomDTO> data){
-        Log.v("테스트","this.items.size : "+this.items.size()+"     data : "+data.size());
-        //this.items.addAll(data);
-        Log.v("테스트","this.items.size : "+this.items.size()+"     data : "+data.size());
+    public void addItems(ArrayList<ChatRoomDTO> items){
+        this.items.clear();
+        this.items.addAll(items);
         notifyDataSetChanged();
     }
 
@@ -85,14 +80,12 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
             chatRoomImage=(ImageView)itemView.findViewById(R.id.chatRoom_image);
             userEmails=(TextView)itemView.findViewById(R.id.userEmails);
             userCnt=(TextView)itemView.findViewById(R.id.userCnt);
-            time=(TextView)itemView.findViewById(R.id.date);
+            time=(TextView)itemView.findViewById(R.id.userEmail);
             lastReceivedMessage=(TextView)itemView.findViewById(R.id.lastReceivedMessage);
         }
     }
     public String getTime(String str){
-        //long now=Long.valueOf(str);
-        //임시
-        long now=System.currentTimeMillis();
+        long now=Long.valueOf(str);
         Date date=new Date(now);
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy MM월 dd hh:mm:ss");
         String time = simpleDate.format(date);
