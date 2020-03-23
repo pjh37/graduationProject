@@ -34,14 +34,13 @@ public class IndividualResultActivity extends AppCompatActivity {
     private String url;//getString(R.string.baseUrl);
     private int form_id;
 
-    private FormDTO formDTO=null;
+//    private FormDTO formDTO=null;
     private ArrayList<IndividualResultDTO> datas;
     private IndividualViewDTO individualViewDTO;
 
     private RecyclerView individualResultRV;
     //private RecyclerView.Adapter  individualResultAdapter; //setDatas 인식을 못함
     private IndividualResultRV individualResultAdapter;
-//    private RecyclerView.LayoutManager layoutManager;
 
 
     @Override
@@ -95,53 +94,73 @@ public class IndividualResultActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
                     for(int i=0;i<componentVOS.size();i++){
                         IndividualResultDTO individualResultDTO=new IndividualResultDTO();
-                        ArrayList<String> answers=individualViewDTO.getResult().get(i);
                         String answer="";
 
 
-                        if (componentVOS.get(i).getType() == FormType.RADIOCHOICEGRID
-                                || componentVOS.get(i).getType() == FormType.CHECKBOXGRID)
-                        { // grid 류
+                        if (componentVOS.get(i).getType() == FormType.RADIOCHOICEGRID) {
+                            ArrayList<String> answers = individualViewDTO.getResult().get(i); // get(key)
                             for (int j = 0; j < answers.size(); j++) {
                                 //answer += ((j + 1) + ". " + componentVOS.get(i).getAddedColOption().get(Integer.valueOf(answers.get(j))) + "\n");
-                                // row도!
                                 answer += (componentVOS.get(i).getAddedRowOption().get(j)
-                                        + ". "
-                                        + componentVOS.get(i).getAddedColOption().get(Integer.valueOf(answers.get(j)))); // + " "
-                                if(j != answers.size()-1){
-                                    answer +="\n";
+                                        + " - "
+//                                      + componentVOS.get(i).getAddedColOption().get(Integer.valueOf(answers.get(j))));
+                                        + componentVOS.get(i).getAddedColOption().get(Integer.parseInt(answers.get(j))));
+                                if (j != answers.size() - 1) {
+                                    answer += "\n";
                                 }
                             }
-                        } else if( componentVOS.get(i).getType() == FormType.ADDSECTION
-                                || componentVOS.get(i).getType() == FormType.SUBTEXT )
-                        {
-                            for (int j = 0; j < answers.size(); j++) {
-                                answer += answers.get(j);
+                        }else if (componentVOS.get(i).getType() == FormType.CHECKBOXGRID) { // 따로해줘야됨 , 멀티체크가 되는거라
+//                            ArrayList<ArrayList<String>> answersForCgrid = individualViewDTO.getResult().get(i);
+                            ArrayList<String> answersForCgrid = individualViewDTO.getResult().get(i);
+                            for (int j = 0; j < answersForCgrid.size(); j++) {
+                                //answer += ((j + 1) + ". " + componentVOS.get(i).getAddedColOption().get(Integer.valueOf(answers.get(j))) + "\n");
+                                answer += componentVOS.get(i).getAddedRowOption().get(j) + " - ";
+
+                                answersForCgrid.set(j, answersForCgrid.get(j).replace("[\"", "")
+                                        .replace("\",\"", "")
+                                        .replace("\"]", ""));
+
+                                for (int k = 0; k < answersForCgrid.get(j).length(); k++) {
+
+
+                                    if (k == answersForCgrid.get(j).length() - 1) {
+                                        answer += componentVOS.get(i).getAddedColOption().get(Character.getNumericValue(answersForCgrid.get(j).charAt(k)));
+
+                                    } else {
+                                        answer += componentVOS.get(i).getAddedColOption().get(Character.getNumericValue(answersForCgrid.get(j).charAt(k)));
+                                        answer += ",";
+                                    }
+                                }
+
+
+                                if (j != answersForCgrid.size() - 1) {
+                                    answer += "\n";
+                                }
                             }
-                        } else
-                        {
+                        } else if (componentVOS.get(i).getType() == FormType.CHECKBOXES) {
+                            ArrayList<String> answers = individualViewDTO.getResult().get(i); // get(key)
+                            for (int j = 0; j < answers.size(); j++) {
+                                if (j == answers.size() - 1) {
+                                    answer += answers.get(j);
+                                } else {
+                                    answer += answers.get(j) + ",";
+                                }
+
+                            }
+                        } else {
+                            ArrayList<String> answers = individualViewDTO.getResult().get(i); // get(key)
                             for (int j = 0; j < answers.size(); j++) {
                                 answer += answers.get(j);
                             }
                         }
-                        // subtext 추가
 
                         individualResultDTO.setQuestion(componentVOS.get(i).getQuestion());
                         individualResultDTO.setAnswer(answer);
                         individualResultDTO.setType(componentVOS.get(i).getType());
 
 
-
-
-//                        Log.v("테스트",componentVOS.get(i).getQuestion()+"  "+answer);
                         datas.add(individualResultDTO);
                     }
                     runOnUiThread(new Runnable() {
