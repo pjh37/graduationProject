@@ -135,9 +135,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-//        Bundle args = new Bundle();
-//        args.putString("userEmail", userEmail);
-//        mainVPAdapter = new MainVPAdapter(getSupportFragmentManager(), args);
+        Bundle args = new Bundle();
+        args.putString("userEmail", userEmail);
+        mainVPAdapter = new MainVPAdapter(getSupportFragmentManager());
         viewPager.setAdapter(mainVPAdapter);
         viewPager.setCurrentItem(0);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
