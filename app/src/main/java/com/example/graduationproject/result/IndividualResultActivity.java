@@ -98,21 +98,18 @@ public class IndividualResultActivity extends AppCompatActivity {
                         IndividualResultDTO individualResultDTO=new IndividualResultDTO();
                         String answer="";
 
-
                         if (componentVOS.get(i).getType() == FormType.RADIOCHOICEGRID) {
                             ArrayList<String> answers = individualViewDTO.getResult().get(i); // get(key)
                             for (int j = 0; j < answers.size(); j++) {
                                 //answer += ((j + 1) + ". " + componentVOS.get(i).getAddedColOption().get(Integer.valueOf(answers.get(j))) + "\n");
                                 answer += (componentVOS.get(i).getAddedRowOption().get(j)
                                         + " - "
-//                                      + componentVOS.get(i).getAddedColOption().get(Integer.valueOf(answers.get(j))));
                                         + componentVOS.get(i).getAddedColOption().get(Integer.parseInt(answers.get(j))));
                                 if (j != answers.size() - 1) {
                                     answer += "\n";
                                 }
                             }
                         }else if (componentVOS.get(i).getType() == FormType.CHECKBOXGRID) { // 따로해줘야됨 , 멀티체크가 되는거라
-//                            ArrayList<ArrayList<String>> answersForCgrid = individualViewDTO.getResult().get(i);
                             ArrayList<String> answersForCgrid = individualViewDTO.getResult().get(i);
                             for (int j = 0; j < answersForCgrid.size(); j++) {
                                 //answer += ((j + 1) + ". " + componentVOS.get(i).getAddedColOption().get(Integer.valueOf(answers.get(j))) + "\n");
@@ -124,7 +121,6 @@ public class IndividualResultActivity extends AppCompatActivity {
 
                                 for (int k = 0; k < answersForCgrid.get(j).length(); k++) {
 
-
                                     if (k == answersForCgrid.get(j).length() - 1) {
                                         answer += componentVOS.get(i).getAddedColOption().get(Character.getNumericValue(answersForCgrid.get(j).charAt(k)));
 
@@ -134,21 +130,40 @@ public class IndividualResultActivity extends AppCompatActivity {
                                     }
                                 }
 
-
                                 if (j != answersForCgrid.size() - 1) {
                                     answer += "\n";
                                 }
                             }
                         } else if (componentVOS.get(i).getType() == FormType.CHECKBOXES) {
                             ArrayList<String> answers = individualViewDTO.getResult().get(i); // get(key)
+//                            Log.d("mawang", "IndividualResultActivity onResponse FormType.CHECKBOXES - answers = " + answers);
+//                            Log.d("mawang", "IndividualResultActivity onResponse FormType.CHECKBOXES - answers.size() = " + answers.size());
+
                             for (int j = 0; j < answers.size(); j++) {
-                                if (j == answers.size() - 1) {
+                                if (j == answers.size() - 1 && !answers.get(j).isEmpty()) { // etc에 text존재
                                     answer += answers.get(j);
-                                } else {
+                                }else if(j == answers.size() - 1 && answers.get(j).isEmpty()){ // etc에 text 없음
+                                    answer = answer.substring(0,answer.length()-1); // 끝에 comma 제거
+                                }else if(j == answers.size() - 2 && answers.get(j).isEmpty()){ // etc 표시
+                                    answer += " 기타) ";
+                                } else { // 체크박스들 답안
                                     answer += answers.get(j) + ",";
                                 }
-
                             }
+//                            Log.d("mawang", "IndividualResultActivity onResponse FormType.CHECKBOXES - 문자열 = " + answer);
+                        }else if (componentVOS.get(i).getType() == FormType.RADIOCHOICE) {
+                            ArrayList<String> answers = individualViewDTO.getResult().get(i); // get(key)
+//                            Log.d("mawang", "IndividualResultActivity onResponse FormType.RADIOCHOICE - answers = " + answers);
+//                            Log.d("mawang", "IndividualResultActivity onResponse FormType.RADIOCHOICE - answers.size() = " + answers.size());
+
+                            for (int j = 0; j < answers.size(); j++) {
+                                if (j == answers.size() - 2 && answers.get(j).isEmpty()) {
+                                    answer += "기타) ";
+                                } else {
+                                    answer += answers.get(j);
+                                }
+                            }
+//                            Log.d("mawang", "IndividualResultActivity onResponse FormType.RADIOCHOICE - 문자열 = " + answer);
                         } else {
                             ArrayList<String> answers = individualViewDTO.getResult().get(i); // get(key)
                             for (int j = 0; j < answers.size(); j++) {
