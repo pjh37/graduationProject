@@ -1,6 +1,7 @@
 package com.example.graduationproject.community.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.graduationproject.R;
+import com.example.graduationproject.community.activity.ChatingActivity;
 import com.example.graduationproject.community.model.ChatRoomDTO;
 import com.example.graduationproject.community.model.FriendDTO;
 
@@ -31,7 +33,6 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
     public ChatRoomAdapter(Context context, ArrayList<ChatRoomDTO> items){
         this.mContext=context;
         this.items=items;
-        Log.v("테스트","ChatRoomAdapter this.items.size : "+this.items.size());
     }
 
     @NonNull
@@ -58,6 +59,9 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
         //holder.time.setText(getTime(items.get(position).getTime()));
         holder.time.setText("0.0.0.0");
         holder.lastReceivedMessage.setText("구현중...");
+
+        itemView.setOnClickListener(new ClickListener(holder.getAdapterPosition()));
+        Log.v("테스트","getAdapterPosition : "+holder.getAdapterPosition());
         Log.v("테스트","onBindViewHolder this.items.size : "+this.items.size());
     }
 
@@ -68,7 +72,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
 
     public void addData(ArrayList<ChatRoomDTO> data){
         Log.v("테스트","this.items.size : "+this.items.size()+"     data : "+data.size());
-        //this.items.addAll(data);
+        this.items.addAll(data);
         Log.v("테스트","this.items.size : "+this.items.size()+"     data : "+data.size());
         notifyDataSetChanged();
     }
@@ -87,6 +91,19 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
             userCnt=(TextView)itemView.findViewById(R.id.userCnt);
             time=(TextView)itemView.findViewById(R.id.date);
             lastReceivedMessage=(TextView)itemView.findViewById(R.id.lastReceivedMessage);
+
+        }
+    }
+    class ClickListener implements View.OnClickListener{
+        int pos;
+        ClickListener(int pos){
+            this.pos=pos;
+        }
+        @Override
+        public void onClick(View v) {
+            Intent intent=new Intent(mContext, ChatingActivity.class);
+            intent.putExtra("roomKey",items.get(pos).getRoomKey());
+            mContext.startActivity(intent);
         }
     }
     public String getTime(String str){

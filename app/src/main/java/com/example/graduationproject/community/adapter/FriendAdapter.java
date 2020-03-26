@@ -87,12 +87,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendHold
         JSONArray jsonArray=new JSONArray();
         for(int i=0;i<items.size();i++){
             if(items.get(i).isSelected()){
-                //friends.add(items.get(i).getUserEmail());
                 jsonArray.put(items.get(i).getUserEmail());
             }
         }
-        //임시 테스트용
-        jsonArray.put("jjjj1352@naver.com");
         return jsonArray;
     }
     class FriendHolder extends RecyclerView.ViewHolder{

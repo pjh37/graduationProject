@@ -29,7 +29,7 @@ public class FormCopyFactory {
     private ArrayList<Option> OptColTexts;
 
     private Uri fileUri;
-    private int formComponent_id;
+    private int formComponent_id; // for image
 
     public Context getmContext() {
         return mContext;

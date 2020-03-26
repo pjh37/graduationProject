@@ -140,16 +140,21 @@ public class FormTypeGrid extends FormAbstract {
             jsonObject.put("type",mType);
             jsonObject.put("question",mEditQuestion.getText().toString());
             jsonObject.put("required_switch",mSwitch.isChecked());
+
             JSONArray jsonColArray=new JSONArray();
             for(int i=0;i<mAddedColContainer.getChildCount();i++){
-                jsonColArray.put(i,((Option)mAddedColContainer.getChildAt(i)).getOption());
+//                jsonColArray.put(i,((Option)mAddedColContainer.getChildAt(i)).getOption());
+                jsonColArray.put(((Option)mAddedColContainer.getChildAt(i)).getOption());
             }
             jsonObject.put("addedColOption",jsonColArray);
+
             JSONArray jsonRowArray=new JSONArray();
             for(int i=0;i<mAddedRowContainer.getChildCount();i++){
-                jsonRowArray.put(i,((Option)mAddedRowContainer.getChildAt(i)).getOption());
+                //jsonRowArray.put(i,((Option)mAddedRowContainer.getChildAt(i)).getOption());
+                jsonRowArray.put(((Option)mAddedRowContainer.getChildAt(i)).getOption());
             }
             jsonObject.put("addedRowOption",jsonRowArray);
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -162,15 +167,17 @@ public class FormTypeGrid extends FormAbstract {
         mSwitch.setChecked(vo.isRequired_switch());
 
         for(int i=0;i<vo.getAddedRowOption().size();i++){
-            Option option = new Option(mContext, mType, mAddedRowContainer.getChildCount() + 1,rowTexts);
-            option.setOption(vo.getAddedRowOption().get(i));
-            mAddedRowContainer.addView(option);
-        }
 
+            Option option = new Option(mContext, mType, mAddedRowContainer.getChildCount() + 1,rowTexts);
+            option.setOption(vo.getAddedRowOption().get(i)); // string 가져오기
+            mAddedRowContainer.addView(option);
+            rowTexts.add(option);
+        }
         for(int i=0;i<vo.getAddedColOption().size();i++){
-            Option option=new Option(mContext,mType,colTexts);
+            Option option = new Option(mContext, mType,colTexts);
             option.setOption(vo.getAddedColOption().get(i));
             mAddedColContainer.addView(option);
+            colTexts.add(option);
         }
     }
 

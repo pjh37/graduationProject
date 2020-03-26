@@ -31,15 +31,14 @@ public class ResultActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout mTabLayout;
     private ResultViewPagerAdapter pagerAdapter;
-    private String url;
-    private String userEmail;
     private int form_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         Intent intent=getIntent();
-        userEmail=intent.getStringExtra("userEmail");
+//        userEmail=intent.getStringExtra("userEmail");
         form_id=intent.getIntExtra("form_id",-1);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("Result");
@@ -47,16 +46,20 @@ public class ResultActivity extends AppCompatActivity {
         ActionBar actionBar=getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        url=getString(R.string.baseUrl);//getString(R.string.baseUrl);//http://192.168.35.42:8001
+//        url=getString(R.string.baseUrl);//getString(R.string.baseUrl);//http://192.168.35.42:8001
         viewPager=(ViewPager)findViewById(R.id.viewPager);
         mTabLayout=(TabLayout)findViewById(R.id.tabs);
+
         Bundle args=new Bundle();
-        args.putString("userEmail", Session.getUserEmail());
+//        args.putString("userEmail", Session.getUserEmail());
         args.putInt("form_id",form_id);
+
         pagerAdapter=new ResultViewPagerAdapter(getSupportFragmentManager(),args);
+
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(0);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

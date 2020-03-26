@@ -16,6 +16,10 @@ import android.widget.RemoteViews;
 import com.example.graduationproject.MainActivity;
 import com.example.graduationproject.R;
 import com.example.graduationproject.login.Session;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -26,10 +30,12 @@ import io.socket.emitter.Emitter;
 public class MessagingService extends Service {
     Socket socket;
     String url;
+    MessageManager messageManager;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
         startForegroundService();
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     @Nullable
@@ -41,19 +47,51 @@ public class MessagingService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        messageManager=MessageManager.getInstance(this);
+        messageManager.connect();
+        messageManager.roomJoin();
+        socket=MessageManager.getInstance(this).getSocket();
+        socket.on(Socket.EVENT_CONNECT,onConnected);
+        socket.on(Socket.EVENT_DISCONNECT,onReconnect);
+        socket.on(Socket.EVENT_MESSAGE,onMessageReceive);
+        socket.on("test",testReceive);
         Log.v("테스트","MessagingService onCreate 실행");
 
     }
     private Emitter.Listener onConnected=new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            //socket.emit("connectComplete","jjjj1352");
+            Log.v("테스트","onConnected : "+args.length);
         }
     };
-    private Emitter.Listener onMessageReceive=new Emitter.Listener() {
+    private Emitter.Listener onReconnect=new Emitter.Listener() {
         @Override
         public void call(Object... args) {
+            Log.v("disconnect","서버연결끊어짐");
+            messageManager.connect();
+            socket=messageManager.getSocket();
+        }
+    };
+    private Emitter.Listener testReceive=(args)->{
+        Log.v("테스트","testReceive : 메세지 도착" + " "+args[0].toString());
+    };
+    private Emitter.Listener onMessageReceive=new Emitter.Listener() {
 
+        @Override
+        public void call(Object... args) {
+            Log.v("테스트","onMessageReceive : 메세지 도착" + " "+args[0].toString());
+            try{
+                Log.v("테스트","onMessageReceive : 메세지 도착");
+                Gson gson=new Gson();
+                JSONObject jsonObject=(JSONObject)args[0];
+                Log.v("테스트","onMessageReceive : "+jsonObject.toString());
+                MessageDTO msg=gson.fromJson(jsonObject.toString(),MessageDTO.class);
+                Intent intent =new Intent("com.example.RECEIVE_ACTION");
+                intent.putExtra("msg",msg);
+                sendBroadcast(intent);
+            }catch (Exception e){
+                Log.v("테스트","onMessageReceive : "+e.getMessage());
+            }
         }
     };
     private void startForegroundService(){
@@ -83,7 +121,12 @@ public class MessagingService extends Service {
             NotificationChannel channel=new NotificationChannel(channelId,channelName,NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(channel);
         }else{
-            builder=new NotificationCompat.Builder(this);
+            builder=new NotificationCompat.Builder(this,channelId)
+                    .setSmallIcon(R.drawable.fab_item)
+                    .setContentTitle("Checkmate 앱이 실행중입니다")
+                    .setAutoCancel(false)
+                    .setOngoing(true)
+                    .setContentIntent(pendingIntent);
         }
         startForeground(1,builder.build());
         notificationManager.notify(0,builder.build());

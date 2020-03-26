@@ -8,6 +8,9 @@ import android.widget.Toast;
 
 import com.example.graduationproject.messageservice.MessagingService;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Session extends Application {
     private static String userEmail;
     private static String userName;
@@ -38,7 +41,6 @@ public class Session extends Application {
     public static String getUserEmail() {
         return userEmail;
     }
-
     public static void setUserEmail(String userEmail) {
         Session.userEmail = userEmail;
     }
@@ -46,7 +48,6 @@ public class Session extends Application {
     public static String getUserName() {
         return userName;
     }
-
     public static void setUserName(String userName) {
         Session.userName = userName;
     }
@@ -54,13 +55,19 @@ public class Session extends Application {
     public static void setUserImage(String userImage) {
         Session.userImage = userImage;
     }
-
     public static String getUserImage() {
         return userImage;
     }
+
     public static String getTime(){
-        return String.valueOf(System.currentTimeMillis());
+        long now=Long.valueOf(String.valueOf(System.currentTimeMillis()));
+        Date date=new Date(now);
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy MM월 dd hh:mm:ss");
+        String time = simpleDate.format(date);
+        return time;
     }
+
+
     public  void showToast(String msg){
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
     }

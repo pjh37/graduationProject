@@ -18,24 +18,31 @@ import com.example.graduationproject.ItemDecorate;
 import com.example.graduationproject.R;
 import com.example.graduationproject.form.FormComponentVO;
 import com.example.graduationproject.form.FormDTO;
+import com.example.graduationproject.form.FormType;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class IndividualResultActivity extends AppCompatActivity {
     private String url;//getString(R.string.baseUrl);
     private int form_id;
-    private FormDTO formDTO=null;
+
+    //private FormDTO formDTO=null;
     private ArrayList<IndividualResultDTO> datas;
     private IndividualViewDTO individualViewDTO;
+
     private RecyclerView individualResultRV;
-    private RecyclerView.Adapter  individualResultAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+    //private RecyclerView.Adapter  individualResultAdapter; //setDatas 인식을 못함
+    private IndividualResultRV individualResultAdapter;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,9 +52,13 @@ public class IndividualResultActivity extends AppCompatActivity {
         form_id=intent.getIntExtra("form_id",-1);
         individualViewDTO=(IndividualViewDTO)intent.getSerializableExtra("result");
         datas=new ArrayList<>();
-        individualResultRV=(RecyclerView)findViewById(R.id.recycleView);
+
+
+        individualResultRV = (RecyclerView) findViewById(R.id.recycleView);
         individualResultRV.setLayoutManager(new LinearLayoutManager(this));
         individualResultRV.addItemDecoration(new ItemDecorate());
+        individualResultAdapter = new IndividualResultRV(getApplicationContext(), datas); //
+        individualResultRV.setAdapter(individualResultAdapter);
 
         getServerForm(form_id);
     }
@@ -66,36 +77,98 @@ public class IndividualResultActivity extends AppCompatActivity {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try{
                     String res=response.body().string();
-                    Log.v("테스트",res);
-                    JSONObject jsonObject=new JSONObject(res);
-                    Gson gson=new Gson();
-                    formDTO=gson.fromJson(jsonObject.toString(), FormDTO.class);
-                    ArrayList<FormComponentVO> componentVOS=formDTO.getFormComponents();
+                    Log.d("각결과테스트","IndividualResultActivity  : "+res);
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<FormComponentVO>>() {}.getType();
+                    ArrayList<FormComponentVO> componentVOS = gson.fromJson(res, type);
+
+//                    formDTO=gson.fromJson(jsonObject.toString(), FormDTO.class);
+//                    ArrayList<FormComponentVO> componentVOS=formDTO.getFormComponents();
+
+
+                    if (componentVOS == null) {
+                        Log.d("mawang", "IndividualResultActivity onResponse - componentVOS is null");
+                    } else {
+                        Log.d("mawang","IndividualResultActivity getServerForm onResponse - componentVOS.size() : "+componentVOS.size());
+                    }
+
+
+
                     for(int i=0;i<componentVOS.size();i++){
                         IndividualResultDTO individualResultDTO=new IndividualResultDTO();
-                        ArrayList<String> answers=individualViewDTO.getResult().get(i);
                         String answer="";
-                        if(componentVOS.get(i).getType()==6){
-                            for(int j=0;j<answers.size();j++){
-                                answer+=(String.valueOf(j+1)+". "+componentVOS.get(i).getAddedColOption().get(Integer.valueOf(answers.get(j)))+" ");
-                            }
 
-                        }else{
-                            for(int j=0;j<answers.size();j++){
-                                answer+=answers.get(j);
+
+                        if (componentVOS.get(i).getType() == FormType.RADIOCHOICEGRID) {
+                            ArrayList<String> answers = individualViewDTO.getResult().get(i); // get(key)
+                            for (int j = 0; j < answers.size(); j++) {
+                                //answer += ((j + 1) + ". " + componentVOS.get(i).getAddedColOption().get(Integer.valueOf(answers.get(j))) + "\n");
+                                answer += (componentVOS.get(i).getAddedRowOption().get(j)
+                                        + " - "
+//                                      + componentVOS.get(i).getAddedColOption().get(Integer.valueOf(answers.get(j))));
+                                        + componentVOS.get(i).getAddedColOption().get(Integer.parseInt(answers.get(j))));
+                                if (j != answers.size() - 1) {
+                                    answer += "\n";
+                                }
+                            }
+                        }else if (componentVOS.get(i).getType() == FormType.CHECKBOXGRID) { // 따로해줘야됨 , 멀티체크가 되는거라
+//                            ArrayList<ArrayList<String>> answersForCgrid = individualViewDTO.getResult().get(i);
+                            ArrayList<String> answersForCgrid = individualViewDTO.getResult().get(i);
+                            for (int j = 0; j < answersForCgrid.size(); j++) {
+                                //answer += ((j + 1) + ". " + componentVOS.get(i).getAddedColOption().get(Integer.valueOf(answers.get(j))) + "\n");
+                                answer += componentVOS.get(i).getAddedRowOption().get(j) + " - ";
+
+                                answersForCgrid.set(j, answersForCgrid.get(j).replace("[\"", "")
+                                        .replace("\",\"", "")
+                                        .replace("\"]", ""));
+
+                                for (int k = 0; k < answersForCgrid.get(j).length(); k++) {
+
+
+                                    if (k == answersForCgrid.get(j).length() - 1) {
+                                        answer += componentVOS.get(i).getAddedColOption().get(Character.getNumericValue(answersForCgrid.get(j).charAt(k)));
+
+                                    } else {
+                                        answer += componentVOS.get(i).getAddedColOption().get(Character.getNumericValue(answersForCgrid.get(j).charAt(k)));
+                                        answer += ",";
+                                    }
+                                }
+
+
+                                if (j != answersForCgrid.size() - 1) {
+                                    answer += "\n";
+                                }
+                            }
+                        } else if (componentVOS.get(i).getType() == FormType.CHECKBOXES) {
+                            ArrayList<String> answers = individualViewDTO.getResult().get(i); // get(key)
+                            for (int j = 0; j < answers.size(); j++) {
+                                if (j == answers.size() - 1) {
+                                    answer += answers.get(j);
+                                } else {
+                                    answer += answers.get(j) + ",";
+                                }
+
+                            }
+                        } else {
+                            ArrayList<String> answers = individualViewDTO.getResult().get(i); // get(key)
+                            for (int j = 0; j < answers.size(); j++) {
+                                answer += answers.get(j);
                             }
                         }
 
                         individualResultDTO.setQuestion(componentVOS.get(i).getQuestion());
                         individualResultDTO.setAnswer(answer);
-                        Log.v("테스트",componentVOS.get(i).getQuestion()+"  "+answer);
+                        individualResultDTO.setType(componentVOS.get(i).getType());
+                        Log.v("각결과테스트","각결과테스트 : "+individualResultDTO.getAnswer());
+
                         datas.add(individualResultDTO);
                     }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            individualResultAdapter=new IndividualResultRV(getApplicationContext(),datas);
-                            individualResultRV.setAdapter(individualResultAdapter);
+//                            individualResultAdapter=new IndividualResultRV(getApplicationContext(),datas);
+//                            individualResultRV.setAdapter(individualResultAdapter);
+                            individualResultAdapter.setDatas(datas);
                         }
                     });
 

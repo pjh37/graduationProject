@@ -61,7 +61,6 @@ public class InvitingActivity extends AppCompatActivity {
             public void onResponse(Call<ArrayList<FriendDTO>> call, Response<ArrayList<FriendDTO>> response) {
                 if(response.body()!=null){
                     datas=response.body();
-                    Log.v("InvitingActivity",datas.get(0).getUserEmail());
                     adapter.addItems(datas);
                     recyclerView.setAdapter(adapter);
                 }
@@ -96,7 +95,7 @@ public class InvitingActivity extends AppCompatActivity {
         HashMap<String, Object> input = new HashMap<>();
         input.put("userEmail", Session.getUserEmail());
         input.put("friends",adapter.getCheckedFriends());
-        input.put("pk",Session.getUserEmail()+Session.getTime());
+        input.put("pk",Session.getUserEmail()+System.currentTimeMillis());
 
         RetrofitApi.getService().chatRoomCreateRequest(input).enqueue(new retrofit2.Callback<Boolean>(){
             @Override

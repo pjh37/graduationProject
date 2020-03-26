@@ -13,10 +13,13 @@
         android:textAlignment="center"
         >
         <TextView
+            android:id="@+id/toolbarTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18dp"
-            android:textColor="#ffffff"/>
+            android:textColor="#ffffff"
+            android:text="더보기"
+            />
     </androidx.appcompat.widget.Toolbar>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
