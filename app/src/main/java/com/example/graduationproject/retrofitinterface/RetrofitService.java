@@ -72,9 +72,12 @@ public interface RetrofitService {
     @POST("chat/create")
     Call<Boolean> chatRoomCreateRequest(@FieldMap HashMap<String, Object> param);
 
-    @GET("chat/{roomKey}")
-    Call<ArrayList<MessageDTO>> getRoomMessage(@Path("roomKey") String roomKey);
-
     @GET("chat/rooms/{userEmail}")
     Call<ArrayList<ChatRoomTempDTO>> getRoomList(@Path("userEmail") String userEmail);
+
+    //로컬 캐시와 디비의 메세지 캐시가 차이 날경우 디비의 메세지를 긁어 온다
+    @GET("chat/rooms/{roomKey}/{count}/{offset}")
+    Call<ArrayList<MessageDTO>> getRoomMessages(@Path("roomKey") String roomKey
+            ,@Path("count") Integer count
+            ,@Path("offset") Integer offset);
 }

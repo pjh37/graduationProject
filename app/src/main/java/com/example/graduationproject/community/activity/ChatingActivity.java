@@ -1,8 +1,11 @@
 package com.example.graduationproject.community.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import retrofit2.Call;
+import retrofit2.Response;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,13 +20,20 @@ import android.widget.EditText;
 import com.example.graduationproject.R;
 import com.example.graduationproject.community.adapter.ChatRoomAdapter;
 import com.example.graduationproject.community.adapter.ChatingAdapter;
+import com.example.graduationproject.community.model.ChatRoomDTO;
+import com.example.graduationproject.community.model.ChatRoomTempDTO;
 import com.example.graduationproject.login.Session;
+import com.example.graduationproject.mainActivityViwePager.RequestType;
 import com.example.graduationproject.messageservice.MessageDTO;
 import com.example.graduationproject.messageservice.MessageManager;
+import com.example.graduationproject.retrofitinterface.RetrofitApi;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class ChatingActivity extends AppCompatActivity {
+    private static final int COUNT=50;
+    private int offset;
     Button btnSend;
     String roomKey;
     String msg;
@@ -39,7 +49,7 @@ public class ChatingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_chating);
         registerReceiver(receiver,new IntentFilter("com.example.RECEIVE_ACTION"));
-
+        offset=0;
         items=new ArrayList<>();
 
         Intent intent=getIntent();
@@ -52,8 +62,29 @@ public class ChatingActivity extends AppCompatActivity {
         recyclerView=(RecyclerView)findViewById(R.id.recyclerView);
         layoutManager= new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addOnScrollListener(new ScrollListener());
         adapter=new ChatingAdapter(this,items);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getRoomMessages(roomKey,offset);
+    }
+    public void getRoomMessages(String roomKey,int offset){
+        RetrofitApi.getService().getRoomMessages(roomKey,COUNT,offset).enqueue(new retrofit2.Callback<ArrayList<MessageDTO>>(){
+            @Override
+            public void onResponse(Call<ArrayList<MessageDTO>> call, Response<ArrayList<MessageDTO>> response) {
+                if(response.body()!=null){
+                    ArrayList<MessageDTO> msg=response.body();
+                    adapter.addAll(msg);
+                    recyclerView.scrollToPosition(adapter.getItemCount()-1);
+                }
+            }
+            @Override
+            public void onFailure(Call<ArrayList<MessageDTO>> call, Throwable t) { }
+        });
     }
     BroadcastReceiver receiver=new BroadcastReceiver() {
         @Override
@@ -61,6 +92,7 @@ public class ChatingActivity extends AppCompatActivity {
             MessageDTO msg=(MessageDTO)intent.getSerializableExtra("msg");
             if(roomKey.equals(msg.getRoomKey())){
                 adapter.addItem(msg);
+                recyclerView.scrollToPosition(adapter.getItemCount()-1);
             }
         }
     };
@@ -74,11 +106,31 @@ public class ChatingActivity extends AppCompatActivity {
                             ,editSendMessage.getText().toString()
                             ,Session.getTime());
                     MessageManager.msgSend(msg);
-                    //adapter.addItem(msg);
+                    adapter.addItem(msg);
+                    recyclerView.scrollToPosition(adapter.getItemCount()-1);
                     editSendMessage.setText("");
                     break;
                 }
             }
         }
+    }
+
+    public class ScrollListener extends RecyclerView.OnScrollListener{
+        @Override
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy){
+            super.onScrolled(recyclerView, dx, dy);
+            int firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+            int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+
+            if(lastVisiblePosition==adapter.getItemCount()-1){
+               offset+=50;
+               getRoomMessages(roomKey,offset);
+            }
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
     }
 }

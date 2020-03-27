@@ -78,6 +78,10 @@ public class ChatingAdapter extends RecyclerView.Adapter<ChatingAdapter.ChatingH
         notifyItemInserted(items.size());
         //notifyDataSetChanged();
     }
+    public void addAll(ArrayList<MessageDTO> msg){
+        items.addAll(items.size(),msg);
+        notifyDataSetChanged();
+    }
     class ChatingHolder extends RecyclerView.ViewHolder{
         ImageView profileImage;
         TextView txtUserEmail;

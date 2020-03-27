@@ -39,8 +39,19 @@ public class MessageManager {
             error.printStackTrace();
         }
     }
+
     public Socket getSocket(){
         return mSocket;
+    }
+    public static void login(){
+        JSONObject jObject=new JSONObject();
+        try{
+            jObject.put("userEmail", Session.getUserEmail());
+            mSocket.emit("login",jObject);
+            Log.v("login","메세지 전송함!!!");
+        }catch (Exception error){
+            error.printStackTrace();
+        }
     }
     public static void msgSend(MessageDTO msg){
         JSONObject jObject=new JSONObject();

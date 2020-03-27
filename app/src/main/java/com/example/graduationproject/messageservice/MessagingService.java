@@ -49,6 +49,7 @@ public class MessagingService extends Service {
         super.onCreate();
         messageManager=MessageManager.getInstance(this);
         messageManager.connect();
+        messageManager.login();
         messageManager.roomJoin();
         socket=MessageManager.getInstance(this).getSocket();
         socket.on(Socket.EVENT_CONNECT,onConnected);
