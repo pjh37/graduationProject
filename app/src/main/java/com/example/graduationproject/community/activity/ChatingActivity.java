@@ -26,6 +26,7 @@ import com.example.graduationproject.login.Session;
 import com.example.graduationproject.mainActivityViwePager.RequestType;
 import com.example.graduationproject.messageservice.MessageDTO;
 import com.example.graduationproject.messageservice.MessageManager;
+import com.example.graduationproject.messageservice.MessageSaveManager;
 import com.example.graduationproject.retrofitinterface.RetrofitApi;
 
 import java.util.ArrayList;
@@ -70,7 +71,14 @@ public class ChatingActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        getRoomMessages(roomKey,offset);
+        getMessageCache(roomKey,offset);
+    }
+    //로컬 캐시
+    public void getMessageCache(String roomKey,int offset){
+        ArrayList<MessageDTO> msg=MessageSaveManager.getInstance(this).findRoomMessage(roomKey, offset);
+        adapter.addAll(msg);
+        Log.v("캐시테스트","로컬에서 읽은것 : "+msg.size());
+        getRoomMessages(roomKey,msg.size());
     }
     public void getRoomMessages(String roomKey,int offset){
         RetrofitApi.getService().getRoomMessages(roomKey,COUNT,offset).enqueue(new retrofit2.Callback<ArrayList<MessageDTO>>(){
@@ -79,6 +87,8 @@ public class ChatingActivity extends AppCompatActivity {
                 if(response.body()!=null){
                     ArrayList<MessageDTO> msg=response.body();
                     adapter.addAll(msg);
+                    Log.v("캐시테스트","외부db에서 읽은것 : "+msg.size());
+                    MessageSaveManager.getInstance(ChatingActivity.this).insertAll(msg);
                     recyclerView.scrollToPosition(adapter.getItemCount()-1);
                 }
             }

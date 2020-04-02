@@ -87,6 +87,7 @@ public class MessagingService extends Service {
                 JSONObject jsonObject=(JSONObject)args[0];
                 Log.v("테스트","onMessageReceive : "+jsonObject.toString());
                 MessageDTO msg=gson.fromJson(jsonObject.toString(),MessageDTO.class);
+                MessageSaveManager.getInstance(getApplicationContext()).insert(msg);
                 Intent intent =new Intent("com.example.RECEIVE_ACTION");
                 intent.putExtra("msg",msg);
                 sendBroadcast(intent);

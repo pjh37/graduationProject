@@ -14,6 +14,7 @@ import io.socket.client.Socket;
 
 public class MessageManager {
     private static MessageManager messageManager=null;
+    private static  MessageSaveManager messageSaveManager=null;
     private static Socket mSocket;
     private Context mContext;
     private MessageManager(){ }
@@ -23,6 +24,9 @@ public class MessageManager {
     public static MessageManager getInstance(Context context){
         if(messageManager==null){
             messageManager=new MessageManager(context);
+        }
+        if(messageSaveManager==null){
+            messageSaveManager=MessageSaveManager.getInstance(context);
         }
         return messageManager;
     }
@@ -54,6 +58,8 @@ public class MessageManager {
         }
     }
     public static void msgSend(MessageDTO msg){
+        //로컬저장
+        messageSaveManager.insert(msg);
         JSONObject jObject=new JSONObject();
         try{
             jObject.put("roomKey",msg.getRoomKey());
