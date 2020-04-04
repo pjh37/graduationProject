@@ -59,6 +59,11 @@
             android:exported="true"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
+        <service
+            android:name=".widget.WidgetUpdateService"
+            android:enabled="true"
+            android:exported="true"/>
+
         <activity android:name=".widget.WidgetConfigActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
@@ -68,6 +73,8 @@
         <receiver android:name=".widget.HomeSurveyWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name=".widget.HomeSurveyWidget.ACTION_REFRESH_PRESSED"/>
+                <action android:name=".widget.HomeSurveyWidget.ACTION_CONFIGURE_FINISHED"/>
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"

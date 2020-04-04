@@ -1,7 +1,10 @@
 package com.example.graduationproject.widget;
 
+import android.app.Activity;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -39,7 +42,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.ArrayList;
 
-public class WidgetConfigActivity extends AppCompatActivity {
+import static com.example.graduationproject.widget.HomeSurveyWidget.ACTION_CONFIGURE_FINISHED;
+
+public class WidgetConfigActivity extends Activity {
 
     int mAppWidgetId;
     AppWidgetManager appWidgetManager;
@@ -69,6 +74,9 @@ public class WidgetConfigActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_widget_config);
 
+        appWidgetManager = AppWidgetManager.getInstance(this);
+        remoteViews = new RemoteViews(this.getPackageName(), R.layout.home_survey_widget);
+
         preferences = getSharedPreferences("testPref", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
@@ -80,13 +88,15 @@ public class WidgetConfigActivity extends AppCompatActivity {
                 if(!data.isEmpty()){
                     expectValue = intent.getIntExtra("expectValue", 0);
                     rvPosition = intent.getIntExtra("position", 0);
+                    editor.putInt("_id", data.get(rvPosition).get_id());
                     editor.putInt("expectValue", expectValue);
                     editor.putString("title", data.get(rvPosition).getTitle());
                     editor.putInt("response", data.get(rvPosition).getResponse_cnt());
                     editor.putString("time",data.get(rvPosition).getTime());
-                    editor.commit();
+                    editor.apply();
+
                     isReceived = true;
-                    finish();
+
                 }
             }
         };
@@ -120,14 +130,28 @@ public class WidgetConfigActivity extends AppCompatActivity {
 
         if(bundle != null){
             mAppWidgetId = bundle.getInt(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    AppWidgetManager.EXTRA_APPWIDGET_IDS,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
         }
 
-        appWidgetManager = AppWidgetManager.getInstance(this);
-        remoteViews = new RemoteViews(this.getPackageName(), R.layout.home_survey_widget);
-        appWidgetManager.updateAppWidget(mAppWidgetId, remoteViews);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(!isReceived){}
+                appWidgetManager.updateAppWidget(mAppWidgetId, remoteViews);
 
+                Intent serviceIntent = new Intent(getApplicationContext(), WidgetUpdateService.class);
+                ComponentName componentName = new ComponentName(getApplicationContext(), HomeSurveyWidget.class);
+                int[] allWidgetIds = appWidgetManager.getAppWidgetIds(componentName);
+                serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds);
+                getApplicationContext().startService(serviceIntent);
+
+                Intent resultValue = new Intent();
+                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, mAppWidgetId);
+                setResult(RESULT_OK, resultValue);
+                finish();
+            }
+        }).start();
     }
 
     @Override
@@ -164,20 +188,10 @@ public class WidgetConfigActivity extends AppCompatActivity {
 
                             loginSession.setSession(user.getEmail(),user.getDisplayName(),String.valueOf(user.getPhotoUrl()));
 
-                            Intent resultIntent = new Intent();
-                            resultIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-                            setResult(RESULT_OK, resultIntent);
-
-                            Intent test = new Intent(getBaseContext(), HomeSurveyWidget.class);
-                            test.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-                            WidgetConfigActivity.this.sendBroadcast(test);
-
                             waitText.setVisibility(View.GONE);
                             recyclerView.setVisibility(View.VISIBLE);
                             data.clear();
                             getSurveyList(user.getEmail());
-
-                            //finish();
 
                         } else {
                             // 로그인 실패

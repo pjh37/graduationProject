@@ -1,7 +1,9 @@
 package com.example.graduationproject.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,8 +11,11 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.example.graduationproject.R;
+import com.example.graduationproject.UploadedSurveyDTO;
+import com.example.graduationproject.retrofitinterface.RetrofitApi;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -19,79 +24,77 @@ import java.util.Date;
 public class HomeSurveyWidget extends AppWidgetProvider {
 
     public static String WIDGET_LOGIN_ACTION = "WidgetLoginAction";
-    private String userEmail = "default";
-    SharedPreferences preferences;
+    public static final String ACTION_REFRESH_PRESSED = ".widget.HomeSurveyWidget.ACTION_REFRESH_PRESSED";
+    public static final String ACTION_CONFIGURE_FINISHED = ".widget.HomeSurveyWidget.ACTION_CONFIGURE_FINISHED";
+    private String surveyTitle = "default";
+    private ArrayList<UploadedSurveyDTO> refreshSurveyArrList = new ArrayList<>();
+    private boolean isRefreshPressed = false;
+    private boolean isRefreshFinished = false;
+    private static SharedPreferences preferences;
+    static RemoteViews widget;
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+    public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
         // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.home_survey_widget);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
-
+        widget = new RemoteViews(context.getPackageName(), R.layout.home_survey_widget);
         // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, widget.getLayoutId());
+        appWidgetManager.updateAppWidget(appWidgetId, widget);
+    }
+
+    @Override
+    public void onReceive(Context context, Intent recv_intent){
+        String action = recv_intent.getAction();
+        if(action != null && action.equals(ACTION_REFRESH_PRESSED)){
+            preferences = context.getSharedPreferences("testPref",Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("isRefreshPressed", true);
+            editor.apply();
+
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+            startUpdateService(context, appWidgetManager);
+
+        }
+        super.onReceive(context,recv_intent);
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
-        preferences = context.getSharedPreferences("testPref",Context.MODE_PRIVATE);
-        userEmail = preferences.getString("title","fail");
-
-        Log.i("preftest",userEmail);
+        widget = new RemoteViews(context.getPackageName(), R.layout.home_survey_widget);
 
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            Intent serviceIntent = new Intent(context, WidgetRemoteViewsService.class);
-            RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.home_survey_widget);
-            //widget.setRemoteAdapter(R.id.appwidget_listview, serviceIntent);
-
-            this.refresh(context, widget);
-            //updateAppWidget(context, appWidgetManager, appWidgetId);
-            appWidgetManager.updateAppWidget(appWidgetIds, widget);
+            startUpdateService(context, appWidgetManager);
         }
 
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
     @Override
     public void onEnabled(Context context) {
         // Enter relevant functionality for when the first widget is created
+        widget = new RemoteViews(context.getPackageName(), R.layout.home_survey_widget);
+
+        if(preferences == null)
+            preferences = context.getSharedPreferences("testPref",Context.MODE_PRIVATE);
+        super.onEnabled(context);
     }
 
     @Override
     public void onDisabled(Context context) {
-
+        Intent intent = new Intent(context.getApplicationContext(), WidgetUpdateService.class);
+        context.stopService(intent);
+        super.onDisabled(context);
     }
 
-    private String getTime(String str){
-        long now;
-        Date date;
-        if(str != null) {
-            now = Long.valueOf(str);
-            date = new Date(now);
-        }
-        else
-            date = new Date();
-        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy년 MM월 dd일");
-        String time = simpleDate.format(date);
-        return time;
+    private void startUpdateService(Context context, AppWidgetManager appWidgetManager){
+        ComponentName componentName = new ComponentName(context, HomeSurveyWidget.class);
+        int[] allWidgetIds = appWidgetManager.getAppWidgetIds(componentName);
+        Intent intent = new Intent(context.getApplicationContext(), WidgetUpdateService.class);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds);
+        context.startService(intent);
     }
 
-    private void refresh(Context context, RemoteViews remoteViews){
-        remoteViews.setTextViewText(R.id.appwidget_text, userEmail);
-        int recv_response = preferences.getInt("response",0);
-        int recv_expect = preferences.getInt("expectValue",0);
-        String time = getTime(preferences.getString("time",null));
-        if(recv_expect != 0){
-            int value = recv_response / recv_expect;
-            if(value > 1){value = 1;}
-            remoteViews.setTextViewText(R.id.widget_txtProgress, Integer.toString(value) + "%");
-            remoteViews.setTextViewText(R.id.homewidget_response, Integer.toString(recv_response) + "명 응답");
-            remoteViews.setTextViewText(R.id.homewidget_time, time);
-        }
-    }
-    
 }
 

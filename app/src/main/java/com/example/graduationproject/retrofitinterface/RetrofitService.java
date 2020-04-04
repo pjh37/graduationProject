@@ -55,6 +55,9 @@ public interface RetrofitService {
     @GET("search_keyword/{keyword}")
     Call<ArrayList<SurveyDTO>> getKeywordSurveyList(@Path("keyword") String keyword);
 
+    @GET("search_id/{id}")
+    Call<ArrayList<UploadedSurveyDTO>> get_idSurveyList(@Path("id") Integer id);
+
     //커뮤니티 관련 요청
     @FormUrlEncoded
     @POST("friend/select")
