@@ -51,6 +51,16 @@
         <item>오래된순</item>
     </string-array>
 
+    <string-array name="category">
+        <item>카테고리</item>
+        <item>여행</item>
+        <item>건강</item>
+        <item>동물</item>
+        <item>스포츠</item>
+        <item>취미</item>
+        <item>음식</item>
+        <item>과학/기술</item>
+    </string-array>
 
 
 </resources>

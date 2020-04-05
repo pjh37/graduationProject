@@ -6,6 +6,7 @@
     <string name="baseUrl">http://192.168.35.42:8001/</string>
     <string name="notification_channel_id">checkmate_msg</string>
     <string name="notification_channel_name">checkmate</string>
+    <string name="category_spinner">카테고리</string>
     <!--http://pjh.cafe24app.com/  -->
     <!--http://192.168.35.42:8001/ -->
 </resources>
