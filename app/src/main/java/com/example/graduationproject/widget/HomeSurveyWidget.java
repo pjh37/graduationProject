@@ -50,7 +50,7 @@ public class HomeSurveyWidget extends AppWidgetProvider {
             preferences = context.getSharedPreferences("testPref",Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("isRefreshPressed", true);
-            editor.apply();
+            editor.commit();
 
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             startUpdateService(context, appWidgetManager);
