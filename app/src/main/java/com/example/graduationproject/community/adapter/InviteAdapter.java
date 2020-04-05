@@ -50,7 +50,7 @@ public class InviteAdapter extends RecyclerView.Adapter<InviteAdapter.InviteHold
                     .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
         }else{
             Glide.with(holder.itemView.getContext())
-                    .load(mContext.getString(R.string.baseUrl)+"user/profile/"+items.get(position).getProfileImageUrl()+".jpg")
+                    .load(mContext.getString(R.string.baseUrl)+"user/profile/select/"+items.get(position).getProfileImageUrl()+".jpg")
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
         }

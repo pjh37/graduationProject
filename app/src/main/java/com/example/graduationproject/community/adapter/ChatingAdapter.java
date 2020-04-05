@@ -56,7 +56,7 @@ public class ChatingAdapter extends RecyclerView.Adapter<ChatingAdapter.ChatingH
             holder.leftView.setVisibility(View.GONE);
             holder.profileImage.setVisibility(View.VISIBLE);
             Glide.with(holder.itemView.getContext())
-                    .load(mContext.getString(R.string.baseUrl)+"user/profile/"+items.get(position).getUserEmail()+".jpg")
+                    .load(mContext.getString(R.string.baseUrl)+"user/profile/select/"+items.get(position).getUserEmail()+".jpg")
                     .error(R.drawable.profile)
                     .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
             holder.txtRightDate.setVisibility(View.VISIBLE);

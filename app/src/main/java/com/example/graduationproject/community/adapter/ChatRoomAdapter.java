@@ -45,7 +45,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
     @Override
     public void onBindViewHolder(@NonNull ChatRoomHolder holder, int position) {
         Glide.with(holder.itemView.getContext())
-                .load(mContext.getString(R.string.baseUrl)+"user/profile/"+items.get(position).getUserEmails().get(0)+".jpg")
+                .load(mContext.getString(R.string.baseUrl)+"user/profile/select/"+items.get(position).getUserEmails().get(0)+".jpg")
                 .error(R.drawable.profile)
                 .apply(new RequestOptions().circleCrop()).into(holder.chatRoomImage);
         int len = items.get(position).getUserEmails().size()>2 ? 2 : items.get(position).getUserEmails().size();

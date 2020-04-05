@@ -51,7 +51,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendHold
                     .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
         }else{
             Glide.with(mContext)
-                    .load(mContext.getString(R.string.baseUrl)+"user/profile/"+items.get(position).getProfileImageUrl()+".jpg")
+                    .load(mContext.getString(R.string.baseUrl)+"user/profile/select/"+items.get(position).getProfileImageUrl()+".jpg")
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
         }
