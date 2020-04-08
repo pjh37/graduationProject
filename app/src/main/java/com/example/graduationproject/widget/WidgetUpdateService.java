@@ -1,5 +1,8 @@
 package com.example.graduationproject.widget;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
@@ -10,9 +13,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
+
+import androidx.core.app.NotificationCompat;
 
 import com.example.graduationproject.R;
 import com.example.graduationproject.UploadedSurveyDTO;
@@ -49,6 +55,21 @@ public class WidgetUpdateService extends Service {
     @Override
     public void onCreate(){
         super.onCreate();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            final String strId = "widget_channel_id";
+            final String strTitle = getString(R.string.app_name);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationChannel channel = notificationManager.getNotificationChannel(strId);
+            if (channel == null) {
+                channel = new NotificationChannel(strId, strTitle, NotificationManager.IMPORTANCE_HIGH);
+                notificationManager.createNotificationChannel(channel);
+            }
+
+            Notification notification = new NotificationCompat.Builder(this, strId).build();
+            startForeground(1, notification);
+        }
+
         Log.d("WUS_onCreate()","WUS_onCreate()");
         preferences = getSharedPreferences("testPref", Context.MODE_PRIVATE);
     }
@@ -72,7 +93,17 @@ public class WidgetUpdateService extends Service {
     private RemoteViews buildUpdate(Context context, int appWidgetId){
         RemoteViews updateViews = new RemoteViews(context.getPackageName(), R.layout.home_survey_widget);
         setPressRefreshButton(context, updateViews, appWidgetId);
-        refresh(context, updateViews);
+        setWidgetView(context,updateViews);
+        if(preferences.getBoolean("isRefreshPressed", false)){
+            isRefreshPressed = true;
+            setRefreshView(context, updateViews);
+        }
+
+        isRefreshPressed = false;
+        isRefreshFinished = false;
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("isRefreshPressed", false);
+        editor.apply();
 
         return updateViews;
     }
@@ -91,27 +122,22 @@ public class WidgetUpdateService extends Service {
         return time;
     }
 
-    private synchronized void refresh(Context context, RemoteViews remoteViews){
+    private void setRefreshView(Context context, RemoteViews remoteViews){
 
-        if(preferences.getBoolean("isRefreshPressed", false)){
-            isRefreshPressed = true;
-        }
-        Log.d("isRefreshPressed",Boolean.toString(isRefreshPressed));
+        if(isRefreshPressed){
+            if(preferences.getInt("_id", -1) == -1)
+                return;
+            Log.d("getInt_id", Integer.toString(preferences.getInt("_id", 0)));
+            get_idSurveyList(preferences.getInt("_id", 0));
 
-        Thread refreshThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int recv_response;
-                int recv_expect;
-                String time;
+            Thread setRefreshViewThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    int recv_response;
+                    int recv_expect;
+                    String time;
 
-                if(isRefreshPressed){
-                    if(preferences.getInt("_id", -1) == -1)
-                        return;
-                    Log.d("getInt_id", Integer.toString(preferences.getInt("_id", 0)));
-                    get_idSurveyList(preferences.getInt("_id", 0));
-
-                    while(!isRefreshFinished);
+                    while(!isRefreshFinished){}
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putInt("_id", refreshSurveyArrList.get(0).get_id());
                     editor.putString("title", refreshSurveyArrList.get(0).getTitle());
@@ -122,49 +148,74 @@ public class WidgetUpdateService extends Service {
                     recv_response = refreshSurveyArrList.get(0).getResponse_cnt();
                     recv_expect = preferences.getInt("expectValue",0);
                     time = getTime(refreshSurveyArrList.get(0).getTime());
-                }
-                else{
-                    Log.d("getInt_id2", Integer.toString(preferences.getInt("_id", 0)));
-                    recv_response = preferences.getInt("response", 0);
-                    recv_expect = preferences.getInt("expectValue", 0);
-                    time = getTime(preferences.getString("time", null));
-                }
 
-                if(recv_expect != 0){
-                    int value = ((recv_response * 100) / recv_expect);
-                    if(value > 100){value = 100;}
-                    surveyTitle = preferences.getString("title","fail");
-                    Log.i("preftest",surveyTitle);
-                    Log.i("recv_expect",Integer.toString(recv_expect));
-                    Log.i("value",Integer.toString(value));
-                    remoteViews.setProgressBar(R.id.widget_progressBar,100, value, false);
-                    remoteViews.setTextViewText(R.id.appwidget_text, surveyTitle);
-                    remoteViews.setTextViewText(R.id.widget_txtProgress, Integer.toString(value) + "%");
-                    remoteViews.setTextViewText(R.id.homewidget_response, Integer.toString(recv_response) + "명 응답");
-                    remoteViews.setTextViewText(R.id.homewidget_time, time);
+                    if(recv_expect != 0){
+                        int value = ((recv_response * 100) / recv_expect);
+                        if(value > 100){value = 100;}
+                        surveyTitle = preferences.getString("title","fail");
+                        Log.i("preftest",surveyTitle);
+                        Log.i("recv_expect",Integer.toString(recv_expect));
+                        Log.i("value",Integer.toString(value));
+                        remoteViews.setProgressBar(R.id.widget_progressBar,100, value, false);
+                        remoteViews.setTextViewText(R.id.appwidget_text, surveyTitle);
+                        remoteViews.setTextViewText(R.id.widget_txtProgress, Integer.toString(value) + "%");
+                        remoteViews.setTextViewText(R.id.homewidget_response, Integer.toString(recv_response) + "명 응답");
+                        remoteViews.setTextViewText(R.id.homewidget_time, time);
+                    }
                 }
-            }
-        });
-        refreshThread.start();
-
-        try {
-            refreshThread.join();
-        }catch (InterruptedException e){}
-
-        isRefreshPressed = false;
-        isRefreshFinished = false;
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("isRefreshPressed", false);
-        editor.apply();
+            });
+            setRefreshViewThread.start();
+        }
     }
 
-    private void get_idSurveyList(Integer id){
+    private void setWidgetView(Context context, RemoteViews remoteViews){
+
+        Log.d("isRefreshPressed",Boolean.toString(isRefreshPressed));
+
+        /*
+        Thread setViewThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+        setViewThread.start();
+*/
+        int recv_response;
+        int recv_expect;
+        String time;
+
+        Log.d("getInt_id2", Integer.toString(preferences.getInt("_id", 0)));
+        recv_response = preferences.getInt("response", 0);
+        recv_expect = preferences.getInt("expectValue", 0);
+        time = getTime(preferences.getString("time", null));
+
+        if(recv_expect != 0){
+            int value = ((recv_response * 100) / recv_expect);
+            if(value > 100){value = 100;}
+            surveyTitle = preferences.getString("title","fail");
+            Log.i("preftest",surveyTitle);
+            Log.i("recv_expect",Integer.toString(recv_expect));
+            Log.i("value",Integer.toString(value));
+            remoteViews.setProgressBar(R.id.widget_progressBar,100, value, false);
+            remoteViews.setTextViewText(R.id.appwidget_text, surveyTitle);
+            remoteViews.setTextViewText(R.id.widget_txtProgress, Integer.toString(value) + "%");
+            remoteViews.setTextViewText(R.id.homewidget_response, Integer.toString(recv_response) + "명 응답");
+            remoteViews.setTextViewText(R.id.homewidget_time, time);
+        }
+
+    }
+
+    public void get_idSurveyList(Integer id){
         RetrofitApi.getService().get_idSurveyList(id).enqueue(new retrofit2.Callback<ArrayList<UploadedSurveyDTO>>() {
             @Override
             public void onResponse(retrofit2.Call<ArrayList<UploadedSurveyDTO>> call, retrofit2.Response<ArrayList<UploadedSurveyDTO>> response) {
-                refreshSurveyArrList.clear();
-                refreshSurveyArrList.addAll(response.body());
-                isRefreshFinished= true;
+
+                if(response.isSuccessful()) {
+                    refreshSurveyArrList.clear();
+                    refreshSurveyArrList.addAll(response.body());
+                    isRefreshFinished = true;
+                }
             }
             @Override
             public void onFailure(retrofit2.Call<ArrayList<UploadedSurveyDTO>> call, Throwable t) { }

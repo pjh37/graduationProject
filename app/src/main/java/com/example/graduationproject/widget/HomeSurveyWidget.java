@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -93,7 +94,13 @@ public class HomeSurveyWidget extends AppWidgetProvider {
         int[] allWidgetIds = appWidgetManager.getAppWidgetIds(componentName);
         Intent intent = new Intent(context.getApplicationContext(), WidgetUpdateService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds);
-        context.startService(intent);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
+
     }
 
 }
