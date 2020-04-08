@@ -14,7 +14,6 @@ public class FormComponentVO {
     private ArrayList<String> addedColOption; // grid 용
     private String media_file; // uri
     private boolean OptionEtc_switch;
-//    private String OptionEtc_text; // no need
 
     private int beginIndex; // 직선단계용
     private int endIndex; // 직선단계용
@@ -67,8 +66,6 @@ public class FormComponentVO {
 
     public boolean isOptionEtc_switch() {return OptionEtc_switch;}
     public void setOptionEtc_switch(boolean optionEtc_switch) {OptionEtc_switch = optionEtc_switch;}
-//    public String getOptionEtc_text() {return OptionEtc_text;}
-//    public void setOptionEtc_text(String optionEtc_text) {OptionEtc_text = optionEtc_text;}
 
     public int getBeginIndex() {return beginIndex;}
     public void setBeginIndex(int beginIndex) {this.beginIndex = beginIndex;}

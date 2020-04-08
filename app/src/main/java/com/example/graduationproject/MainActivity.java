@@ -3,11 +3,9 @@ package com.example.graduationproject;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,11 +23,8 @@ import com.bumptech.glide.Glide;
 import com.example.graduationproject.form.FormActivity;
 import com.example.graduationproject.login.Session;
 import com.example.graduationproject.mainActivityViwePager.MainVPAdapter;
-import com.example.graduationproject.offlineform.old_OfflineFormActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
@@ -135,9 +130,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-//        Bundle args = new Bundle();
-//        args.putString("userEmail", userEmail);
-//        mainVPAdapter = new MainVPAdapter(getSupportFragmentManager(), args);
+        Bundle args = new Bundle();
+        args.putString("userEmail", userEmail);
+        mainVPAdapter = new MainVPAdapter(getSupportFragmentManager());
         viewPager.setAdapter(mainVPAdapter);
         viewPager.setCurrentItem(0);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));

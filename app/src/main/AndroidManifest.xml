@@ -19,7 +19,8 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
 
-        <activity android:name=".community.activity.ChatingActivity"></activity>
+        <activity android:name=".community.activity.GroupCreateActivity"></activity>
+        <activity android:name=".community.activity.ChatingActivity" />
         <activity android:name=".community.activity.InvitingActivity" />
         <activity android:name=".community.activity.ChatServiceActivity" />
         <activity android:name=".community.activity.SearchResultActivity" />
@@ -31,9 +32,8 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".UploadedFormEditableActivity" />
         <activity android:name=".result.IndividualResultActivity" />
-        <activity android:name=".result.ResultActivity" /> <!-- <activity android:name=".form.old_BaseFormActivity" /> -->
+        <activity android:name=".result.ResultActivity" />
         <activity android:name=".form.FormActivity" />
-        <activity android:name=".offlineform.old_OfflineFormActivity" />
         <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

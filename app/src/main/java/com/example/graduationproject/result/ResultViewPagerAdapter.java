@@ -26,6 +26,7 @@ public class ResultViewPagerAdapter extends FragmentStatePagerAdapter {
        this.individualViewFragment=new IndividualViewFragment();
 
         individualViewFragment.setArguments(args);
+        summaryViewFragment.setArguments(args);
     }
     @NonNull
     @Override

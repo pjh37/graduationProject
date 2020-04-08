@@ -120,14 +120,14 @@ public class MainVPMySurveyFragment extends Fragment {
             switch (view.getId()){
                 case R.id.moreMySurveyView:{
                     Intent intent =new Intent(getContext(),moreViewActivity.class);
-                    intent.putExtra("type",SERVER_SURVEY);
+                    intent.putExtra("type",OFFLINE_SURVEY);
 //                    intent.putExtra("userEmail",userEmail);
                     startActivity(intent);
                     break;
                 }
                 case R.id.moreOfflineView:{
                     Intent intent =new Intent(getContext(),moreViewActivity.class);
-                    intent.putExtra("type",OFFLINE_SURVEY);
+                    intent.putExtra("type",SERVER_SURVEY);
 //                    intent.putExtra("userEmail",userEmail);
                     startActivity(intent);
                     break;
@@ -284,7 +284,7 @@ public class MainVPMySurveyFragment extends Fragment {
 
         RequestBody requestbody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("userEmail", MainActivity.getUserEmail())
+                .addFormDataPart("userEmail", Session.getUserEmail())
                 .build();
 
         okhttp3.Request request = new okhttp3.Request.Builder()

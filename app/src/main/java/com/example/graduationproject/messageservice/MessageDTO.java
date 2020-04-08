@@ -1,12 +1,22 @@
 package com.example.graduationproject.messageservice;
 
-public class MessageDTO {
+import java.io.Serializable;
+
+public class MessageDTO implements Serializable {
     private int _id;
     private String roomKey;
     private String userEmail;
     private String message;
     private String date;
     private int isRead;
+
+    public MessageDTO(String roomKey,String userEmail,String message,String date){
+        this.roomKey=roomKey;
+        this.userEmail=userEmail;
+        this.message=message;
+        this.date=date;
+    }
+
     public MessageDTO(int _id,String roomKey,String userEmail,String message,String date,int isRead){
         this._id=_id;
         this.roomKey=roomKey;

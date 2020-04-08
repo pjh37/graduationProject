@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/question_visual"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#CCCCCC">
+
+        <TableLayout
+            android:id="@+id/table_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="*"
+            android:background="#FFFFFF"
+            android:visibility="gone"
+            tools:visibility="invisible"
+            >
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFF"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tablerow_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="1dp"
+                    android:text="번호"
+                    android:background="#CCCCCC"
+                    android:textSize="17dp"
+                    android:padding="3dp"
+                    android:gravity="center_horizontal"/>
+                <TextView
+                    android:id="@+id/tablerow_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="1dp"
+                    android:text="보기 내용"
+                    android:background="#CCCCCC"
+                    android:textSize="17dp"
+                    android:padding="3dp"
+                    android:gravity="center_horizontal"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="응답 수 (응답률)"
+                    android:background="#CCCCCC"
+                    android:textSize="17dp"
+                    android:padding="3dp"
+                    android:gravity="center_horizontal"/>
+            </TableRow>
+        </TableLayout>
+
+        <TableLayout
+            android:id="@+id/tablelayout_forShort"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="*"
+            android:background="#fff"
+            android:visibility="gone"
+            tools:visibility="visible"
+            >
+            <TextView
+                android:id="@+id/tablelayout_forShort_totalNum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:text="총 응답수"
+                android:textColor="#000"
+                android:background="#CCCCCC"
+                android:textSize="17dp"
+                android:padding="3dp"
+                android:gravity="center_horizontal"
+                />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:paddingBottom="10dp"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="1dp"
+                    android:text="번호"
+                    android:textColor="#000"
+                    android:background="#CCCCCC"
+                    android:textSize="17dp"
+                    android:padding="3dp"
+                    android:gravity="center_horizontal"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="8"
+                    android:layout_height="wrap_content"
+
+                    android:text="답변"
+                    android:textSize="17dp"
+                    android:textColor="#000"
+                    android:background="#CCCCCC"
+                    android:padding="3dp"
+                    android:gravity="center_horizontal"/>
+
+            </TableRow>
+        </TableLayout>
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/piechart"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="10dp"
+            android:background="#FFFFFF"
+            android:visibility="gone"
+            tools:visibility="invisible"
+            >
+        </com.github.mikephil.charting.charts.PieChart>
+
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barchart"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="10dp"
+            android:background="#FFFFFF"
+            android:visibility="gone"
+            tools:visibility="invisible"
+            >
+        </com.github.mikephil.charting.charts.BarChart>
+
+    </LinearLayout>
+</ScrollView>

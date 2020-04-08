@@ -51,11 +51,8 @@ public class IndividualViewFragment extends Fragment {
         super.onCreate(savedInstanceState);
         url=getString(R.string.baseUrl);
         if(getArguments()!=null) {
-//            userEmail = getArguments().getString("userEmail");
             form_id = getArguments().getInt("form_id");
         }
-
-//        Log.v("테스트","args : "+userEmail+"   "+form_id);
     }
 
     @Nullable
@@ -68,8 +65,6 @@ public class IndividualViewFragment extends Fragment {
         individualViewRV.addItemDecoration(new DividerItemDecoration(getContext(), 1));
         individualViewAdapter = new IndividualViewRV(getContext(), datas, form_id);
         individualViewRV.setAdapter(individualViewAdapter);
-
-        //Log.v("테스트","datas 크기 : "+datas.size());
         return rootView;
     }
 
@@ -117,12 +112,13 @@ public class IndividualViewFragment extends Fragment {
                         JSONObject jsonObject=jsonArray.getJSONObject(i);
                         JSONObject jsonObjResult=jsonObject.getJSONObject("surveyResult");
 
-                        //                        Log.d("mawang","IndividualViewFragment getSurveyResult onResponse -befo jsonObjResult : "+jsonObjResult);
                         jsonObjResult.remove("form_id"); // 필요없으니
                         jsonObjResult.remove("userEmail"); // 필요없으니
                         Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse after - jsonObjResult : " + jsonObjResult);
 
                         String time=jsonObject.getString("time");
+                        individualViewDTO.setIndex(i + 1);
+                        individualViewDTO.setTime(time);
 
                         Iterator<String> keys= jsonObjResult.keys();
                         HashMap<String,ArrayList<String>> gridParser=new HashMap<>();
@@ -130,23 +126,19 @@ public class IndividualViewFragment extends Fragment {
 
                         while(keys.hasNext()){
                             String key=keys.next();
-                            //                            Log.d("mawang","IndividualViewFragment getSurveyResult onResponse hasNext- key값 : "+key);
                             if(key.split("-").length==2){
 
                                 String[] grids=key.split("-");
                                 String gridKey=grids[0];
                                 String gridVal=jsonObjResult.getString(key);
-                                Log.v("테스트","gridKey : "+gridKey+"  gridVal :" +gridVal+" key : "+key);
                                 removeKeys.add(key);
 
                                 if(gridParser.containsKey(gridKey)){
                                     gridParser.get(gridKey).add(gridVal);
-                                    //                                    Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse containsKey - gridParser : " + gridParser);
                                 }else{
                                     ArrayList<String> temp=new ArrayList<>();
                                     temp.add(gridVal);
                                     gridParser.put(gridKey,temp);
-                                    //                                    Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse else - gridParser : " + gridParser);
                                 }
 
 
@@ -165,44 +157,30 @@ public class IndividualViewFragment extends Fragment {
                                     }
 
                                     individualViewDTO.setResult(keyInt, multiAnswer);
-                                    Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse JSONArray- multiAnswerJson : " + multiAnswerJson);
                                 } else {
                                     ArrayList<String> multiAnswer = new ArrayList<>();
                                     multiAnswer.add(String.valueOf(json));
                                     individualViewDTO.setResult(keyInt, multiAnswer);
-                                    Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse - multiAnswer : " + multiAnswer);
                                 }
 
                             }
 
 
                         }
-                        Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse - removeKeys : " + removeKeys);
-                        Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse - gridParser : " + gridParser);
                        for(int j=0;j<removeKeys.size();j++){
                            jsonObjResult.remove(removeKeys.get(j));
                        }
-                        Log.v("테스트",jsonObjResult.toString());
                         Iterator<String>  iterator=gridParser.keySet().iterator();
                         while(iterator.hasNext()){
                             String key=iterator.next();
-                            Log.v("테스트","iterator.hasNext()"+key);
-                            Log.v("테스트","gridParser.get(key)"+gridParser.get(key).toString());
                             individualViewDTO.setResult(Integer.valueOf(key),gridParser.get(key));
                         }
-                        individualViewDTO.setIndex(i+1);
-                        individualViewDTO.setTime(time);
-                        Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse - jsonObjResult.length() : " + jsonObjResult.length());
-                        Log.d("mawang", "IndividualViewFragment getSurveyResult onResponse - individualViewDTO HashMap : " + individualViewDTO.getResult());
                         datas.add(individualViewDTO);
 
                     }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //                            individualViewAdapter=new IndividualViewRV(getContext(),datas,form_id);
-//                            individualViewRV.setAdapter(individualViewAdapter);
-
                             individualViewAdapter.setDatas(datas);
                         }
                     });

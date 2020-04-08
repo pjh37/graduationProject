@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--    <string-array name="formType">-->
-    <!--        <item>단답형</item>-->
-    <!--        <item>장문형</item>-->
-    <!--        <item>다중선택</item>-->
-    <!--        <item>체크박스</item>-->
-    <!--        <item>드롭다운</item>-->
-    <!--        <item>범위질문</item>-->
-    <!--        <item>그리드</item>-->
-    <!--        <item>날짜</item>-->
-    <!--        <item>시간</item>-->
-    <!--        <item>구획분할</item>-->
-    <!--        <item>이미지</item>-->
-    <!--        <item>동영상</item>-->
-    <!--    </string-array>-->
-
     <string-array name="templateItemSpinner">
 
         <item>단답형</item>
@@ -66,6 +51,16 @@
         <item>오래된순</item>
     </string-array>
 
+    <string-array name="category">
+        <item>카테고리</item>
+        <item>여행</item>
+        <item>건강</item>
+        <item>동물</item>
+        <item>스포츠</item>
+        <item>취미</item>
+        <item>음식</item>
+        <item>과학/기술</item>
+    </string-array>
 
 
 </resources>

@@ -9,12 +9,13 @@ public class IndividualViewDTO implements Serializable {
 
     private String time;
     private HashMap<Integer, ArrayList<String>> result;
-
+//    private HashMap<Integer,ArrayList<ArrayList<String>>> resultCheckGrid;
     //public ArrayList<Integer> keyArray; // 키 보관용
 
 
     public IndividualViewDTO(){
         result=new HashMap<>();
+        //        resultCheckGrid = new HashMap<>();
         //keyArray = new ArrayList<>();
     }
 
@@ -39,5 +40,5 @@ public class IndividualViewDTO implements Serializable {
     public void setResult(int key, ArrayList<String> value) {
         this.result.put(key,value);
     }
-    public void setResult(HashMap<Integer, ArrayList<String>> result) {this.result = result;}
+//    public void setResult(HashMap<Integer, ArrayList<String>> result) {this.result = result;}
 }

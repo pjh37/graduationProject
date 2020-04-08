@@ -72,7 +72,7 @@ public class SettingFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Glide.with(getContext()).load(getContext().getString(R.string.baseUrl)+"user/profile/"+Session.getUserEmail()+".jpg")
+        Glide.with(getContext()).load(getContext().getString(R.string.baseUrl)+"user/profile/select/"+Session.getUserEmail()+".jpg")
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(profileImage);

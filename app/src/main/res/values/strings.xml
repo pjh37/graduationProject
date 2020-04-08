@@ -17,6 +17,8 @@
     <string name="appwidget_text">로그인 및 설정이 필요합니다</string>
     <string name="add_widget">Add widget</string>
     <string name="widget_set_expectValue">.widget.WidgetConfigActivity.SET_EXPECT_RESPONSE</string>
+    <string name="category_spinner">카테고리</string>
+
     <!--http://pjh.cafe24app.com/  -->
     <!--http://192.168.35.42:8001/ -->
     <!--http://203.229.46.196:8001/ -->
