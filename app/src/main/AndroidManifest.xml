@@ -18,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".community.activity.GroupCreateActivity"></activity>
+        <activity android:name=".community.activity.MyGroupActivity"></activity>
+        <activity android:name=".community.activity.GroupCreateActivity" />
         <activity android:name=".community.activity.ChatingActivity" />
         <activity android:name=".community.activity.InvitingActivity" />
         <activity android:name=".community.activity.ChatServiceActivity" />

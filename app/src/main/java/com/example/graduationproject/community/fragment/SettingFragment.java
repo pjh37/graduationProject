@@ -54,6 +54,7 @@ public class SettingFragment extends Fragment {
         profileImage=(ImageView)rootView.findViewById(R.id.profile_image);
         imageAdd=(ImageView)rootView.findViewById(R.id.imageAdd);
         imageAdd.setOnClickListener(new ClickListener());
+
         recyclerView=(RecyclerView)rootView.findViewById(R.id.recyclerView);
         datas=new ArrayList<>();
         layoutManager= new LinearLayoutManager(getContext());

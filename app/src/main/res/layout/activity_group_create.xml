@@ -20,6 +20,7 @@
             android:textColor="#ffffff"/>
     </androidx.appcompat.widget.Toolbar>
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
@@ -44,6 +45,12 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="*"
+                    android:textColor="#FF0303"/>
                 <Spinner
                     android:id="@+id/categoryMenu"
                     android:layout_width="wrap_content"
@@ -60,7 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_outline"
-                android:hint="그룹 이름 지정"
+                android:hint="그룹 이름 지정(필수)"
                 android:padding="10dp"
                 android:layout_margin="10dp"
                 />
@@ -120,13 +127,25 @@
                 android:layout_height="1px"
                 android:background="#000000"
                 android:layout_margin="10dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="공개 여부"
-                android:textSize="18dp"
-                android:textColor="#000000"
-                android:layout_margin="10dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:text="*"
+                    android:textColor="#FF0303"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="공개 여부"
+                    android:textSize="18dp"
+                    android:textColor="#000000"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -184,6 +203,15 @@
                     </RadioGroup>
                 </LinearLayout>
             </LinearLayout>
+            <EditText
+                android:id="@+id/groupPassword"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/edittext_outline"
+                android:paddingLeft="10dp"
+                android:hint="비밀번호"
+                />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -197,10 +225,12 @@
                 android:text="그룹 만들기"
                 android:textColor="#ffffff"
                 android:background="@drawable/corner_border"
-                android:backgroundTint="#0275d8"/>
+                android:backgroundTint="#0275d8"
+                />
 
         </LinearLayout>
 
     </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
