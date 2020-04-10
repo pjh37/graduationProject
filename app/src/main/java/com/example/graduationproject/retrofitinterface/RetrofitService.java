@@ -5,6 +5,7 @@ import com.example.graduationproject.community.model.ChatRoomDTO;
 import com.example.graduationproject.community.model.ChatRoomTempDTO;
 import com.example.graduationproject.community.model.FriendDTO;
 import com.example.graduationproject.community.model.GroupDTO;
+import com.example.graduationproject.community.model.PostDTO;
 import com.example.graduationproject.form.FormDTO;
 import com.example.graduationproject.mainActivityViwePager.RequestType;
 import com.example.graduationproject.mainActivityViwePager.SurveyDTO;
@@ -85,6 +86,7 @@ public interface RetrofitService {
             ,@Path("count") Integer count
             ,@Path("offset") Integer offset);
 
+    //그룹 관련 api
     @Multipart
     @POST("group/create")
     Call<Boolean> groupCreate( @PartMap HashMap<String, Object> param,@Part MultipartBody.Part file);
@@ -101,4 +103,13 @@ public interface RetrofitService {
 
     @DELETE("group/withdraw")
     Call<Boolean> groupWithdraw();
+
+    //게시글 api
+    @FormUrlEncoded
+    @POST("post/create")
+    Call<Boolean> postCreate(@FieldMap HashMap<String, Object> param);
+
+    @GET("post/{groupID}/{count}/{offset}")
+    Call<ArrayList<PostDTO>> getPost(@Path("groupID")Integer groupID,@Path("count")Integer count,@Path("offset")Integer offset);
+
 }

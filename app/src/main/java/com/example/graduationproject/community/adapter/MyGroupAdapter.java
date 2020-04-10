@@ -1,6 +1,7 @@
 package com.example.graduationproject.community.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +15,13 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.graduationproject.R;
+import com.example.graduationproject.community.activity.PostActivity;
 import com.example.graduationproject.community.model.GroupDTO;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MyGroupAdapter extends RecyclerView.Adapter<MyGroupAdapter.MyGroupHolder>{
@@ -47,7 +50,7 @@ public class MyGroupAdapter extends RecyclerView.Adapter<MyGroupAdapter.MyGroupH
                 .into(holder.cover);
         holder.title.setText(items.get(position).getTitle().substring(1,items.get(position).getTitle().length()-1));
         holder.member_cnt.setText("멤버 : "+items.get(position).getMember_cnt());
-
+        holder.layout.setOnClickListener(new ClickListener(holder,position));
     }
 
     @Override
@@ -65,26 +68,33 @@ public class MyGroupAdapter extends RecyclerView.Adapter<MyGroupAdapter.MyGroupH
         TextView title;
         TextView member_cnt;
         ImageView cover;
-
+        ConstraintLayout layout;
         MyGroupHolder(View itemView){
             super(itemView);
             title=(TextView)itemView.findViewById(R.id.title);
             member_cnt=(TextView)itemView.findViewById(R.id.member_cnt);
             cover=(ImageView)itemView.findViewById(R.id.cover);
-
+            layout=(ConstraintLayout)itemView.findViewById(R.id.my_group_layout);
         }
     }
     class ClickListener implements View.OnClickListener{
         int position;
         MyGroupHolder holder;
-
+        ClickListener(){}
         ClickListener(@NonNull MyGroupHolder holder, int position){
             this.holder=holder;
             this.position=position;
         }
         @Override
-        public void onClick(View view) {
-
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.my_group_layout:{
+                    Intent intent =new Intent(mContext, PostActivity.class);
+                    intent.putExtra("groupID",items.get(position).get_id());
+                    mContext.startActivity(intent);
+                    break;
+                }
+            }
         }
     }
 }
