@@ -18,6 +18,17 @@
                 android:gravity="center"
                 app:layout_constraintTop_toTopOf="parent">
                 <Button
+                    android:id="@+id/btnMyGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:drawableLeft="@drawable/chatroom"
+                    android:drawableTint="#020202"
+                    android:background="@drawable/corner_border"
+                    android:text="내그룹"
+                    android:elevation="10dp"
+                    android:backgroundTint="#FFFFFF"/>
+                <Button
                     android:id="@+id/btnGroupCreate"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
@@ -47,12 +58,14 @@
                     android:id="@+id/recommand_group_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="추천그룹"
+                    android:text="모든 그룹"
                     android:textStyle="bold"
                     android:textSize="18dp"/>
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:layout_below="@id/recommand_group_title"/>
             </RelativeLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,8 @@ import com.example.graduationproject.UploadedSurveyDTO;
 import com.example.graduationproject.community.model.ChatRoomDTO;
 import com.example.graduationproject.community.model.ChatRoomTempDTO;
 import com.example.graduationproject.community.model.FriendDTO;
+import com.example.graduationproject.community.model.GroupDTO;
+import com.example.graduationproject.community.model.PostDTO;
 import com.example.graduationproject.form.FormDTO;
 import com.example.graduationproject.mainActivityViwePager.RequestType;
 import com.example.graduationproject.mainActivityViwePager.SurveyDTO;
@@ -12,11 +14,13 @@ import com.example.graduationproject.offlineform.FormItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -25,6 +29,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 
 public interface RetrofitService {
@@ -84,4 +89,31 @@ public interface RetrofitService {
     Call<ArrayList<MessageDTO>> getRoomMessages(@Path("roomKey") String roomKey
             ,@Path("count") Integer count
             ,@Path("offset") Integer offset);
+
+    //그룹 관련 api
+    @Multipart
+    @POST("group/create")
+    Call<Boolean> groupCreate( @PartMap HashMap<String, Object> param,@Part MultipartBody.Part file);
+
+    @GET("group/all/{count}/{offset}")
+    Call<ArrayList<GroupDTO>> grouptGet(@Path("count")Integer count,@Path("offset")Integer offset);
+
+    @FormUrlEncoded
+    @POST("group/join")
+    Call<Boolean> groupJoin(@FieldMap HashMap<String, Object> param);
+
+    @GET("group/my/{userEmail}")
+    Call<ArrayList<GroupDTO>> getMyGroup(@Path("userEmail")String userEmail);
+
+    @DELETE("group/withdraw")
+    Call<Boolean> groupWithdraw();
+
+    //게시글 api
+    @FormUrlEncoded
+    @POST("post/create")
+    Call<Boolean> postCreate(@FieldMap HashMap<String, Object> param);
+
+    @GET("post/{groupID}/{count}/{offset}")
+    Call<ArrayList<PostDTO>> getPost(@Path("groupID")Integer groupID,@Path("count")Integer count,@Path("offset")Integer offset);
+
 }
