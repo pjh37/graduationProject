@@ -44,6 +44,7 @@
         android:layout_marginBottom="10dp" />
 
     <LinearLayout
+        android:id="@+id/appwidget_textLayout"
         android:layout_width="0dp"
         android:layout_weight="7"
         android:layout_height="match_parent"

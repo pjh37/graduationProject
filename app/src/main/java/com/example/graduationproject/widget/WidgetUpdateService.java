@@ -27,7 +27,6 @@ import com.example.graduationproject.retrofitinterface.RetrofitApi;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import static com.example.graduationproject.widget.HomeSurveyWidget.ACTION_REFRESH_PRESSED;
 
 public class WidgetUpdateService extends Service {
@@ -93,6 +92,7 @@ public class WidgetUpdateService extends Service {
     private RemoteViews buildUpdate(Context context, int appWidgetId){
         RemoteViews updateViews = new RemoteViews(context.getPackageName(), R.layout.home_survey_widget);
         setPressRefreshButton(context, updateViews, appWidgetId);
+        setPressSettingSurvey(context, updateViews, appWidgetId);
         setWidgetView(context,updateViews);
         if(preferences.getBoolean("isRefreshPressed", false)){
             isRefreshPressed = true;
@@ -230,4 +230,14 @@ public class WidgetUpdateService extends Service {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.homewidget_refresh, pendingIntent);
     }
+
+    private void setPressSettingSurvey(Context context, RemoteViews remoteViews, int appwidgetId){
+        Intent intent = new Intent(context, WidgetConfigActivity.class);
+        int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.appwidget_textLayout, pendingIntent);
+    }
+
+
 }

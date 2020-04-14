@@ -61,6 +61,7 @@ public class WidgetConfigActivity extends Activity {
     private WidgetListRV widgetListRV;
     private RecyclerView recyclerView;
     private TextView waitText;
+    private TextView signIDText;
 
     // 임시, 추후 클래스 넘겨받는 걸로 수정할 것.
     private int rvPosition;
@@ -76,9 +77,49 @@ public class WidgetConfigActivity extends Activity {
 
         appWidgetManager = AppWidgetManager.getInstance(this);
         remoteViews = new RemoteViews(this.getPackageName(), R.layout.home_survey_widget);
+        signIDText = (TextView)findViewById(R.id.widget_signInID);
+        waitText = (TextView)findViewById(R.id.widget_pleaseLogin);
+        widgetListRV = new WidgetListRV(this, data);
+        recyclerView = (RecyclerView)findViewById(R.id.widget_surveyList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getBaseContext(), 1));
+        recyclerView.setAdapter(widgetListRV);
 
         preferences = getSharedPreferences("testPref", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences onAppLoginPref = getSharedPreferences("widget_LoginOnApp",MODE_PRIVATE);
+
+        if(onAppLoginPref.getBoolean("IsUserLogin",false)){
+            editor.putString("LoginID",onAppLoginPref.getString("LoginID",""));
+            editor.putBoolean("IsUserLogin",true);
+            editor.apply();
+        }
+
+        loginSession=(Session)getApplication();
+
+        GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient= GoogleSignIn.getClient(this,gso);
+        firebaseAuth=FirebaseAuth.getInstance();
+
+        SignInButton signInButton=findViewById(R.id.widget_signIn);
+        signInButton.setOnClickListener((view)->{
+            Intent intent= mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(intent,RC_SIGN_IN);
+
+        });
+
+        if(preferences.getBoolean("IsUserLogin", false)){
+            signInButton.setVisibility(View.INVISIBLE);
+            signIDText.setText(preferences.getString("LoginID", "Default"));
+            signIDText.setVisibility(View.VISIBLE);
+            waitText.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            data.clear();
+            getSurveyList(preferences.getString("LoginID", ""));
+        }
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(SET_EXPECT_RESPONSE);
@@ -101,29 +142,6 @@ public class WidgetConfigActivity extends Activity {
             }
         };
         registerReceiver(setExpectBR, intentFilter);
-
-        waitText = (TextView)findViewById(R.id.widget_pleaseLogin);
-        widgetListRV = new WidgetListRV(this, data);
-        recyclerView = (RecyclerView)findViewById(R.id.widget_surveyList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getBaseContext(), 1));
-        recyclerView.setAdapter(widgetListRV);
-
-        loginSession=(Session)getApplication();
-
-        GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleSignInClient= GoogleSignIn.getClient(this,gso);
-        firebaseAuth=FirebaseAuth.getInstance();
-
-        SignInButton signInButton=findViewById(R.id.widget_signIn);
-        signInButton.setOnClickListener((view)->{
-            Intent intent= mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(intent,RC_SIGN_IN);
-
-        });
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -192,6 +210,11 @@ public class WidgetConfigActivity extends Activity {
                             recyclerView.setVisibility(View.VISIBLE);
                             data.clear();
                             getSurveyList(user.getEmail());
+
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("LoginID",user.getEmail());
+                            editor.putBoolean("IsUserLogin",true);
+                            editor.apply();
 
                         } else {
                             // 로그인 실패

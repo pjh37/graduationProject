@@ -61,6 +61,10 @@ public class LoginActivity extends AppCompatActivity {
     boolean fileReadPermission;
     boolean fileWritePermission;
     boolean internetPermission;
+    //Use for Widget Login
+    private SharedPreferences widgetLoginPref;
+    private SharedPreferences.Editor widgetLoginEdit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,8 +90,9 @@ public class LoginActivity extends AppCompatActivity {
         });
         chkAutoLogin=(CheckBox)findViewById(R.id.chkAutoLogin);
         mPref=getSharedPreferences("login",MODE_PRIVATE);
+        widgetLoginPref=getSharedPreferences("widget_LoginOnApp", MODE_PRIVATE);
         editor=mPref.edit();
-
+        widgetLoginEdit=widgetLoginPref.edit();
 
     }
     public void checkPermission(){
@@ -191,6 +196,12 @@ public class LoginActivity extends AppCompatActivity {
                             userEmail= session.getUserEmail();
                             userName= session.getUserName();
                             userImage= session.getUserImage();
+
+                            //위젯 로그인용
+                            widgetLoginEdit.putString("LoginID",user.getEmail());
+                            widgetLoginEdit.putBoolean("IsUserLogin",true);
+                            widgetLoginEdit.apply();
+
                         } else {
                             // 로그인 실패
                             Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();

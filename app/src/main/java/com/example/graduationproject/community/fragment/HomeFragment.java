@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
     private ArrayList<SurveyDTO> datas = new ArrayList<>();
     private ArrayList<String> extractedTitles = new ArrayList<>();
     private KoreanPhraseExtractorApi koreanPhraseExtractor;
-    private int pageCount = 1;
+    private int pageCount = 0;
     private WebView d3;
     private boolean isFinish = false;
     private boolean isWordReady = false;
@@ -290,10 +290,10 @@ public class HomeFragment extends Fragment {
         roll = roll + (temp*dt);
 
         // Word Y축 기울기값 임시로 제한. 자세에 따른 보정를 위한 함수 필요
-        if(pitch > 40.0)
-            pitch = 40.0;
-        if(pitch < -40.0)
-            pitch = -40.0;
+        if(pitch > 20.0)
+            pitch = 20.0;
+        if(pitch < -20.0)
+            pitch = -20.0;
 
     }
 
