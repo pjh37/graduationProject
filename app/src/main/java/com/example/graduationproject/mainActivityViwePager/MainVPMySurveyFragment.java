@@ -203,7 +203,6 @@ public class MainVPMySurveyFragment extends Fragment {
         RequestBody requestbody=new MultipartBody.Builder().
                 setType(MultipartBody.FORM)
                 .addFormDataPart("userEmail", Session.getUserEmail())//userEmail 부분 교체
-//                .addFormDataPart("userEmail", MainActivity.getUserEmail())
                 .build();
         okhttp3.Request request=new okhttp3.Request.Builder()
                 .url(url+"user/forms")
@@ -261,8 +260,8 @@ public class MainVPMySurveyFragment extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-//                                uploadedSurveyAdapter=new UploadedSurveyRV(getContext(),userEmail,datas);
-//                                responseWaitSurveyRecycleView.setAdapter(uploadedSurveyAdapter);
+                                uploadedSurveyAdapter=new UploadedSurveyRV(getContext(),datas);
+                                responseWaitSurveyRecycleView.setAdapter(uploadedSurveyAdapter);
                                 Toast.makeText(getActivity(), "설문지들을 불러옵니다.", Toast.LENGTH_SHORT).show(); // work
                                 uploadedSurveyAdapter.setDatas(datas); // 안에다 집어넣어야 하나보다
                             }

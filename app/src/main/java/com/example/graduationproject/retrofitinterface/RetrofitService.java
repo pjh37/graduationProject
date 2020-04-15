@@ -91,18 +91,27 @@ public interface RetrofitService {
     @POST("group/create")
     Call<Boolean> groupCreate( @PartMap HashMap<String, Object> param,@Part MultipartBody.Part file);
 
-    @GET("group/all/{count}/{offset}")
-    Call<ArrayList<GroupDTO>> grouptGet(@Path("count")Integer count,@Path("offset")Integer offset);
+    @GET("group/all/{userEmail}/{count}/{offset}")
+    Call<ArrayList<GroupDTO>> grouptGet(@Path("userEmail")String userEmail,@Path("count")Integer count,@Path("offset")Integer offset);
 
     @FormUrlEncoded
     @POST("group/join")
     Call<Boolean> groupJoin(@FieldMap HashMap<String, Object> param);
 
+    @FormUrlEncoded
+    @POST("group/passwordCheck")
+    Call<RetrofitResponse> groupPasswordCheck(@FieldMap HashMap<String, Object> param);
+
     @GET("group/my/{userEmail}")
     Call<ArrayList<GroupDTO>> getMyGroup(@Path("userEmail")String userEmail);
 
-    @DELETE("group/withdraw")
-    Call<Boolean> groupWithdraw();
+    //그룹 탈퇴
+    @DELETE("group/withdraw/{id}")
+    Call<RetrofitResponse> groupWithdraw(@Path("id")Integer id);
+
+    //그룹 폭파 => 그룹의 호스트가 그룹을 아예 없애버리는것
+
+
 
     //게시글 api
     @FormUrlEncoded

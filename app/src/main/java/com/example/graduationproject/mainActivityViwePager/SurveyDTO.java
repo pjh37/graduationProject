@@ -2,6 +2,7 @@ package com.example.graduationproject.mainActivityViwePager;
 
 public class SurveyDTO {
     private int _id;
+    private String userEmail;
     private String title;
     private int response_cnt;
     private String time;
@@ -11,6 +12,14 @@ public class SurveyDTO {
     }
     public void set_id(int _id) {
         this._id = _id;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getTitle() {
