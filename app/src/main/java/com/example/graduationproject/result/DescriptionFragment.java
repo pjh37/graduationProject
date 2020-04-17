@@ -37,7 +37,6 @@ public class DescriptionFragment extends Fragment {
             writerEmail = getBundle.getString("email");
         }
 
-        Log.d("mawang", "DescriptionFragment onCreate - emails = " + writerEmail);
 
     }
 
@@ -51,12 +50,25 @@ public class DescriptionFragment extends Fragment {
         tv_participate = (TextView) v.findViewById(R.id.survey_participate);
         tv_writerEmail= (TextView) v.findViewById(R.id.survey_writer);
 
+        if (title == null || title.isEmpty()) {
+            tv_title.setText("(빈 제목)");
+        } else {
+            tv_title.setText(title);
+        }
 
-        tv_title.setText(title);
-        tv_description.setText(description);
+        if(description == null|| description.isEmpty()){
+            tv_description.setText("(빈 내용)");
+        }else{
+            tv_description.setText(description);
+        }
+
         tv_participate.setText(participateNum + "명");
-        tv_writerEmail.setText(writerEmail);
 
+        if(writerEmail == null|| writerEmail.isEmpty()){
+            tv_writerEmail.setText("(???)");
+        }else{
+            tv_writerEmail.setText(writerEmail);
+        }
 
         return v;
     }

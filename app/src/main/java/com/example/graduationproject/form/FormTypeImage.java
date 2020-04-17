@@ -43,52 +43,55 @@ public class FormTypeImage extends FormAbstract{
     private View customView;
 
     private EditText mEditQuestion;
-    private Button btnImageAdd;
-    private ImageView mAttachedImage;
     private ImageButton mCopyView;
     private ImageButton mDeleteView;
+    private Button btnImageAdd;
+    private ImageView mAttachedImage;
 
     private File file; // 로컬 저장용
     private Uri uri;
     private Activity activity;
-    private int formComponent_id; // 원래는 image local file name 이다. 하지만 파일명으로 바꾸었다.
+    private int formComponent_id;
+
+    private boolean IsPoseted; // (수정불가용 불변수) ,null 처리용
 
     public FormTypeImage(Context context, int type) {
         super(context, type);
-        mContext=context;
-        this.mType=type;
+        mContext = context;
+        this.mType = type;
 
-        activity=(Activity)mContext;
+        activity = (Activity) mContext;
 
-        mInflater=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        customView=mInflater.inflate(R.layout.form_type_image,this,true);
+        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        customView = mInflater.inflate(R.layout.form_type_image, this, true);
 
-        mEditQuestion=(EditText)findViewById(R.id.editQuestion);
-        btnImageAdd=(Button)findViewById(R.id.btnImageAdd);
-        mAttachedImage=(ImageView)findViewById(R.id.attached_image);
-        mCopyView=(ImageButton)findViewById(R.id.copy_view);
-        mDeleteView=(ImageButton)findViewById(R.id.delete_view);
+        mEditQuestion = (EditText) findViewById(R.id.editQuestion);
+        btnImageAdd = (Button) findViewById(R.id.btnImageAdd);
+        mAttachedImage = (ImageView) findViewById(R.id.attached_image);
+        mCopyView = (ImageButton) findViewById(R.id.copy_view);
+        mDeleteView = (ImageButton) findViewById(R.id.delete_view);
 
         btnImageAdd.setOnClickListener(new ClickListener());
         mCopyView.setOnClickListener(new ClickListener());
         mDeleteView.setOnClickListener(new ClickListener());
 
+        IsPoseted = false;
     }
     public FormTypeImage(FormCopyFactory fcf) {
         super(fcf.getmContext(), fcf.getmType());
         mContext = fcf.getmContext();
         this.mType = fcf.getmType();
 
-        activity=(Activity)mContext;
+        activity = (Activity) mContext;
 
-        mInflater=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        customView=mInflater.inflate(R.layout.form_type_image,this,true);
+        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        customView = mInflater.inflate(R.layout.form_type_image, this, true);
 
-        mEditQuestion=(EditText)findViewById(R.id.editQuestion);
-        btnImageAdd=(Button)findViewById(R.id.btnImageAdd);
-        mAttachedImage=(ImageView)findViewById(R.id.attached_image);
-        mCopyView=(ImageButton)findViewById(R.id.copy_view);
-        mDeleteView=(ImageButton)findViewById(R.id.delete_view);
+        mEditQuestion = (EditText) findViewById(R.id.editQuestion);
+        btnImageAdd = (Button) findViewById(R.id.btnImageAdd);
+        mAttachedImage = (ImageView) findViewById(R.id.attached_image);
+        mCopyView = (ImageButton) findViewById(R.id.copy_view);
+        mDeleteView = (ImageButton) findViewById(R.id.delete_view);
 
         mEditQuestion.setText(fcf.getEditQuestion_text());
 
@@ -100,6 +103,12 @@ public class FormTypeImage extends FormAbstract{
         Glide.with(this).load(uri).into(mAttachedImage);
         formComponent_id = fcf.getFormComponent_id();
 
+        IsPoseted = fcf.isImagePosted();
+//        if(IsPoseted){ // == true
+//            btnImageAdd.setVisibility(GONE); // 수정불가로 만들기
+//        }
+
+        file = new File(getImagePath(uri));
     }
 
 //    public String getImageToString(File file){
@@ -162,31 +171,54 @@ public class FormTypeImage extends FormAbstract{
     }
     @Override
     public JSONObject getJsonObject() {
-        JSONObject jsonObject=new JSONObject();
-        try{
-            jsonObject.put("type",mType);
-            jsonObject.put("question",mEditQuestion.getText().toString());
-            jsonObject.put("media_file", uri.toString());
-            jsonObject.put("real_file_data",file);
-            jsonObject.put("real_file_name",formComponent_id);
-//            Log.v("테스트","getJsonObject 이미지 파일 : "+getImageToString(file));
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("type", mType);
+            jsonObject.put("question", mEditQuestion.getText().toString());
+            jsonObject.put("real_file_name", formComponent_id);
+            jsonObject.put("posted", IsPoseted);
+
+            // null 처리
+            if(IsPoseted) // == true
+            {
+                jsonObject.put("media_file", uri.toString()); // string
+                jsonObject.put("real_file_data", file); // 처음엔 null 아니야?
+            }
+
             Log.d("mawang", "FormTypeImage getJsonObject - file = " + file);
             Log.d("mawang", "FormTypeImage getJsonObject - uri = " + uri);
-        }catch (Exception e){
+            Log.d("mawang", "FormTypeImage getJsonObject - IsPoseted = " + IsPoseted);
+            Log.d("mawang", "FormTypeImage getJsonObject - formComponent_id = " + formComponent_id);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        //Log.v("테스트","이미지뷰"+getImageToString(file));
         return jsonObject;
     }
 
     @Override
     public void formComponentSetting(FormComponentVO vo) {
         mEditQuestion.setText(vo.getQuestion());
-        this.uri=Uri.parse(vo.getMedia_file());
-//        Glide.with(mContext).load(vo.getMedia_file()).into(mAttachedImage);
-        Glide.with(mContext).load(uri).into(mAttachedImage);
+
+        this.IsPoseted = vo.isPosted();
+
+        if(IsPoseted) // == true
+        {
+            this.uri = Uri.parse(vo.getMedia_file());
+            //        Glide.with(mContext).load(vo.getMedia_file()).into(mAttachedImage);
+            Glide.with(mContext).load(uri).into(mAttachedImage);
 //        file=new File(getImagePath(Uri.parse(vo.getMedia_file())));
-        file = new File(getImagePath(uri));
+            file = new File(getImagePath(uri));
+            //formComponent_id 는 FormActivity 에서 set 해준다.
+        }
+
+        Log.d("mawang", "FormTypeImage formComponentSetting - formComponent_id = " + formComponent_id);
+        Log.d("mawang", "FormTypeImage formComponentSetting - uri = " + uri);
+        Log.d("mawang", "FormTypeImage formComponentSetting - file = " + file);
+        Log.d("mawang", "FormTypeImage formComponentSetting - IsPoseted = " + IsPoseted);
+
+//        if(IsPoseted){ // == true
+//            btnImageAdd.setVisibility(GONE); // 수정불가로 만들기
+//        }
     }
 
 
@@ -196,44 +228,46 @@ public class FormTypeImage extends FormAbstract{
     public ImageView getmAttachedImage() {
         return mAttachedImage;
     }
-    public void setDataUri(Uri uri){
-        this.uri=uri;
+    public void setDataUri(Uri uri) {
+        this.uri = uri;
         file = new File(getImagePath(uri));
-        // 해줘야 생성시점에서도 file 이 null 이 아니다. update 도 해당되겠지
+        IsPoseted = true;
+        // 해줘야 생성시점에서도 file 이 null 이 아니다. update 도 해당된다.
+
     }
 
-    public class ClickListener implements OnClickListener{
+    public class ClickListener implements OnClickListener {
         @Override
         public void onClick(View view) {
-            if(view==mDeleteView){
-                ViewGroup parentView=(ViewGroup)customView.getParent();
+            if (view == mDeleteView) {
+                ViewGroup parentView = (ViewGroup) customView.getParent();
                 parentView.removeView(customView);
-            }else if (view == mCopyView) {
+            }
+            else if (view == mCopyView) {
                 DragLinearLayout parentView = (DragLinearLayout) customView.getParent();
                 int index = parentView.indexOfChild(customView);
 
-                FormAbstract layout = new FormCopyFactory.Builder(mContext,mType)
+                FormAbstract layout = new FormCopyFactory.Builder(mContext, mType)
                         .Question(mEditQuestion.getText().toString())
                         .FileUri(uri)
-                        .FormComponentId(index+1)  // setFormComponent_id , 복사되는건 원본 뒤에 생기니까 +1
+                        .FormComponentId(index + 1)  // setFormComponent_id , 복사되는건 원본 뒤에 생기니까 +1
+                        .ImagePosted(IsPoseted)
                         .build()
                         .createCopyForm();
 
                 ViewGroup customlayout = (ViewGroup) layout.getChildAt(0);
-                ImageView dragHandle = (ImageView)customlayout.getChildAt(0);
+                ImageView dragHandle = (ImageView) customlayout.getChildAt(0);
                 parentView.addDragView(layout, dragHandle, index + 1);
 
-            }else if(view==btnImageAdd){
-//                Intent broadcast=new Intent();
-//                broadcast.setAction("com.example.graduationproject.FormTypeImage.IMAGE_ADD_BUTTON_CLICKED");
-//                broadcast.putExtra("form_id",formComponent_id);
-//                activity.sendBroadcast(broadcast);
+            }
+            else if (view == btnImageAdd) {
 
                 FormActivity.set_FormTypeImage_class(FormTypeImage.this);
-                Intent intent=new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                activity.startActivityForResult(intent,10);
+
+//                btnImageAdd.setVisibility(GONE); // 수정불가로 만들기
+
+                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                activity.startActivityForResult(gallery, 10);
 
             }
         }

@@ -6,7 +6,6 @@ import com.example.graduationproject.community.model.ChatRoomTempDTO;
 import com.example.graduationproject.community.model.FriendDTO;
 import com.example.graduationproject.community.model.GroupDTO;
 import com.example.graduationproject.community.model.PostDTO;
-import com.example.graduationproject.form.FormDTO;
 import com.example.graduationproject.mainActivityViwePager.RequestType;
 import com.example.graduationproject.mainActivityViwePager.SurveyDTO;
 import com.example.graduationproject.messageservice.MessageDTO;

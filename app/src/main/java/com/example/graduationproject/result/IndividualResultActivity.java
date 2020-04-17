@@ -17,7 +17,6 @@ import android.util.Log;
 import com.example.graduationproject.ItemDecorate;
 import com.example.graduationproject.R;
 import com.example.graduationproject.form.FormComponentVO;
-import com.example.graduationproject.form.FormDTO;
 import com.example.graduationproject.form.FormType;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

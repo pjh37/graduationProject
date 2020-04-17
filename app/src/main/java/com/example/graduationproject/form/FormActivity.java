@@ -182,7 +182,7 @@ public class FormActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 Gson gson=new Gson();
-                                //FormDTO formDTO=gson.fromJson(jsonObject.toString(), FormDTO.class);
+                                //old_FormDTO formDTO=gson.fromJson(jsonObject.toString(), old_FormDTO.class);
 //                                editTitle.setText(formDTO.getTitle());
 //                                editDescription.setText(formDTO.getDescription());
 //                                ArrayList<FormComponentVO> forms=formDTO.getFormComponents();
@@ -316,7 +316,10 @@ public class FormActivity extends AppCompatActivity {
                 break;
             }
             case R.id.fab_video: {
-                Toast.makeText(getApplicationContext(), "fab_video", Toast.LENGTH_SHORT).show();
+                FormAbstract layout = FormFactory.getInstance(FormActivity.this, FormType.VIDEO).createForm();
+                ViewGroup customlayout = (ViewGroup) layout.getChildAt(0); // 이미 부모 존재
+                ImageView dragHandle = (ImageView) customlayout.findViewById(R.id.drag_view);
+                container.addDragView(layout, dragHandle);
                 fab_close();
                 break;
             }

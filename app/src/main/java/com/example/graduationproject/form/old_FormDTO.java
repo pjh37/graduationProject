@@ -2,7 +2,7 @@ package com.example.graduationproject.form;
 
 import java.util.ArrayList;
 
-public class FormDTO {
+public class old_FormDTO {
 
     //    private String title;
 //    private String description;

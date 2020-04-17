@@ -244,7 +244,7 @@ public class MainVPMySurveyFragment extends Fragment {
 //                        int len=(jsonArray.length()>3) ? 3:jsonArray.length();
                         for(int i=0;i<jsonArray.length();i++){ // 어차피 스크롤 되니까
                             JSONObject jsonObject=jsonArray.getJSONObject(i);
-//                            FormDTO formDTO=gson.fromJson(jsonObject.getString("json"),FormDTO.class);
+//                            old_FormDTO formDTO=gson.fromJson(jsonObject.getString("json"),old_FormDTO.class);
 
                             UploadedSurveyDTO uploadedSurveyDTO=new UploadedSurveyDTO();
                             uploadedSurveyDTO.set_id(jsonObject.getInt("_id"));

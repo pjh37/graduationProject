@@ -794,7 +794,7 @@ public class GraphFragment extends Fragment {
 
                 } else {
                     // 단답형, 장문형, 날짜,시간
-                    // 섹션,서브설명,이미지 제외
+                    // 섹션,서브설명,이미지,비디오 제외
                     Log.d("mawang", "GraphFragment onCreateView 한줄파트 - answer = " + answer);
 
                     TableLayout tl2 = (TableLayout) v.findViewById(R.id.tablelayout_forShort);
