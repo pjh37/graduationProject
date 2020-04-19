@@ -1,11 +1,14 @@
 package com.example.graduationproject.community.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,8 +40,8 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
     ImageView cover;
     ImageView profileImage;
     TextView userEmail;
-    EditText content;
-    Button btnPost;
+    Button content;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     RecyclerView recyclerView;
     PostAdapter adapter;
@@ -50,7 +53,13 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         groupID=getIntent().getIntExtra("groupID",-1);
-
+        swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                load();
+            }
+        });
         recyclerView=(RecyclerView)findViewById(R.id.recyclerView);
         datas=new ArrayList<>();
         layoutManager= new LinearLayoutManager(this);
@@ -61,22 +70,12 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         cover=(ImageView)findViewById(R.id.cover);
         profileImage=(ImageView)findViewById(R.id.profile_image);
         userEmail=(TextView)findViewById(R.id.userEmail);
-        btnPost=(Button)findViewById(R.id.btnPost);
-        btnPost.setOnClickListener(this);
 
-        content=(EditText) findViewById(R.id.content);
-        content.setOnFocusChangeListener(new View.OnFocusChangeListener(){
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if(b){
-                    content.setHeight(300);
-                }else{
-                    content.setHeight(100);
-                }
-            }
-        });
+        content=(Button) findViewById(R.id.content);
+        content.setOnClickListener(this);
         load();
     }
+
     public void load(){
         Glide.with(this).load(getString(R.string.baseUrl)+"group/image/cover/"+groupID)
                 .apply(new RequestOptions().transform(new CenterCrop(),new RoundedCorners(10)))
@@ -90,7 +89,13 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
                 if(response.body()!=null){
                     //Log.v("포스트",response.body().get(0).getContent());
                     datas=response.body();
+                    offset+=datas.size();
                     adapter.addItems(datas);
+                    if(datas.size()!=0){
+                        Log.v("포스트",datas.size()+"  "+datas.get(0).getContent()+"  offset : "+offset);
+                    }
+
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             }
             @Override
@@ -101,28 +106,13 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btnPost:{
-                postCreate();
-                content.setText("");
+            case R.id.content:{
+                Intent intent=new Intent(getApplicationContext(),PostCreateActivity.class);
+                intent.putExtra("groupID",groupID);
+                startActivity(intent);
                 break;
             }
         }
     }
-    public void postCreate(){
-        Log.v("포스트","postCreate");
-        HashMap<String,Object> hashMap=new HashMap<>();
-        hashMap.put("group_id",groupID);
-        hashMap.put("content",content.getText().toString());
-        hashMap.put("userEmail",Session.getUserEmail());
-        hashMap.put("time",System.currentTimeMillis());
-        RetrofitApi.getService().postCreate(hashMap).enqueue(new retrofit2.Callback<Boolean>(){
-            @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
 
-
-            }
-            @Override
-            public void onFailure(Call<Boolean> call, Throwable t) { }
-        });
-    }
 }

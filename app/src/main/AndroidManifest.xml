@@ -17,10 +17,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        android:usesCleartextTraffic="true"
-        android:requestLegacyExternalStorage="true"
-        >
-        <activity android:name=".community.activity.PostActivity"></activity>
+        android:usesCleartextTraffic="true">
+        <activity android:name=".community.activity.PostCreateActivity"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity android:name=".community.activity.PostUpdateActivity" />
+        <activity android:name=".community.activity.PostActivity" />
         <activity android:name=".community.activity.MyGroupActivity" />
         <activity android:name=".community.activity.GroupCreateActivity" />
         <activity android:name=".community.activity.ChatingActivity" />

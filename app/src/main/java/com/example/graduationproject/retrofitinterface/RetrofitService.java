@@ -113,11 +113,14 @@ public interface RetrofitService {
 
 
     //게시글 api
-    @FormUrlEncoded
+    @Multipart
     @POST("post/create")
-    Call<Boolean> postCreate(@FieldMap HashMap<String, Object> param);
+    Call<PostDTO> postCreate(@PartMap HashMap<String, Object> param,@Part ArrayList<MultipartBody.Part> files);
 
     @GET("post/{groupID}/{count}/{offset}")
     Call<ArrayList<PostDTO>> getPost(@Path("groupID")Integer groupID,@Path("count")Integer count,@Path("offset")Integer offset);
+
+    @DELETE("post/delete/{id}")
+    Call<RetrofitResponse> postDelete(@Path("id")Integer id);
 
 }

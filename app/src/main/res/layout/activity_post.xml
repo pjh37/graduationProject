@@ -24,37 +24,31 @@
                 app:layout_constraintTop_toBottomOf="@id/cover"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_margin="10dp"/>
-            <EditText
+            <Button
                 android:id="@+id/content"
                 android:layout_width="0dp"
-                android:layout_height="100dp"
+                android:layout_height="40dp"
                 app:layout_constraintLeft_toRightOf="@id/profile_image"
                 app:layout_constraintTop_toBottomOf="@id/cover"
                 app:layout_constraintRight_toRightOf="parent"
-                android:hint="게시글 작성"
-                android:gravity="left|top"
-                android:background="@drawable/edittext_outline"
-                android:layout_margin="10dp"
-                android:padding="5dp"/>
-            <Button
-                android:id="@+id/btnPost"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:text="작성"
+                android:text="게시글 작성"
                 android:textColor="#ffffff"
                 android:background="@drawable/corner_border"
                 android:backgroundTint="#0275d8"
-                android:layout_marginTop="5dp"
-                app:layout_constraintTop_toBottomOf="@id/content"
-                app:layout_constraintRight_toRightOf="parent"
-                />
-
+                android:layout_margin="10dp"
+                android:padding="5dp"/>
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="600dp"
+                app:layout_constraintTop_toBottomOf="@id/content">
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                app:layout_constraintTop_toBottomOf="@id/btnPost"/>
+                />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
