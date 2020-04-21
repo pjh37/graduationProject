@@ -6,6 +6,7 @@ import com.example.graduationproject.community.model.ChatRoomTempDTO;
 import com.example.graduationproject.community.model.FriendDTO;
 import com.example.graduationproject.community.model.GroupDTO;
 import com.example.graduationproject.community.model.PostDTO;
+import com.example.graduationproject.community.model.PostImageDTO;
 import com.example.graduationproject.mainActivityViwePager.RequestType;
 import com.example.graduationproject.mainActivityViwePager.SurveyDTO;
 import com.example.graduationproject.messageservice.MessageDTO;
@@ -27,6 +28,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
@@ -119,6 +121,14 @@ public interface RetrofitService {
 
     @GET("post/{groupID}/{count}/{offset}")
     Call<ArrayList<PostDTO>> getPost(@Path("groupID")Integer groupID,@Path("count")Integer count,@Path("offset")Integer offset);
+
+    @Multipart
+    @PUT("post/update")
+    Call<PostDTO> postUpdate(@PartMap HashMap<String, Object> param,@Part ArrayList<MultipartBody.Part> files);
+
+
+    @GET("post/images/{postID}")
+    Call<ArrayList<PostImageDTO>> getImageLen (@Path("postID")Integer postID);
 
     @DELETE("post/delete/{id}")
     Call<RetrofitResponse> postDelete(@Path("id")Integer id);

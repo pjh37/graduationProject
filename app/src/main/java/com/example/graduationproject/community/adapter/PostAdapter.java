@@ -3,6 +3,7 @@ package com.example.graduationproject.community.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.graduationproject.R;
+import com.example.graduationproject.community.activity.PostUpdateActivity;
 import com.example.graduationproject.community.model.GroupDTO;
 import com.example.graduationproject.community.model.PostDTO;
 import com.example.graduationproject.login.Session;
@@ -103,6 +105,10 @@ public class PostAdapter extends  RecyclerView.Adapter<PostAdapter.PostHolder>{
                 }
                 case R.id.post_update:{
                     Toast.makeText(mContext,"업데이트 클릭",Toast.LENGTH_LONG).show();
+                    Intent intent=new Intent(mContext, PostUpdateActivity.class);
+                    intent.putExtra("postID",items.get(position).get_id());
+                    intent.putExtra("content",items.get(position).getContent());
+                    mContext.startActivity(intent);
                     break;
                 }
             }
