@@ -371,7 +371,8 @@ public class SummaryViewFragment extends Fragment {
                                         for (int k = 0; k < answers.get(j).length(); k++) {
                                             _checkedValue.add(grid_col.get(i).get(Character.getNumericValue(answers.get(j).charAt(k))));
                                         }
-                                        _checkedValue.add("@");
+                                        _checkedValue.add("¿"); // 잘안쓰는 특수문자로 해야함
+                                        // 'ㄱ' 한자
                                     }
 
                                     grid_checkedValue.set(i,_checkedValue);
@@ -381,7 +382,9 @@ public class SummaryViewFragment extends Fragment {
                                 {
 
                                     for (int j = 0; j < answers.size(); j++) {
-                                        if (answers.get(j).isEmpty()) { // etc가 존재할 경우 , 보기에 추가
+                                        if (answers.get(j).isEmpty() && !choice_option.get(i).contains(answers.get(j + 1))) {
+                                            // etc가 존재할 경우 ,etc text를 보기에 추가
+                                            // 겹치지 않게 보기에 추가
                                             choice_option.get(i).add(answers.get(j + 1));
                                         }
                                     }
@@ -398,9 +401,7 @@ public class SummaryViewFragment extends Fragment {
                                     survey_answer.set(i,answers);
                                 }
                             }
-//                        else{ // 디버깅 임시용
-//                            Log.d("mawang", "SummaryViewFragment getDataUsing onResponse - answers 널 = " + answers);
-//                        }
+
 
 
                         }

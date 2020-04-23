@@ -52,29 +52,7 @@ public class NetworkManager {
         return networkManager;
     }
 
-//    public  class Request extends AsyncTask<Integer,Integer,Void>{
-//        String userID;
-//        JSONObject jsonObject;
-//        String title;
-//        String description;
-//        public Request(String id,JSONObject jsonObject,String title,String description){
-//            this.userID=id;
-//            this.jsonObject=jsonObject;
-//            this.title=title;
-//            this.description=description;
-//            Log.v("테스트","생성자호출"+id);
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Integer... integers) {
-//            submit(jsonObject);
-//            return null;
-//        }
-//    }
-
     public void submit(JSONObject jsonObject){
-        Log.v("테스트","서버로 폼 전송 : "+jsonObject.toString());
-
 
         MultipartBody.Builder builder=new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);

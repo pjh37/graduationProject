@@ -67,6 +67,9 @@ dependencies {
 
     //MpAndroidChart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-//    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+
+    // youtube
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
+
 }
 apply plugin: 'com.google.gms.google-services'

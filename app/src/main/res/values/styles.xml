@@ -16,4 +16,12 @@
         <item name="searchIcon">@drawable/search</item>
         <item name="closeIcon">@drawable/close</item>
     </style>
+
+
+    <style name="DialogSheetAnimation">
+        <item name="android:windowEnterAnimation">@anim/popup_show</item>
+        <item name="android:windowExitAnimation">@anim/popup_hide</item>
+    </style>
+
+
 </resources>

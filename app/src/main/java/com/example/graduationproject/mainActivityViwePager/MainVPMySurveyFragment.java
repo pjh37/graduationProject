@@ -358,13 +358,9 @@ public class MainVPMySurveyFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-//        Log.d("mawang", "MainVPMySurveyFragment onStart -befo datas =  " + datas);
-//        Log.d("mawang", "MainVPMySurveyFragment onStart -befo OFFdatas =  " + items);
         datas.clear();
         items.clear();
 
-//        Log.d("mawang", "MainVPMySurveyFragment onStart -befo uploadedSurveyAdapter datas =  " + uploadedSurveyAdapter.getDatas());
-//        Log.d("mawang", "MainVPMySurveyFragment onStart -befo uploadedSurveyAdapter datas =  " + offlineFormAdapter.getItems());
         uploadedSurveyAdapter.datasClear();
         offlineFormAdapter.ItemsClear();
 
@@ -372,7 +368,17 @@ public class MainVPMySurveyFragment extends Fragment {
         getDraftSurvey(); // work
     }
 
+    public void refreshData(){
+        Log.d("mawang","MainVPMySurveyFragment refreshData called");
+        datas.clear();
+        items.clear();
+        uploadedSurveyAdapter.datasClear();
+        offlineFormAdapter.ItemsClear();
 
+        getResponseWaitSurvey();
+        getDraftSurvey();
+// 삭제는 refresh 바로 해야함
+    }
 
 
 }

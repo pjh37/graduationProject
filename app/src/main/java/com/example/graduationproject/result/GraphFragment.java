@@ -593,7 +593,7 @@ public class GraphFragment extends Fragment {
 
                                             for (int y = pos2; y < grid_checkedValues.get(i).size(); y ++) {
 
-                                                if ("@".equals(grid_checkedValues.get(i).get(y))) {
+                                                if ("¿".equals(grid_checkedValues.get(i).get(y))) {
                                                     pos2 = y+1;
                                                     break;// 오 감사합니다 break 는 누가 만든 키워드인지 정말 감사합니다
                                                 }

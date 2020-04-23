@@ -116,13 +116,13 @@ public class LoginActivity extends AppCompatActivity {
             chkAutoLogin.setChecked(true);
         }
         // 로그인 누르기전에 실행되서,, null 값이다.
-        userEmail=session.getUserEmail();
-        userName=session.getUserName();
-        userImage=session.getUserImage();
-
-        Log.d("mawang", "LoginActivity onStart - userEmail = "+userEmail);
-        Log.d("mawang", "LoginActivity onStart - userName = "+userName);
-        Log.d("mawang", "LoginActivity onStart - userImage = "+userImage);
+//        userEmail=session.getUserEmail();
+//        userName=session.getUserName();
+//        userImage=session.getUserImage();
+//
+//        Log.d("mawang", "LoginActivity onStart - userEmail = "+userEmail);
+//        Log.d("mawang", "LoginActivity onStart - userName = "+userName);
+//        Log.d("mawang", "LoginActivity onStart - userImage = "+userImage);
     }
 
     public void onClick(View v){
@@ -185,9 +185,9 @@ public class LoginActivity extends AppCompatActivity {
                             loginSuccess();
 
                             // 로그인 후에 해야 값이 온다.
-                            userEmail= session.getUserEmail();
-                            userName= session.getUserName();
-                            userImage= session.getUserImage();
+//                            userEmail= session.getUserEmail();
+//                            userName= session.getUserName();
+//                            userImage= session.getUserImage();
                         } else {
                             // 로그인 실패
                             Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();

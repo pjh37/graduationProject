@@ -63,22 +63,7 @@ public class OfflineFormRVAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
             });
 
-//            deleteBtn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    String whereClause="_id=?";
-//                    String[] whereArgs=new String[]{String.valueOf(_id.getText())};
-//                    FormSaveManager.getInstance(mContext).delete(whereClause,whereArgs);
-//                    formItem.remove(getAdapterPosition());
-//                    ((Activity)mContext).runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            notifyDataSetChanged();
-//                        }
-//                    });
-//
-//                }
-//            });
+
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

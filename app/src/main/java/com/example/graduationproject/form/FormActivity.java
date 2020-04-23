@@ -27,6 +27,7 @@ import com.example.graduationproject.MainActivity;
 import com.example.graduationproject.NetworkManager;
 import com.example.graduationproject.R;
 import com.example.graduationproject.UploadedFormEditableActivity;
+import com.example.graduationproject.UploadedSurveyRV;
 import com.example.graduationproject.login.Session;
 import com.example.graduationproject.offlineform.OfflineFormRVAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -50,9 +51,6 @@ public class FormActivity extends AppCompatActivity {
 
     private ArrayList<DialogVO> datas;
 
-//    private static final String KEY="SUBVIEWKEY";
-//    private static final String AUTOSAVE="SUBVIEWKEY";
-
     private String[] txtTypes = {"단답형", "장문형",
             "객관식 질문", "체크박스", "드롭다운"
             , "직선 그리드", "객관식 그리드", "체크박스 그리드",
@@ -71,8 +69,6 @@ public class FormActivity extends AppCompatActivity {
     private Animation fab_open, fab_close, fab_clock, fab_anticlock;
     Boolean isOpen = false;
 
-//    private ArrayList<Integer> subViews;
-//private FormSaveManager formSaveManager;
     private static FormTypeImage formTypeImage;
     private static final int REQUEST_CODE = 10;
 
@@ -89,7 +85,7 @@ public class FormActivity extends AppCompatActivity {
 
     private int classifyByCategory;
 
-
+    private boolean IsDraftEdit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,18 +137,21 @@ public class FormActivity extends AppCompatActivity {
         //formSaveManager= FormSaveManager.getInstance(this);
 
         Intent intent=getIntent();
-        //userEmail =intent.getStringExtra("userEmail");
         form_id=intent.getIntExtra("form_id",-1);
         jsonstr=intent.getStringExtra("json");
         classifyByCategory = intent.getIntExtra("category", -111);
 
 
-        // 첫 시작인지, 중간편집인지 구분
+        // 첫 시작인지, 중간편집 , 가편집인지 구분
         if (classifyByCategory == MainActivity.categoryNumber) {
-            //Log.d("mawang", "FormActivity init - from MainActivity");
-        } else if (classifyByCategory == UploadedFormEditableActivity.categoryNumber
-                || classifyByCategory == OfflineFormRVAdapter.categoryNumber) {
-            //Log.d("mawang", "FormActivity init - from UploadedFormEditableActivity,OfflineFormRVAdapter");
+            // 첫시작
+        } else if (classifyByCategory == UploadedFormEditableActivity.categoryNumber || classifyByCategory == UploadedSurveyRV.categoryNumber) {
+            // 중간편집
+            load();
+        }else if ( classifyByCategory == OfflineFormRVAdapter.categoryNumber) {
+            // 가편집
+            IsDraftEdit = true;
+            Log.d("mawang", "FormActivity init - from OfflineFormRVAdapter ,IsDraftEdit:"+IsDraftEdit);
             load();
         }
 
@@ -252,18 +251,7 @@ public class FormActivity extends AppCompatActivity {
         }
     }
     public void save(){
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                //기존에 있던것인지 확인
-//                JSONObject jsonObject=createJsonObject();
-//                formSaveManager.save(form_id,jsonObject,getTime());
-//                finish();
-//            }
-//        }).start();
 
-        // recycleview 위쪽
-//        Log.d("mawang", "FormActivity save called");
         try {
             jsonObject = createJsonObject();
             NetworkManager networkManager = NetworkManager.getInstance(getApplicationContext());
@@ -289,12 +277,13 @@ public class FormActivity extends AppCompatActivity {
             jsonObject = createJsonObject();
             NetworkManager networkManager = NetworkManager.getInstance(getApplicationContext());
 
-            if (jsonstr == null) {
+            if (jsonstr == null || IsDraftEdit==true ) {
+                // 가편집에서 완료는 첫 서밋이다.
                 networkManager.submit(jsonObject);
-                Log.d("mawang", "FormActivity submit first : " + jsonObject.toString());
+//                Log.d("mawang", "FormActivity submit first : " + jsonObject.toString());
             } else { //jsonstr != null
                 networkManager.update(jsonObject, form_id);
-                Log.d("mawang", "FormActivity submit update : " + jsonObject.toString());
+//                Log.d("mawang", "FormActivity submit update : " + jsonObject.toString());
             }
             finish();
         } catch (Exception e) {}
@@ -412,6 +401,7 @@ public class FormActivity extends AppCompatActivity {
     public static void set_FormTypeImage_class(FormTypeImage fti){
         formTypeImage = fti;
     }
+
     public JSONObject createJsonObject(){
         JSONObject jsonObject=new JSONObject();
         int formCnt=container.getChildCount()-2;

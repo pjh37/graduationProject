@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    android:elevation="10dp"
+    android:background="@drawable/border"
+    android:backgroundTint="#FFFFFF">
+    <ImageView
+        android:id="@+id/drag_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/drag_handle"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/editQuestion"
+            android:layout_width="0dp"
+            android:layout_weight="9"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="Question"
+            />
+        <ImageButton
+            android:id="@+id/copy_view"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:background="#ffffff"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/copy"/>
+        <ImageButton
+            android:id="@+id/delete_view"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/delete"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        >
+        <Button
+            android:id="@+id/btnVideoAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:text="동영상"
+            android:textColor="#ffffff"
+            android:backgroundTint="#246CE9"/>
+
+        <EditText
+            android:id="@+id/editURL"
+            android:layout_width="wrap_content"
+            android:layout_weight="7"
+            android:layout_height="wrap_content"
+            android:hint="YouTube 주소를 복사하세요."
+
+            />
+
+    </LinearLayout>
+
+
+
+    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+        android:id="@+id/youtube_player_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:showFullScreenButton="false"
+        app:enableAutomaticInitialization="false"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+
+</LinearLayout>
+
