@@ -1,31 +1,26 @@
 package com.example.graduationproject.retrofitinterface;
 
 import com.example.graduationproject.UploadedSurveyDTO;
-import com.example.graduationproject.community.model.ChatRoomDTO;
 import com.example.graduationproject.community.model.ChatRoomTempDTO;
+import com.example.graduationproject.community.model.CommentDTO;
+import com.example.graduationproject.community.model.CommentReplyDTO;
 import com.example.graduationproject.community.model.FriendDTO;
 import com.example.graduationproject.community.model.GroupDTO;
 import com.example.graduationproject.community.model.PostDTO;
-import com.example.graduationproject.form.FormDTO;
-import com.example.graduationproject.mainActivityViwePager.RequestType;
 import com.example.graduationproject.mainActivityViwePager.SurveyDTO;
 import com.example.graduationproject.messageservice.MessageDTO;
 import com.example.graduationproject.offlineform.FormItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.DELETE;
-import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -113,7 +108,26 @@ public interface RetrofitService {
     @POST("post/create")
     Call<Boolean> postCreate(@FieldMap HashMap<String, Object> param);
 
+    @FormUrlEncoded
+    @POST("post/add_comment")
+    Call<Boolean> commentCreate(@FieldMap HashMap<String, Object> param);
+
+    @FormUrlEncoded
+    @POST("post/add_comment_reply")
+    Call<Boolean> replyCreate(@FieldMap HashMap<String, Object> param);
+
     @GET("post/{groupID}/{count}/{offset}")
     Call<ArrayList<PostDTO>> getPost(@Path("groupID")Integer groupID,@Path("count")Integer count,@Path("offset")Integer offset);
 
+    @GET("post/comment/{postID}/{count}/{offset}")
+    Call<ArrayList<CommentDTO>> getComment(@Path("postID")Integer groupID, @Path("count")Integer count, @Path("offset")Integer offset);
+
+    @GET("post/comment_reply/{postID}/{count}/{offset}")
+    Call<ArrayList<CommentReplyDTO>> getReply(@Path("postID")Integer groupID, @Path("count")Integer count, @Path("offset")Integer offset);
+
+    @GET("post/delete_comment/{_id}")
+    Call<Boolean> deleteComment(@Path("_id")Integer _id);
+
+    @GET("post/delete_reply/{_id}")
+    Call<Boolean> deleteReply(@Path("_id")Integer _id);
 }

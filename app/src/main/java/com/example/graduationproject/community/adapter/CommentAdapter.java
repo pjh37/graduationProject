@@ -5,12 +5,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,8 +19,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.graduationproject.R;
 import com.example.graduationproject.community.activity.PostActivity;
 import com.example.graduationproject.community.model.CommentDTO;
+import com.example.graduationproject.community.model.CommentReplyDTO;
 import com.example.graduationproject.community.model.OnItemClick;
-import com.example.graduationproject.community.model.PostDTO;
 import com.example.graduationproject.retrofitinterface.RetrofitApi;
 
 import java.text.SimpleDateFormat;
@@ -31,32 +30,32 @@ import java.util.Date;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class PostAdapter extends  RecyclerView.Adapter<PostAdapter.PostHolder>{
+public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentHolder> {
 
-    private ArrayList<PostDTO> items;
-    private final static int COUNT = 5;
-    private RecyclerView.LayoutManager layoutManager;
-    Integer offset=0;
-
+    private ArrayList<CommentDTO> items;
     private Context mContext;
     private View itemView;
     private OnItemClick mCallback;
 
-    public PostAdapter(Context context, ArrayList<PostDTO> items, OnItemClick callback){
-        this.mContext=context;
-        this.items=items;
+    private final static int COUNT = 5;
+    private RecyclerView.LayoutManager layoutManager;
+    Integer offset=0;
+
+    public CommentAdapter(Context context, OnItemClick callback){
+        this.mContext = context;
+        this.items = new ArrayList<>();
         this.mCallback = callback;
     }
 
     @NonNull
     @Override
-    public PostHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_community_post_item,parent,false);
-        return new PostHolder(itemView);
+    public CommentHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_community_comment_item,parent,false);
+        return new CommentHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PostHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CommentAdapter.CommentHolder holder, int position) {
         if(items.get(position).getUserEmail()==null){
             Glide.with(holder.itemView.getContext())
                     .load(R.drawable.profile)
@@ -77,53 +76,49 @@ public class PostAdapter extends  RecyclerView.Adapter<PostAdapter.PostHolder>{
         return items.size();
     }
 
-    public void addItems(ArrayList<PostDTO> datas){
-        int position=items.size();
-        this.items.addAll(position,datas);
-        notifyItemRangeChanged(position,datas.size());
+    public void addItems(ArrayList<CommentDTO> datas){
+        this.items.addAll(datas);
+        notifyDataSetChanged();
     }
 
-    class PostHolder extends RecyclerView.ViewHolder{
+    public void clear(){
+        this.items.clear();
+    }
+
+    class CommentHolder extends RecyclerView.ViewHolder{
         ImageView profileImage;
         TextView userEmail;
         TextView time;
         TextView content;
-        Button commentBtn;
-        ConstraintLayout postObject;
-        RecyclerView commentRV;
-        CommentAdapter adapter;
+        RecyclerView replyRV;
+        CommentReplyAdapter adapter;
 
-        PostHolder(View v){
-            super(v);
-            profileImage=(ImageView)v.findViewById(R.id.profile_image);
-            userEmail=(TextView)v.findViewById(R.id.userEmail);
-            time=(TextView)v.findViewById(R.id.time);
-            content=(TextView)v.findViewById(R.id.content);
-            postObject = (ConstraintLayout)v.findViewById(R.id.post_object);
-            commentRV = (RecyclerView)v.findViewById(R.id.comment_rv);
-            commentBtn = (Button)v.findViewById(R.id.comment_btn);
+        LinearLayout commentObject;
+
+        CommentHolder(View view){
+            super(view);
+            profileImage=(ImageView)view.findViewById(R.id.comment_profile);
+            userEmail=(TextView)view.findViewById(R.id.comment_id);
+            time=(TextView)view.findViewById(R.id.comment_time);
+            content=(TextView)view.findViewById(R.id.comment_text);
+            commentObject = (LinearLayout)view.findViewById(R.id.comment_object);
+            replyRV = (RecyclerView)view.findViewById(R.id.commentReply_rv);
 
             layoutManager = new LinearLayoutManager(mContext);
-            commentRV.setLayoutManager(layoutManager);
+            replyRV.setLayoutManager(layoutManager);
 
-            adapter = new CommentAdapter(mContext, mCallback);
-            commentRV.setAdapter(adapter);
+            adapter = new CommentReplyAdapter(mContext, mCallback);
+            replyRV.setAdapter(adapter);
 
-            postObject.setOnClickListener(new View.OnClickListener() {
+            commentObject.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mCallback.onPostObjectClick(items.get(getAdapterPosition()).get_id(), PostActivity.COMMENT);
-                }
-            });
-
-            commentBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    commentRV.setVisibility(View.VISIBLE);
+                    //Toast.makeText(mContext, Integer.toString(getAdapterPosition()), Toast.LENGTH_LONG).show();
+                    mCallback.onPostObjectClick(items.get(getAdapterPosition()).get_id(), PostActivity.COMMENT_REPLY);
+                    mCallback.getTargetUserEmail(items.get(getAdapterPosition()).getUserEmail());
                 }
             });
         }
-
     }
 
     public String getTime(String str){
@@ -134,13 +129,13 @@ public class PostAdapter extends  RecyclerView.Adapter<PostAdapter.PostHolder>{
         return time;
     }
 
-    public void loadComment(CommentAdapter adapter, int post_id){
-        RetrofitApi.getService().getComment(post_id,COUNT,offset).enqueue(new retrofit2.Callback<ArrayList<CommentDTO>>(){
+    public void loadComment(CommentReplyAdapter adapter, int post_id){
+        RetrofitApi.getService().getReply(post_id,COUNT,offset).enqueue(new retrofit2.Callback<ArrayList<CommentReplyDTO>>(){
             @Override
-            public void onResponse(Call<ArrayList<CommentDTO>> call, Response<ArrayList<CommentDTO>> response) {
+            public void onResponse(Call<ArrayList<CommentReplyDTO>> call, Response<ArrayList<CommentReplyDTO>> response) {
                 if(response.body()!=null){
                     if(response.body()!=null){
-                        ArrayList<CommentDTO> data=response.body();
+                        ArrayList<CommentReplyDTO> data=response.body();
                         adapter.clear();
                         adapter.addItems(data);
                         Log.d("CommentLog",Integer.toString(adapter.getItemCount()));
@@ -148,7 +143,7 @@ public class PostAdapter extends  RecyclerView.Adapter<PostAdapter.PostHolder>{
                 }
             }
             @Override
-            public void onFailure(Call<ArrayList<CommentDTO>> call, Throwable t) { }
+            public void onFailure(Call<ArrayList<CommentReplyDTO>> call, Throwable t) { }
         });
     }
 }

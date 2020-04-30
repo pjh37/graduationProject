@@ -1,27 +1,28 @@
 package com.example.graduationproject.community.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import retrofit2.Call;
-import retrofit2.Response;
-
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.graduationproject.R;
-import com.example.graduationproject.community.adapter.MyGroupAdapter;
 import com.example.graduationproject.community.adapter.PostAdapter;
-import com.example.graduationproject.community.model.GroupDTO;
+import com.example.graduationproject.community.model.OnItemClick;
 import com.example.graduationproject.community.model.PostDTO;
 import com.example.graduationproject.login.Session;
 import com.example.graduationproject.retrofitinterface.RetrofitApi;
@@ -29,16 +30,28 @@ import com.example.graduationproject.retrofitinterface.RetrofitApi;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PostActivity extends AppCompatActivity implements View.OnClickListener{
+import retrofit2.Call;
+import retrofit2.Response;
+
+public class PostActivity extends AppCompatActivity implements View.OnClickListener, OnItemClick {
+    public final static int COMMENT = 0;
+    public final static int COMMENT_REPLY = 1;
+
     private final static Integer COUNT=20;
     Integer offset=0;
+    Integer clickedPostObjectId = -1;
+    Integer clickedPostObjectType = -1;
+    String clickedTargetUserEmail = "";
     private Integer groupID;
 
     ImageView cover;
     ImageView profileImage;
     TextView userEmail;
     EditText content;
+    EditText commentEditor;
     Button btnPost;
+    Button btnComment;
+    LinearLayout editLayout;
 
     RecyclerView recyclerView;
     PostAdapter adapter;
@@ -54,7 +67,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView=(RecyclerView)findViewById(R.id.recyclerView);
         datas=new ArrayList<>();
         layoutManager= new LinearLayoutManager(this);
-        adapter=new PostAdapter(this,datas);
+        adapter=new PostAdapter(this,datas,this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
@@ -63,6 +76,10 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         userEmail=(TextView)findViewById(R.id.userEmail);
         btnPost=(Button)findViewById(R.id.btnPost);
         btnPost.setOnClickListener(this);
+        btnComment=(Button)findViewById(R.id.post_commentBtn);
+        btnComment.setOnClickListener(this);
+        commentEditor = (EditText)findViewById(R.id.post_editComment);
+        editLayout = (LinearLayout) findViewById(R.id.post_editLayout);
 
         content=(EditText) findViewById(R.id.content);
         content.setOnFocusChangeListener(new View.OnFocusChangeListener(){
@@ -106,8 +123,78 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
                 content.setText("");
                 break;
             }
+            case R.id.post_commentBtn:{
+                commentCreate();
+                commentEditor.setText("");
+                editLayout.setVisibility(View.INVISIBLE);
+
+                InputMethodManager immhide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                immhide.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                break;
+            }
         }
     }
+
+    @Override
+    public void onPostObjectClick(int post_id, int type){
+        EditText editText = (EditText) findViewById(R.id.post_editComment);
+        editLayout.setVisibility(View.VISIBLE);
+        editText.requestFocus();
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+        Toast.makeText(this, Integer.toString(post_id),Toast.LENGTH_LONG).show();
+        clickedPostObjectId = post_id;
+        clickedPostObjectType = type;
+    }
+
+    @Override
+    public void getTargetUserEmail(String target){
+        clickedTargetUserEmail = target;
+    }
+
+    public void commentCreate(){
+        if(clickedPostObjectId == -1 || clickedPostObjectType == -1)
+            return;
+
+        if(clickedPostObjectType == COMMENT){
+            HashMap<String,Object> hashMap=new HashMap<>();
+            hashMap.put("post_id",clickedPostObjectId);
+            hashMap.put("content",commentEditor.getText().toString());
+            hashMap.put("userEmail",Session.getUserEmail());
+            hashMap.put("time",System.currentTimeMillis());
+            RetrofitApi.getService().commentCreate(hashMap).enqueue(new retrofit2.Callback<Boolean>(){
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    adapter.notifyDataSetChanged();
+                }
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) { }
+            });
+        }
+
+        if(clickedPostObjectType == COMMENT_REPLY){
+            HashMap<String,Object> hashMap=new HashMap<>();
+            hashMap.put("post_id",clickedPostObjectId);
+            hashMap.put("content",commentEditor.getText().toString());
+            hashMap.put("target_userEmail",clickedTargetUserEmail);
+            hashMap.put("userEmail",Session.getUserEmail());
+            hashMap.put("time",System.currentTimeMillis());
+            RetrofitApi.getService().replyCreate(hashMap).enqueue(new retrofit2.Callback<Boolean>(){
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    adapter.notifyDataSetChanged();
+                }
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) { }
+            });
+        }
+
+        clickedPostObjectId = -1;
+        clickedPostObjectType = -1;
+    }
+
     public void postCreate(){
         Log.v("포스트","postCreate");
         HashMap<String,Object> hashMap=new HashMap<>();
@@ -118,11 +205,17 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         RetrofitApi.getService().postCreate(hashMap).enqueue(new retrofit2.Callback<Boolean>(){
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-
-
+                adapter.notifyDataSetChanged();
             }
             @Override
             public void onFailure(Call<Boolean> call, Throwable t) { }
         });
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        InputMethodManager immhide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        immhide.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 }

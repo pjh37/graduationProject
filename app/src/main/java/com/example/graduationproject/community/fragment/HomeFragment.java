@@ -6,7 +6,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -17,8 +16,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.graduationproject.R;
 import com.example.graduationproject.mainActivityViwePager.SurveyDTO;
@@ -26,11 +28,6 @@ import com.example.graduationproject.retrofitinterface.RetrofitApi;
 import com.example.graduationproject.service.KoreanPhraseExtractorApi;
 import com.example.graduationproject.service.OnClickWithOnTouchListener;
 import com.example.graduationproject.service.WordleClickedActivity;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.widget.ContentLoadingProgressBar;
-import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
@@ -126,60 +123,58 @@ public class HomeFragment extends Fragment {
             }
         }).start();
 
-        return root;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         // Word Cloud 띄워주는 스레드
         // asset 폴더의 d3.html 참조
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while(!isWordReady){ }
-                if(isWordReady){
-                    getActivity().runOnUiThread(()->{
-                        progressBar.setVisibility(View.GONE);
-                        d3 = (WebView) root.findViewById(R.id.d3_cloud);
-                        d3.addJavascriptInterface(new AndroidBridge(), "GetWord");
-                        WebSettings ws = d3.getSettings();
-                        ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
-                        ws.setJavaScriptEnabled(true);
-                        ws.setLoadWithOverviewMode(true);
-                        ws.setUseWideViewPort(true);
+                if(isWordReady) {
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            d3 = (WebView) root.findViewById(R.id.d3_cloud);
+                            d3.addJavascriptInterface(new AndroidBridge(), "GetWord");
+                            WebSettings ws = d3.getSettings();
+                            ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+                            ws.setJavaScriptEnabled(true);
+                            ws.setLoadWithOverviewMode(true);
+                            ws.setUseWideViewPort(true);
 
-                        d3.setOnTouchListener(new OnClickWithOnTouchListener(root.getContext(), new OnClickWithOnTouchListener.OnClickListener() {
-                            @Override
-                            public void onClick() {
-                                //Toast.makeText(getContext(),"WebViewClickTest",Toast.LENGTH_SHORT).show();
+                            d3.setOnTouchListener(new OnClickWithOnTouchListener(root.getContext(), new OnClickWithOnTouchListener.OnClickListener() {
+                                @Override
+                                public void onClick() {
+                                    //Toast.makeText(getContext(),"WebViewClickTest",Toast.LENGTH_SHORT).show();
 
-                            }
-                        }));
-
-                        d3.loadUrl("file:///android_asset/d3.html");
-                        d3.setWebViewClient(new WebViewClient() {
-                            @Override
-                            public void onPageFinished(WebView view, String url) {
-                                super.onPageFinished(view, url);
-                                StringBuffer sb = new StringBuffer();
-                                sb.append("wordCloud([");
-                                for (int i = 0; i < wordCloud.length; i++) {
-                                    sb.append("'").append(wordCloud[i]).append("'");
-                                    if (i < wordCloud.length - 1) {
-                                        sb.append(",");
-                                    }
                                 }
-                                sb.append("])");
+                            }));
 
-                                d3.evaluateJavascript(sb.toString(), null);
+                            d3.loadUrl("file:///android_asset/d3.html");
+                            d3.setWebViewClient(new WebViewClient() {
+                                @Override
+                                public void onPageFinished(WebView view, String url) {
+                                    super.onPageFinished(view, url);
+                                    StringBuffer sb = new StringBuffer();
+                                    sb.append("wordCloud([");
+                                    for (int i = 0; i < wordCloud.length; i++) {
+                                        sb.append("'").append(wordCloud[i]).append("'");
+                                        if (i < wordCloud.length - 1) {
+                                            sb.append(",");
+                                        }
+                                    }
+                                    sb.append("])");
 
-                            }
+                                    d3.evaluateJavascript(sb.toString(), null);
+
+                                }
+                            });
                         });
-                    });
+                    }
                 }
             }
         }).start();
+
+        return root;
     }
 
     // 서버에 등록된 설문의 pageCount 를 어디까지 상한을 둬야할지는 후에 테스트에서 실험해야할 듯.

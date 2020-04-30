@@ -132,7 +132,7 @@ public class SummaryViewFragment extends Fragment {
         OkHttpClient client = new OkHttpClient();
         RequestBody requestbody = new MultipartBody.Builder().
                 setType(MultipartBody.FORM)
-                .addFormDataPart("userEmail", MainActivity.getUserEmail())
+                //.addFormDataPart("userEmail", MainActivity.getUserEmail())
                 .addFormDataPart("form_id", String.valueOf(form_id))
                 .build();
         okhttp3.Request request = new okhttp3.Request.Builder()
