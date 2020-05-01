@@ -16,9 +16,44 @@
             android:id="@+id/summary_spinner"
             android:background="@drawable/spinner_background"
             android:layout_centerHorizontal="true"
-            android:layout_width="200dp"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"/>
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"/>
+
+        <ImageButton
+            android:id="@+id/btn_exportToimage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_image"
+            android:background="#fff"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:onClick="onClick"/>
+        <ImageButton
+            android:id="@+id/btn_doc"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_document"
+            android:background="#fff"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:onClick="onClick"/>
+        <ImageButton
+            android:id="@+id/btn_check"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_share"
+            android:background="#fff"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:onClick="onClick"/>
     </LinearLayout>
 
     <FrameLayout
