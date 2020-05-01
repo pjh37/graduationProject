@@ -77,6 +77,7 @@ public class GraphFragment extends Fragment {
             lineargridbeginIndex = getBundle.getIntegerArrayList("grid_beginIndex");
             lineargridEndIndex = getBundle.getIntegerArrayList("grid_endIndex");
 
+
             grid_rows = (ArrayList<ArrayList<String>>) getBundle.getSerializable("grid_rows");
             grid_cols = (ArrayList<ArrayList<String>>) getBundle.getSerializable("grid_cols");
             grid_checkedValues = (ArrayList<ArrayList<String>>) getBundle.getSerializable("grid_checkedValue");
@@ -197,7 +198,7 @@ public class GraphFragment extends Fragment {
 
                     Description description = new Description();
                     description.setText("응답수 :" + replyTotalNum); //라벨
-                    description.setTextSize(17);
+                    description.setTextSize(14);
                     pieChart.setDescription(description);
 //                        pieChart.getDescription().setEnabled(false);
 
@@ -211,7 +212,7 @@ public class GraphFragment extends Fragment {
 
                     PieData piedata = new PieData(piedataSet);
                     piedata.setValueTextColor(Color.YELLOW);
-                    piedata.setValueTextSize(20);
+                    piedata.setValueTextSize(15);
 
                     piedata.setValueFormatter(new ValueFormatter() {
                         @Override
@@ -240,7 +241,7 @@ public class GraphFragment extends Fragment {
 //                    Log.d("mawang", "객쳌드 - xasis_name = " + xasis_name);
                     XAxis xAxis = barChart.getXAxis();
                     xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                    xAxis.setTextSize(17);
+                    xAxis.setTextSize(15);
                     xAxis.setGranularity(1f);
                     xAxis.setValueFormatter(new ValueFormatter() {
                         //                        int crazy;
@@ -262,7 +263,6 @@ public class GraphFragment extends Fragment {
                     yAxis.setDrawGridLines(true);
                     yAxis.setGranularity(1); // interval 1
                     yAxis.setAxisMinimum(0f); // must
-                    yAxis.setTextSize(17);
                     yAxis.setValueFormatter(new ValueFormatter() {
                         @Override
                         public String getFormattedValue(float value) {
@@ -270,7 +270,10 @@ public class GraphFragment extends Fragment {
                         }
                     });
 
+
                     barChart.getAxisRight().setEnabled(false); // 오른쪽 축 제거
+
+
                     barChart.setVisibility(View.VISIBLE);
                     barChart.setTouchEnabled(false); // 막아야 과도한 호출이 안생김..
 
@@ -299,11 +302,14 @@ public class GraphFragment extends Fragment {
 
                     Description description2 = new Description();
                     description2.setText("응답수 :" + replyTotalNum); //라벨
-                    description2.setTextSize(17);
+                    description2.setTextSize(14);
                     //description2.setPosition(0.5f,0.5f); // won't work in bar chart
                     barChart.setDescription(description2);
 
 //                        barChart.getDescription().setEnabled(false);
+
+
+
                 } else if (type.get(i) == FormType.LINEARSCALE)
                 {
 //                    Log.d("mawang", "GraphFragment onCreateView LINEARSCALE - answer = " + answer);
@@ -416,7 +422,7 @@ public class GraphFragment extends Fragment {
 
                     Description description = new Description();
                     description.setText("응답수 :" + replyTotalNum); //라벨
-                    description.setTextSize(17);
+                    description.setTextSize(14);
                     pieChart.setDescription(description);
 //                        pieChart.getDescription().setEnabled(false);
 
@@ -429,7 +435,7 @@ public class GraphFragment extends Fragment {
 
                     PieData piedata = new PieData(dataSet);
                     piedata.setValueTextColor(Color.YELLOW); // 노란색이 best
-                    piedata.setValueTextSize(20);
+                    piedata.setValueTextSize(15);
                     piedata.setValueFormatter(new ValueFormatter() {
                         @Override
                         public String getFormattedValue(float value) {
@@ -443,6 +449,9 @@ public class GraphFragment extends Fragment {
                             }else{
                                 return percent+"%";
                             }
+
+
+
                         }
                     });
 
@@ -452,11 +461,12 @@ public class GraphFragment extends Fragment {
                         xasis_name.add("" + q);
                     }
 
+
                     XAxis xAxis = barChart.getXAxis();
                     xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                    xAxis.setTextSize(17);
+                    xAxis.setTextSize(15);
                     xAxis.setGranularity(1f);
-//                    xAxis.setAxisMinimum(0f); // must
+                    xAxis.setAxisMinimum(0f); // must
                     xAxis.setValueFormatter(new ValueFormatter() {
                         int crazy;
                         @Override
@@ -476,7 +486,6 @@ public class GraphFragment extends Fragment {
                     yAxis.setDrawGridLines(true);
                     yAxis.setGranularity(1); // interval 1
                     yAxis.setAxisMinimum(0f); // must
-                    yAxis.setTextSize(17);
                     yAxis.setValueFormatter(new ValueFormatter() {
                         @Override
                         public String getFormattedValue(float value) {
@@ -492,7 +501,7 @@ public class GraphFragment extends Fragment {
 
                     BarDataSet set = new BarDataSet(barentries, "");
                     set.setValueTextSize(15);
-                    set.setColors(ColorTemplate.COLORFUL_COLORS);
+                    set.setColors(ColorTemplate.LIBERTY_COLORS);
                     //LIBERTY_COLORS , JOYFUL_COLORS , PASTEL_COLORS , COLORFUL_COLORS , VORDIPLOM_COLORS , MATERIAL_COLORS
 
                     BarData bardata = new BarData(set);
@@ -516,11 +525,7 @@ public class GraphFragment extends Fragment {
                     barChart.setFitBars(true);
                     barChart.invalidate();
 
-                    Description description2 = new Description();
-                    description2.setText("응답수 : " + replyTotalNum); //라벨
-                    description2.setTextSize(17);
 
-                    barChart.setDescription(description2);
 
                 } else if (type.get(i) == FormType.RADIOCHOICEGRID || type.get(i) == FormType.CHECKBOXGRID)
                 {
@@ -536,6 +541,8 @@ public class GraphFragment extends Fragment {
                         ArrayList<Integer> _gridresults = new ArrayList<Integer>();
                         switch (type.get(i)) {
                             case FormType.RADIOCHOICEGRID:
+// 저도 복잡해서,, ... 설명하기 힘듭니다.
+
                                 int pos = 0;
 
                                 for (int j = 0; j < grid_rows.get(i).size(); j++) {
@@ -574,6 +581,7 @@ public class GraphFragment extends Fragment {
 
                                 break;
                             case FormType.CHECKBOXGRID:
+// 체크그리드쪽은 어떻게 돌아가는지도 잘 모르겠습니다..
                                 int pos2 = 0;
                                 boolean Ismore = false;
                                 for (int j = 0; j < grid_rows.get(i).size(); j++) {
@@ -669,7 +677,7 @@ public class GraphFragment extends Fragment {
 
                     XAxis xAxis = barChart.getXAxis();
                     xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                    xAxis.setTextSize(17);
+                    xAxis.setTextSize(15);
                     xAxis.setDrawGridLines(true); // 이거 없애고 , temp
                     xAxis.setGranularity(1f);
                     xAxis.setValueFormatter(new ValueFormatter() {
@@ -691,7 +699,6 @@ public class GraphFragment extends Fragment {
                     yAxis.setDrawGridLines(true);
                     yAxis.setGranularity(1); // interval 1
                     yAxis.setAxisMinimum(0f); // must
-                    yAxis.setTextSize(17);
 
                     yAxis.setValueFormatter(new ValueFormatter() {
                         @Override
@@ -700,7 +707,9 @@ public class GraphFragment extends Fragment {
                         }
                     });
 
+
                     barChart.getAxisRight().setEnabled(false); // 오른쪽 축 제거
+
 
                     ArrayList<BarDataSet> barDatasets = new ArrayList<BarDataSet>();
 
@@ -723,7 +732,7 @@ public class GraphFragment extends Fragment {
                     for (int p = 0; p < barDatasets.size(); p++) {
                         barData.addDataSet(barDatasets.get(p)); // 그냥은 되나?
                     }
-                    barData.setValueTextSize(15);
+
 
                     barData.setValueFormatter(new ValueFormatter() {
 
@@ -755,7 +764,7 @@ public class GraphFragment extends Fragment {
 //                    barChart.getDescription().setEnabled(false); // 대기
                     Description description = new Description();
                     description.setText("응답수 :" + replyTotalNum); //라벨
-                    description.setTextSize(17);
+                    description.setTextSize(18); //ㅅㅂ
                     barChart.setDescription(description);
 
                     if ( grid_cols.get(i).size() == 1 || barDatasets.isEmpty()) { // 1행만 존재하면 groupBars에서 err
@@ -847,6 +856,8 @@ public class GraphFragment extends Fragment {
 
                         tl2.addView(tr);
                     }
+
+
                 }
             }
         }

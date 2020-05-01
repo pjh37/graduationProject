@@ -149,35 +149,6 @@
                     android:gravity="center_horizontal"/>
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#FFF"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="7dp"
-                    android:text="조사 방법"
-                    android:textColor="#FFFFFF"
-                    android:background="#888888"
-                    android:textSize="15dp"
-                    android:padding="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="1dp"
-                    android:text="링크 공유를 통한 설문 참여"
-                    android:background="#CCCCCC"
-                    android:textSize="15dp"
-                    android:padding="10dp"
-                    android:layout_weight="2"
-                    android:gravity="center_horizontal"/>
-            </TableRow>
-
         </TableLayout>
 
         <View
