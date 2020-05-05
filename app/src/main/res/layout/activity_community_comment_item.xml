@@ -13,13 +13,25 @@
         <ImageView
             android:id="@+id/comment_profile"
             android:layout_width="24dp"
-            android:layout_height="24dp"/>
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"/>
 
         <TextView
             android:id="@+id/comment_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:text="아이디"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end">
+            <Button
+                android:id="@+id/comment_del"
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
+        </RelativeLayout>
 
     </LinearLayout>
 

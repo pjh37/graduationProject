@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     private ArrayList<CommentDTO> items;
     private Context mContext;
     private View itemView;
+    private boolean isDeleted = false;
     private OnItemClick mCallback;
 
     private final static int COUNT = 5;
@@ -68,6 +70,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         holder.userEmail.setText(items.get(position).getUserEmail().split("@")[0]);
         holder.time.setText(getTime(items.get(position).getTime()));
         holder.content.setText(items.get(position).getContent());
+
         loadComment(holder.adapter, items.get(holder.getAdapterPosition()).get_id());
     }
 
@@ -90,6 +93,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         TextView userEmail;
         TextView time;
         TextView content;
+        Button delButton;
         RecyclerView replyRV;
         CommentReplyAdapter adapter;
 
@@ -101,6 +105,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             userEmail=(TextView)view.findViewById(R.id.comment_id);
             time=(TextView)view.findViewById(R.id.comment_time);
             content=(TextView)view.findViewById(R.id.comment_text);
+            delButton=(Button)view.findViewById(R.id.comment_del);
             commentObject = (LinearLayout)view.findViewById(R.id.comment_object);
             replyRV = (RecyclerView)view.findViewById(R.id.commentReply_rv);
 
@@ -118,6 +123,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
                     mCallback.getTargetUserEmail(items.get(getAdapterPosition()).getUserEmail());
                 }
             });
+
+            delButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mCallback.onCommentDelClick(items.get(getAdapterPosition()).get_id(), PostActivity.COMMENT);
+                    items.remove(getAdapterPosition());
+                    notifyDataSetChanged();
+                }
+            });
+
         }
     }
 
@@ -146,4 +161,5 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             public void onFailure(Call<ArrayList<CommentReplyDTO>> call, Throwable t) { }
         });
     }
+
 }

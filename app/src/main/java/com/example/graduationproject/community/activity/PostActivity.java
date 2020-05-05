@@ -154,6 +154,31 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         clickedTargetUserEmail = target;
     }
 
+    @Override
+    public void onCommentDelClick(int _id, int type){
+        if(type == COMMENT){
+            RetrofitApi.getService().deleteComment(_id).enqueue(new retrofit2.Callback<Boolean>(){
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    adapter.notifyDataSetChanged();
+                }
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) { }
+            });
+        }
+
+        if(type == COMMENT_REPLY){
+            RetrofitApi.getService().deleteReply(_id).enqueue(new retrofit2.Callback<Boolean>(){
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    adapter.notifyDataSetChanged();
+                }
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) { }
+            });
+        }
+    }
+
     public void commentCreate(){
         if(clickedPostObjectId == -1 || clickedPostObjectType == -1)
             return;
@@ -194,6 +219,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         clickedPostObjectId = -1;
         clickedPostObjectType = -1;
     }
+
 
     public void postCreate(){
         Log.v("포스트","postCreate");

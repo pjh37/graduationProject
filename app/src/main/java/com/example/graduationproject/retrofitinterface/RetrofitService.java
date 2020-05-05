@@ -125,9 +125,9 @@ public interface RetrofitService {
     @GET("post/comment_reply/{postID}/{count}/{offset}")
     Call<ArrayList<CommentReplyDTO>> getReply(@Path("postID")Integer groupID, @Path("count")Integer count, @Path("offset")Integer offset);
 
-    @GET("post/delete_comment/{_id}")
-    Call<Boolean> deleteComment(@Path("_id")Integer _id);
+    @GET("post/delete_comment/{id}")
+    Call<Boolean> deleteComment(@Path("id")Integer _id);
 
-    @GET("post/delete_reply/{_id}")
-    Call<Boolean> deleteReply(@Path("_id")Integer _id);
+    @GET("post/delete_reply/{id}")
+    Call<Boolean> deleteReply(@Path("id")Integer _id);
 }

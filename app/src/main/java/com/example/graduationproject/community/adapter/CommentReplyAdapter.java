@@ -8,6 +8,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -91,6 +92,7 @@ public class CommentReplyAdapter extends RecyclerView.Adapter<CommentReplyAdapte
         TextView userEmail;
         TextView time;
         TextView content;
+        Button delButton;
         LinearLayout replyObject;
 
         CommentReplyHolder(View view){
@@ -100,6 +102,7 @@ public class CommentReplyAdapter extends RecyclerView.Adapter<CommentReplyAdapte
             userEmail=(TextView)view.findViewById(R.id.commentReply_id);
             time=(TextView)view.findViewById(R.id.commentReply_time);
             content=(TextView)view.findViewById(R.id.commentReply_text);
+            delButton=(Button)view.findViewById(R.id.commentReply_del);
             replyObject = (LinearLayout)view.findViewById(R.id.commentReply_object);
 
             replyObject.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +110,15 @@ public class CommentReplyAdapter extends RecyclerView.Adapter<CommentReplyAdapte
                 public void onClick(View view) {
                     mCallback.onPostObjectClick(items.get(getAdapterPosition()).getPost_id(), PostActivity.COMMENT_REPLY);
                     mCallback.getTargetUserEmail(items.get(getAdapterPosition()).getUserEmail());
+                }
+            });
+
+            delButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mCallback.onCommentDelClick(items.get(getAdapterPosition()).get_id(), PostActivity.COMMENT_REPLY);
+                    items.remove(getAdapterPosition());
+                    notifyDataSetChanged();
                 }
             });
         }
