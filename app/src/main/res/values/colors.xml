@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#4E5052</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorBackBtn">#ffffff</color>
+    <color name="dialog_editText">#ffffff</color>
 </resources>

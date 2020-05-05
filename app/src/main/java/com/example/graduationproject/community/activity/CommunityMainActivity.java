@@ -20,12 +20,15 @@ import android.widget.Toast;
 
 import com.example.graduationproject.R;
 import com.example.graduationproject.community.adapter.CommunityVPadapter;
+import com.example.graduationproject.community.fragment.HomeFragment;
 import com.example.graduationproject.community.model.FriendDTO;
 import com.example.graduationproject.retrofitinterface.RetrofitApi;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+
+import static com.example.graduationproject.community.fragment.HomeFragment.userSensorListner;
 
 public class CommunityMainActivity extends AppCompatActivity {
     private NavigationView navigationView;
@@ -143,5 +146,12 @@ public class CommunityMainActivity extends AppCompatActivity {
             }
             return false;
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if(HomeFragment.mSensorManager != null && userSensorListner != null)
+            HomeFragment.mSensorManager.unregisterListener(userSensorListner);
     }
 }

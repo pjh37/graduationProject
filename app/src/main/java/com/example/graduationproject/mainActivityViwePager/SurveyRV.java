@@ -123,8 +123,14 @@ public class SurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         return datas.size();
     }
     public String getTime(String str){
-        long now=Long.valueOf(str);
-        Date date=new Date(now);
+        long now;
+        Date date;
+        if(str != null) {
+            now = Long.valueOf(str);
+            date = new Date(now);
+        }
+        else
+            date = new Date();
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy MM월 dd hh:mm:ss");
         String time = simpleDate.format(date);
         return time;

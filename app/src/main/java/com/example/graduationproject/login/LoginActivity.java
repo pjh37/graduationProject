@@ -39,6 +39,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.kakao.usermgmt.LoginButton;
 
+
+
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "로그인연동에러";//에러나면 하드코딩해서 이메일 넘길것!!!
     private static final int RC_SIGN_IN=1;
@@ -59,6 +61,10 @@ public class LoginActivity extends AppCompatActivity {
     boolean fileReadPermission;
     boolean fileWritePermission;
     boolean internetPermission;
+    //Use for Widget Login
+    private SharedPreferences widgetLoginPref;
+    private SharedPreferences.Editor widgetLoginEdit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,8 +90,9 @@ public class LoginActivity extends AppCompatActivity {
         });
         chkAutoLogin=(CheckBox)findViewById(R.id.chkAutoLogin);
         mPref=getSharedPreferences("login",MODE_PRIVATE);
+        widgetLoginPref=getSharedPreferences("widget_LoginOnApp", MODE_PRIVATE);
         editor=mPref.edit();
-
+        widgetLoginEdit=widgetLoginPref.edit();
 
     }
     public void checkPermission(){
@@ -152,7 +159,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode,resultCode,data);
         if(requestCode==RC_SIGN_IN){
             Task<GoogleSignInAccount> task=GoogleSignIn.getSignedInAccountFromIntent(data);
-
             handleSignInResult(task);
         }
     }
@@ -162,14 +168,15 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void handleSignInResult(Task<GoogleSignInAccount> completeTask){
         try{
-            GoogleSignInAccount account=completeTask.getResult(ApiException.class);
+            GoogleSignInAccount account=completeTask.getResult(ApiException.class); // @.@
             firebaseAuthWithGoogle(account);
             String email=account.getEmail();
             Log.v(TAG,email);
-        }catch (Exception e){}
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -179,15 +186,23 @@ public class LoginActivity extends AppCompatActivity {
                             // 로그인 성공
                             FirebaseUser user=firebaseAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
+
                             session.setSession(user.getEmail(),user.getDisplayName(),String.valueOf(user.getPhotoUrl()));
                             saveLoginInfo(user.getEmail(),user.getDisplayName(),user.getPhotoUrl());
                             session.messageServiceStart();
                             loginSuccess();
 
                             // 로그인 후에 해야 값이 온다.
-//                            userEmail= session.getUserEmail();
-//                            userName= session.getUserName();
-//                            userImage= session.getUserImage();
+                            userEmail= session.getUserEmail();
+                            userName= session.getUserName();
+                            userImage= session.getUserImage();
+
+                            //위젯 로그인용
+                            widgetLoginEdit.putString("LoginID",user.getEmail());
+                            widgetLoginEdit.putBoolean("IsUserLogin",true);
+                            widgetLoginEdit.apply();
+
+
                         } else {
                             // 로그인 실패
                             Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
@@ -197,6 +212,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
     private void loginSuccess(){
+
         btnGoSurvey.setVisibility(View.VISIBLE);
         btnGoCommunity.setVisibility(View.VISIBLE);
         btnLogin.setVisibility(View.GONE);
@@ -213,6 +229,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
     private void goToSurvey(){
         Intent intent=new Intent(LoginActivity.this, MainActivity.class); // new
         intent.putExtra("userEmail",Session.getUserEmail());

@@ -54,6 +54,8 @@ public class NetworkManager {
 
     public void submit(JSONObject jsonObject){
 
+        Log.v("테스트","서버로 폼 전송 : "+jsonObject.toString());
+
         MultipartBody.Builder builder=new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
         builder.addFormDataPart("json",jsonObject.toString());

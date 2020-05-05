@@ -18,15 +18,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true"
-        android:requestLegacyExternalStorage="true"
-        >
+        android:requestLegacyExternalStorage="true">
 
+        <activity android:name=".community.activity.PostActivity"></activity>
         <activity android:name=".community.activity.PostCreateActivity"
             android:windowSoftInputMode="adjustResize"></activity>
         <activity android:name=".community.activity.PostUpdateActivity" />
-        <activity android:name=".community.activity.PostActivity" />
+
         <activity android:name=".community.activity.MyGroupActivity" />
         <activity android:name=".community.activity.GroupCreateActivity" />
+
         <activity android:name=".community.activity.ChatingActivity" />
         <activity android:name=".community.activity.InvitingActivity" />
         <activity android:name=".community.activity.ChatServiceActivity" />
@@ -34,6 +35,7 @@
         <activity
             android:name=".community.activity.CommunityMainActivity"
             android:windowSoftInputMode="adjustPan" />
+
         <activity android:name=".mainActivityViwePager.moreViewActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".UploadedFormEditableActivity" />
@@ -47,6 +49,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".service.WordleClickedActivity" />
+        <activity
+            android:name=".service.ServiceTabActivity"
+            android:label="@string/title_activity_service_tab"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ServiceSelectActivicy" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -63,6 +71,33 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service
+            android:name=".widget.WidgetRemoteViewsService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <service
+            android:name=".widget.WidgetUpdateService"
+            android:enabled="true"
+            android:exported="true"/>
+
+        <activity android:name=".widget.WidgetConfigActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
+
+        <receiver android:name=".widget.HomeSurveyWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name=".widget.HomeSurveyWidget.ACTION_REFRESH_PRESSED"/>
+                <action android:name=".widget.HomeSurveyWidget.ACTION_CONFIGURE_FINISHED"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/home_survey_widget_info" />
+        </receiver>
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"

@@ -3,10 +3,25 @@
     <string name="kakao_app_key">053549b2c82731621dbf53e58c360eac</string>
     <string name="drawer_open">open navigation drawer</string>
     <string name="drawer_close">close navigation drawer</string>
-    <string name="baseUrl">http://pjh.cafe24app.com/</string>
+
+    <string name="title_activity_service_tab">ServiceTabActivity</string>
+    <string name="tab_text_1">Wordle</string>
+    <string name="tab_text_2">Blank</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="baseUrl">http://203.229.46.196:8001/</string>
+
     <string name="notification_channel_id">checkmate_msg</string>
     <string name="notification_channel_name">checkmate</string>
+    <string name="appwidget_text">로그인 및 설정이 필요합니다</string>
+    <string name="add_widget">Add widget</string>
+    <string name="widget_set_expectValue">.widget.WidgetConfigActivity.SET_EXPECT_RESPONSE</string>
     <string name="category_spinner">카테고리</string>
+
     <!--http://pjh.cafe24app.com/  -->
     <!--http://192.168.35.42:8001/ -->
+    <!--http://203.229.46.196:8001/ -->
+    <!--http://192.168.0.3:8001/ -->
+
 </resources>
