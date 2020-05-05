@@ -1,11 +1,14 @@
 package com.example.graduationproject.community.model;
 
+import java.util.ArrayList;
+
 public class PostDTO {
     private Integer _id;
     private Integer group_id;
     private String userEmail;
     private String content;
     private String time;
+
 
     public String getUserEmail() {
         return userEmail;
@@ -46,4 +49,6 @@ public class PostDTO {
     public void setTime(String time) {
         this.time = time;
     }
+
+
 }

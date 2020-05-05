@@ -30,6 +30,9 @@ public class FormCopyFactory {
 
     private Uri fileUri;
     private int formComponent_id; // for image
+    private String editYtbURL_text;
+
+    private boolean imagePosted;
 
     public Context getmContext() {
         return mContext;
@@ -86,7 +89,10 @@ public class FormCopyFactory {
     public Uri getFileUri() {return fileUri;}
     public int getFormComponent_id() {return formComponent_id;}
 
-    private FormCopyFactory(Builder builder) {
+    public String getEditYtbURL_text() {return editYtbURL_text;}
+    public boolean isImagePosted() {return imagePosted;}
+
+    private FormCopyFactory(Builder builder) { // 생성자
         this.mContext = builder.mContext;
         this.mType = builder.mType;
         this.editQuestion_text = builder.editQuestion_text;
@@ -105,6 +111,8 @@ public class FormCopyFactory {
 
         this.fileUri = builder.fileUri;
         this.formComponent_id = builder.formComponent_id;
+        this.editYtbURL_text = builder.editYtbURL_text;
+        this.imagePosted = builder.imagePosted;
     }
 
     public FormAbstract createCopyForm() {
@@ -136,6 +144,8 @@ public class FormCopyFactory {
 
             case FormType.IMAGE:
                 return new FormTypeImage(this);
+            case FormType.VIDEO:
+                return new FormTypeVideo(this);
             default:
                 return null;
 
@@ -166,6 +176,9 @@ public class FormCopyFactory {
         Uri fileUri;
         int formComponent_id;
 
+        String editYtbURL_text;
+        boolean imagePosted;
+
         public Builder(Context context, int type) {
             this.mContext = context;
             this.mType = type;
@@ -176,10 +189,6 @@ public class FormCopyFactory {
             return this;
         }
 
-        //        public Builder SpinnerPosition(int spinner_position) {
-//            this.spinner_position = spinner_position;
-//            return this;
-//        }
 
         public Builder Explanation(String editExplanation_text) {
             this.editExplanation_text = editExplanation_text;
@@ -229,6 +238,15 @@ public class FormCopyFactory {
         }
         public Builder FormComponentId(int formComponent_id) { // 사진 URI
             this.formComponent_id = formComponent_id;
+            return this;
+        }
+        public Builder YtbURL(String editYtbURL_text) {
+            this.editYtbURL_text = editYtbURL_text;
+            return this;
+        }
+
+        public Builder ImagePosted(boolean imagePosted) {
+            this.imagePosted = imagePosted;
             return this;
         }
 

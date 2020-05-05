@@ -114,7 +114,7 @@ public class SurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position){
         SurveyDTO vo = datas.get(position);
         ((ViewHolder)holder).txtTitle.setText(vo.getTitle());
-        ((ViewHolder) holder).txtWriterName.setText(MainActivity.getUserName());
+        ((ViewHolder) holder).txtWriterName.setText(vo.getUserEmail().split("@")[0]);
         ((ViewHolder)holder).txtTime.setText(getTime(vo.getTime()));
         ((ViewHolder) holder).txtResponse.setText(vo.getResponse_cnt() + " 참여"); //response
     }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -44,22 +45,45 @@
             android:src="@drawable/delete"/>
 
     </LinearLayout>
-    <Button
-        android:id="@+id/btnImageAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_margin="5dp"
-        android:background="@drawable/border"
-        android:text="이미지"
-        android:textColor="#ffffff"
-        android:backgroundTint="#246CE9"/>
-    <ImageView
-        android:id="@+id/attached_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        >
+        <Button
+            android:id="@+id/btnVideoAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:text="동영상"
+            android:textColor="#ffffff"
+            android:backgroundTint="#246CE9"/>
+
+        <EditText
+            android:id="@+id/editURL"
+            android:layout_width="wrap_content"
+            android:layout_weight="7"
+            android:layout_height="wrap_content"
+            android:hint="YouTube 주소를 복사하세요."
+
+            />
+
+    </LinearLayout>
+
+
+
+    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+        android:id="@+id/youtube_player_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:showFullScreenButton="false"
+        app:enableAutomaticInitialization="false"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
 
 
 </LinearLayout>
+

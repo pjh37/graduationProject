@@ -17,9 +17,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true">
 
         <activity android:name=".community.activity.PostActivity"></activity>
+        <activity android:name=".community.activity.PostCreateActivity"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity android:name=".community.activity.PostUpdateActivity" />
+
         <activity android:name=".community.activity.MyGroupActivity" />
         <activity android:name=".community.activity.GroupCreateActivity" />
 
@@ -50,6 +55,16 @@
             android:label="@string/title_activity_service_tab"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ServiceSelectActivicy" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider" />
+        </provider>
 
         <service android:name=".messageservice.MessagingService">
             <intent-filter>

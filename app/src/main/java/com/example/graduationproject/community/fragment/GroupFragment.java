@@ -14,6 +14,7 @@ import com.example.graduationproject.community.adapter.FriendAdapter;
 import com.example.graduationproject.community.adapter.GroupAdapter;
 import com.example.graduationproject.community.model.FriendDTO;
 import com.example.graduationproject.community.model.GroupDTO;
+import com.example.graduationproject.login.Session;
 import com.example.graduationproject.retrofitinterface.RetrofitApi;
 import com.google.gson.Gson;
 
@@ -69,7 +70,7 @@ public class GroupFragment extends Fragment {
     }
 
     public void findAllGroup(){
-        RetrofitApi.getService().grouptGet(COUNT,offset).enqueue(new retrofit2.Callback<ArrayList<GroupDTO>>(){
+        RetrofitApi.getService().grouptGet(Session.getUserEmail(),COUNT,offset).enqueue(new retrofit2.Callback<ArrayList<GroupDTO>>(){
             @Override
             public void onResponse(Call<ArrayList<GroupDTO>> call, Response<ArrayList<GroupDTO>> response) {
                 if(response.body()!=null){

@@ -52,27 +52,8 @@ public class NetworkManager {
         return networkManager;
     }
 
-//    public  class Request extends AsyncTask<Integer,Integer,Void>{
-//        String userID;
-//        JSONObject jsonObject;
-//        String title;
-//        String description;
-//        public Request(String id,JSONObject jsonObject,String title,String description){
-//            this.userID=id;
-//            this.jsonObject=jsonObject;
-//            this.title=title;
-//            this.description=description;
-//            Log.v("테스트","생성자호출"+id);
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Integer... integers) {
-//            submit(jsonObject);
-//            return null;
-//        }
-//    }
-
     public void submit(JSONObject jsonObject){
+
         Log.v("테스트","서버로 폼 전송 : "+jsonObject.toString());
 
         MultipartBody.Builder builder=new MultipartBody.Builder();
@@ -81,14 +62,14 @@ public class NetworkManager {
         try{
             JSONArray jsonArray=jsonObject.getJSONArray("formComponents");
             for(int i=0;i<jsonArray.length();i++){
-                JSONObject jsonObject1=jsonArray.getJSONObject(i);
+                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
                 // 이미지는 string url 만 보내줘도 된다.
                 // 하지만 웹에서 불러오려면 로컬저장을 해야하기 때문에
                 // 파일도 보내야 한다.
-                if(jsonObject1.getInt("type")== FormType.IMAGE){
-                    File file=(File)jsonObject1.get("real_file_data");
-                    builder.addFormDataPart(String.valueOf(jsonObject1.getInt("real_file_name")),file.getName(), RequestBody.create(file, MediaType.parse("image/jpeg")));
+                if (jsonObject1.getInt("type") == FormType.IMAGE && jsonObject1.getBoolean("posted") == true) {
+                    File file = (File) jsonObject1.get("real_file_data");
+                    builder.addFormDataPart(String.valueOf(jsonObject1.getInt("real_file_name")), file.getName(), RequestBody.create(file, MediaType.parse("image/jpeg")));
                 }
             }
         }catch (Exception e){e.printStackTrace();}
@@ -128,11 +109,11 @@ public class NetworkManager {
         try {
             JSONArray jsonArray = jsonObject.getJSONArray("formComponents");
             for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                JSONObject jsonObject2 = jsonArray.getJSONObject(i);
 
-                if (jsonObject1.getInt("type") == FormType.IMAGE) {
-                    File file = (File) jsonObject1.get("real_file_data");
-                    builder.addFormDataPart(String.valueOf(jsonObject1.getInt("real_file_name")), file.getName(), RequestBody.create(file, MediaType.parse("image/jpeg")));
+                if (jsonObject2.getInt("type") == FormType.IMAGE && jsonObject2.getBoolean("posted") == true) {
+                    File file = (File) jsonObject2.get("real_file_data");
+                    builder.addFormDataPart(String.valueOf(jsonObject2.getInt("real_file_name")), file.getName(), RequestBody.create(file, MediaType.parse("image/jpeg")));
                 }
             }
         } catch (Exception e) {

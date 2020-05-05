@@ -171,7 +171,8 @@ public class UploadedFormEditableActivity extends AppCompatActivity {
         }).start();
 
         okhttp3.Request request=new okhttp3.Request.Builder()
-                .url(getString(R.string.baseUrl)+"deleteform/"+form_id)
+//                .url(getString(R.string.baseUrl)+"deleteform/"+form_id)
+                .url(getString(R.string.baseUrl) + "deleteform/" + form_id+"/"+MainActivity.getUserEmail())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override

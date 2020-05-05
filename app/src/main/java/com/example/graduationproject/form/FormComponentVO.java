@@ -20,6 +20,9 @@ public class FormComponentVO {
     private String beingLabel;
     private String endLabel;
 
+    private String ytburl;
+    private boolean posted;
+
     public String getQuestion() {return question;}
     public void setQuestion(String question) {this.question = question;}
 
@@ -75,4 +78,9 @@ public class FormComponentVO {
     public void setBeingLabel(String beingLabel) {this.beingLabel = beingLabel;}
     public String getEndLabel() {return endLabel;}
     public void setEndLabel(String endLabel) {this.endLabel = endLabel;}
+
+    public String getYtburl() {return ytburl;}
+    public void setYtburl(String ytburl) {this.ytburl = ytburl;}
+    public boolean isPosted() {return posted;}
+    public void setPosted(boolean posted) {this.posted = posted;}
 }

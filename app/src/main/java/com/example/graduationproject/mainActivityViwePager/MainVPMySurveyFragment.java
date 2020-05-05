@@ -203,7 +203,6 @@ public class MainVPMySurveyFragment extends Fragment {
         RequestBody requestbody=new MultipartBody.Builder().
                 setType(MultipartBody.FORM)
                 .addFormDataPart("userEmail", Session.getUserEmail())//userEmail 부분 교체
-//                .addFormDataPart("userEmail", MainActivity.getUserEmail())
                 .build();
         okhttp3.Request request=new okhttp3.Request.Builder()
                 .url(url+"user/forms")
@@ -245,7 +244,7 @@ public class MainVPMySurveyFragment extends Fragment {
 //                        int len=(jsonArray.length()>3) ? 3:jsonArray.length();
                         for(int i=0;i<jsonArray.length();i++){ // 어차피 스크롤 되니까
                             JSONObject jsonObject=jsonArray.getJSONObject(i);
-//                            FormDTO formDTO=gson.fromJson(jsonObject.getString("json"),FormDTO.class);
+//                            old_FormDTO formDTO=gson.fromJson(jsonObject.getString("json"),old_FormDTO.class);
 
                             UploadedSurveyDTO uploadedSurveyDTO=new UploadedSurveyDTO();
                             uploadedSurveyDTO.set_id(jsonObject.getInt("_id"));
@@ -261,8 +260,8 @@ public class MainVPMySurveyFragment extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-//                                uploadedSurveyAdapter=new UploadedSurveyRV(getContext(),userEmail,datas);
-//                                responseWaitSurveyRecycleView.setAdapter(uploadedSurveyAdapter);
+                                uploadedSurveyAdapter=new UploadedSurveyRV(getContext(),datas);
+                                responseWaitSurveyRecycleView.setAdapter(uploadedSurveyAdapter);
                                 Toast.makeText(getActivity(), "설문지들을 불러옵니다.", Toast.LENGTH_SHORT).show(); // work
                                 uploadedSurveyAdapter.setDatas(datas); // 안에다 집어넣어야 하나보다
                             }
@@ -359,13 +358,9 @@ public class MainVPMySurveyFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-//        Log.d("mawang", "MainVPMySurveyFragment onStart -befo datas =  " + datas);
-//        Log.d("mawang", "MainVPMySurveyFragment onStart -befo OFFdatas =  " + items);
         datas.clear();
         items.clear();
 
-//        Log.d("mawang", "MainVPMySurveyFragment onStart -befo uploadedSurveyAdapter datas =  " + uploadedSurveyAdapter.getDatas());
-//        Log.d("mawang", "MainVPMySurveyFragment onStart -befo uploadedSurveyAdapter datas =  " + offlineFormAdapter.getItems());
         uploadedSurveyAdapter.datasClear();
         offlineFormAdapter.ItemsClear();
 
@@ -373,7 +368,17 @@ public class MainVPMySurveyFragment extends Fragment {
         getDraftSurvey(); // work
     }
 
+    public void refreshData(){
+        Log.d("mawang","MainVPMySurveyFragment refreshData called");
+        datas.clear();
+        items.clear();
+        uploadedSurveyAdapter.datasClear();
+        offlineFormAdapter.ItemsClear();
 
+        getResponseWaitSurvey();
+        getDraftSurvey();
+// 삭제는 refresh 바로 해야함
+    }
 
 
 }

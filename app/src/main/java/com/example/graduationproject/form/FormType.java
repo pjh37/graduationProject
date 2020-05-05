@@ -20,4 +20,5 @@ public class FormType {
     public static final int SUBTEXT=11; // 제목 및 설명 추가
 
     public static final int IMAGE=12;
+    public static final int VIDEO=13;
 }

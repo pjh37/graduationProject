@@ -37,19 +37,16 @@ public class IndividualResultRV extends RecyclerView.Adapter<RecyclerView.ViewHo
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
-        Log.d("mawang", "IndividualResultRV onCreateViewHolder - viewType = " + viewType);
 
 
         if(viewType == FormType.ADDSECTION)
         {
-            Log.d("mawang", "IndividualResultRV onCreateViewHolder - ADDSECTION ");
             View sectionView = LayoutInflater.from(mContext).inflate(R.layout.activity_individual_result_item_section, parent, false);
             ViewHolder viewHolder1 = new ViewHolder(sectionView);
             return viewHolder1;
         }
         else if(viewType == FormType.SUBTEXT)
         {
-            Log.d("mawang", "IndividualResultRV onCreateViewHolder - SUBTEXT ");
             View subtextView = LayoutInflater.from(mContext).inflate(R.layout.activity_individual_result_item_subtext, parent, false);
             ViewHolder viewHolder2 = new ViewHolder(subtextView);
 
@@ -57,7 +54,6 @@ public class IndividualResultRV extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
         else
         {
-            Log.d("mawang", "IndividualResultRV onCreateViewHolder - else ");
             View itemView = LayoutInflater.from(mContext).inflate(R.layout.activity_individual_result_item, parent, false);
             ViewHolder viewHolder = new ViewHolder(itemView);
 

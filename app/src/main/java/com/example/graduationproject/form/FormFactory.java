@@ -38,6 +38,9 @@ public class FormFactory {
         else if(mType==FormType.IMAGE){
             return new FormTypeImage(mContext,mType);
         }
+        else if(mType==FormType.VIDEO){ // 변경해야되 fab 로
+            return new FormTypeVideo(mContext,mType);
+        }
         return null;
     }
 

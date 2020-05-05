@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/scroll_view">
 
     <LinearLayout
         android:id="@+id/question_visual"
@@ -19,7 +20,7 @@
             android:stretchColumns="*"
             android:background="#FFFFFF"
             android:visibility="gone"
-            tools:visibility="invisible"
+            tools:visibility="visible"
             >
 
             <TableRow
@@ -43,7 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="1dp"
-                    android:text="보기 내용"
+                    android:text="보기"
                     android:background="#CCCCCC"
                     android:textSize="17dp"
                     android:padding="3dp"
@@ -51,11 +52,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="응답 수 (응답률)"
+                    android:text="응답수"
                     android:background="#CCCCCC"
                     android:textSize="17dp"
                     android:padding="3dp"
                     android:gravity="center_horizontal"/>
+                <!--                android:text="응답 수 (응답률)"-->
             </TableRow>
         </TableLayout>
 
@@ -121,19 +123,19 @@
             android:layout_marginTop="10dp"
             android:background="#FFFFFF"
             android:visibility="gone"
-            tools:visibility="invisible"
+            tools:visibility="visible"
             >
         </com.github.mikephil.charting.charts.PieChart>
-
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/barchart"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginTop="10dp"
+            android:padding="10dp"
             android:background="#FFFFFF"
             android:visibility="gone"
-            tools:visibility="invisible"
+            tools:visibility="visible"
             >
         </com.github.mikephil.charting.charts.BarChart>
 
