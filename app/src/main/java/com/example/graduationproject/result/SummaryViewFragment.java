@@ -1,11 +1,17 @@
 package com.example.graduationproject.result;
 
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -16,11 +22,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
@@ -165,51 +173,22 @@ public class SummaryViewFragment extends Fragment {
     }
 
     public void layoutToPartImage() {
-        linearLayout = (LinearLayout) v.findViewById(R.id.transfer_layout);
+        ScrollView scrollView = (ScrollView) v.findViewById(R.id.scroll_view);
 
         // 비트맵 작업
-        Bitmap bm = Bitmap.createBitmap(linearLayout.getWidth(), linearLayout.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bm);
-        Drawable bgDrawable = linearLayout.getBackground();
+        Bitmap bitmap = Bitmap.createBitmap(scrollView.getChildAt(0).getWidth(), scrollView.getChildAt(0).getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Drawable bgDrawable = scrollView.getBackground();
 
-        if (bgDrawable != null)
+        if(bgDrawable != null)
             bgDrawable.draw(canvas);
         else
             canvas.drawColor(Color.WHITE);
 
-        linearLayout.draw(canvas);
+        scrollView.draw(canvas);
 
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-
-//        linearLayout = (LinearLayout) v.findViewById(R.id.transfer_layout);
-////        Bitmap bm = Bitmap.createBitmap(linearLayout.getWidth(), linearLayout.getHeight(), Bitmap.Config.ARGB_8888);
-//        Bitmap bm = Bitmap.createBitmap(linearLayout.getChildAt(1).getWidth(), linearLayout.getChildAt(1).getHeight(), Bitmap.Config.ARGB_8888);
-//
-//
-////        ScrollView iv = (ScrollView) v.findViewById(R.id.scroll_view);
-////        Bitmap bm = Bitmap.createBitmap(iv.getChildAt(0).getWidth(), iv.getChildAt(0).getHeight(), Bitmap.Config.ARGB_8888);
-//
-//        Canvas canvas = new Canvas(bm);
-////        Drawable bgDrawable = linearLayout.getBackground();
-//        Drawable bgDrawable = linearLayout.getChildAt(1).getBackground();
-////        Drawable bgDrawable = iv.getChildAt(0).getBackground();
-//
-//        if(bgDrawable != null)
-//            bgDrawable.draw(canvas);
-//        else
-//            canvas.drawColor(Color.WHITE);
-//
-////        linearLayout.draw(canvas);
-//        linearLayout.getChildAt(1).draw(canvas);
-////        iv.getChildAt(0).draw(canvas);
-//
-//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//        bm.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-
-
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
         String sdPath = Environment.getExternalStorageDirectory() + File.separator + "설문_" + title;
 
@@ -230,6 +209,26 @@ public class SummaryViewFragment extends Fragment {
 
                 FileOutputStream fo = new FileOutputStream(f2);
                 fo.write(bytes.toByteArray());
+
+                // 상태바에 다운로드되었다는 알림 표시 및 클릭하면 해당 파일 실행
+//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(f2.getAbsoluteFile()));
+                Intent intent = new Intent(f2.getAbsolutePath());
+                PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "file_download")
+                        .setSmallIcon(R.drawable.ic_download)
+                        .setContentTitle("(다운로드) " + "image" + file_count + ".jpg")
+                        .setContentText(sdPath + " 위치에 다운로드 완료")
+                        .setAutoCancel(true)
+                        .setVibrate(new long[]{0, 2000})
+                        .setContentIntent(pendingIntent);
+
+                NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    notificationManager.createNotificationChannel(new NotificationChannel("file_download", "channel_download", NotificationManager.IMPORTANCE_DEFAULT));
+                }
+
+                notificationManager.notify(1, builder.build());
             } else { // 이미지 파일이 존재하는 경우, 가장 끝번호 파일+1 의 이미지 생성
                 File[] created_file = f1.listFiles();
 
@@ -248,6 +247,24 @@ public class SummaryViewFragment extends Fragment {
 
                 FileOutputStream fo = new FileOutputStream(f3);
                 fo.write(bytes.toByteArray());
+
+                // 상태바에 다운로드되었다는 알림 표시 및 클릭하면 해당 파일 실행
+                Intent intent = new Intent(f3.getAbsolutePath());
+                PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, 0);
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "file_download")
+                        .setSmallIcon(R.drawable.ic_download)
+                        .setContentTitle("(다운로드) " + "image" + (last_num+1) + ".jpg")
+                        .setContentText(sdPath + " 위치에 다운로드 완료")
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent);
+
+                NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    notificationManager.createNotificationChannel(new NotificationChannel("file_download", "channel_download", NotificationManager.IMPORTANCE_DEFAULT));
+                }
+
+                notificationManager.notify(1, builder.build());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -259,13 +276,15 @@ public class SummaryViewFragment extends Fragment {
             // 설문 항목 폴더에 있는 이미지들을 PDF로 통합해서 생성
             String sdPath = Environment.getExternalStorageDirectory() + File.separator + "설문_" + title;
 
+            File f2 = new File(sdPath + File.separator + title + ".pdf");
+
             File image_file = new File(sdPath);
             File[] to_file = image_file.listFiles();
 
-            String path_str1 = to_file[0].toString().replace(sdPath + File.separator + "image", "");
+//            String path_str1 = to_file[0].toString().replace(sdPath + File.separator + "image", "");
 
             Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream(sdPath + File.separator + title + ".pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream(f2));
             document.open();
 
             for(int i=0; i<to_file.length; i++) {
@@ -273,14 +292,34 @@ public class SummaryViewFragment extends Fragment {
 
                 Image image = Image.getInstance(sdPath + File.separator + "image" + path_str);
 
-                float scaler = ((document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin() - 0) / image.getWidth()) * 100;
-                image.scalePercent(scaler);
+                float documentWidth = document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin();
+                float documentHeight = document.getPageSize().getHeight() - document.topMargin() - document.bottomMargin();
+
+                image.scaleToFit(documentWidth, documentHeight);
                 image.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
+
                 document.add(image);
             }
             document.close();
 
-            Toast.makeText(getContext(), "PDF 생성 완료", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(f2.getAbsolutePath());
+            PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, 0);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "file_download")
+                    .setSmallIcon(R.drawable.ic_download)
+                    .setContentTitle("(다운로드) " + title + ".pdf")
+                    .setContentText(sdPath + " 위치에 다운로드 완료")
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent);
+
+            NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                notificationManager.createNotificationChannel(new NotificationChannel("file_download", "channel_download", NotificationManager.IMPORTANCE_DEFAULT));
+            }
+
+            notificationManager.notify(1, builder.build());
+
+            Toast.makeText(getContext(), title + ".pdf 생성 완료", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -331,7 +370,7 @@ public class SummaryViewFragment extends Fragment {
         OkHttpClient client = new OkHttpClient();
         RequestBody requestbody = new MultipartBody.Builder().
                 setType(MultipartBody.FORM)
-                //.addFormDataPart("userEmail", MainActivity.getUserEmail())
+                .addFormDataPart("userEmail", MainActivity.getUserEmail())
                 .addFormDataPart("form_id", String.valueOf(form_id))
                 .build();
         okhttp3.Request request = new okhttp3.Request.Builder()
