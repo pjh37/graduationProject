@@ -357,16 +357,19 @@ public class GraphFragment extends Fragment {
                         replyTotalNum += n;
                     }
 
+                    int count = 1;
+
                     for (int k = begin; k < end + 1; k++) {
                         TableRow tr = new TableRow(getContext());
                         tr.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
 
                         for (int l = 0; l < 3; l++) {
                             if (l == 0) {
-                                textView[k][l].setText("" + k);
+                                textView[k][l].setText("" + count);
                                 tr.addView(textView[k][l]);
+                                count++;
                             } else if (l == 1) {
-                                textView[k][l].setText("");
+                                textView[k][l].setText("" + k);
                                 tr.addView(textView[k][l]);
                             } else {
 //                                double calc_resrate = (double) arr[k] / check_count;
