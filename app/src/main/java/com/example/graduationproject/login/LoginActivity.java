@@ -8,15 +8,18 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -54,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnGoSurvey;
     private Button btnGoCommunity;
     private SignInButton btnLogin;
+    private Button btnExit;
     private LinearLayout autoLogin;
     private String userEmail;
     private String userName;
@@ -75,6 +79,10 @@ public class LoginActivity extends AppCompatActivity {
         btnGoSurvey=(Button)findViewById(R.id.btnGoSurvey);
         btnGoCommunity=(Button)findViewById(R.id.btnGoCommunity);
         btnLogin=(SignInButton)findViewById(R.id.sign_in_button);
+
+        btnExit=(Button)findViewById(R.id.btn_exit);
+//        btnExit.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exit, 0, 0, 0);
+
         autoLogin=(LinearLayout)findViewById(R.id.autoLogin);
         btnGoSurvey.setVisibility(View.GONE);
         btnGoCommunity.setVisibility(View.GONE);
@@ -152,6 +160,9 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.btnGoCommunity:
                 goToCommunity();
                 break;
+            case R.id.btn_exit:
+                goToExit();
+                break;
         }
     }
     @Override
@@ -216,6 +227,7 @@ public class LoginActivity extends AppCompatActivity {
         btnGoSurvey.setVisibility(View.VISIBLE);
         btnGoCommunity.setVisibility(View.VISIBLE);
         btnLogin.setVisibility(View.GONE);
+        btnExit.setVisibility(View.GONE);
         autoLogin.setVisibility(View.GONE);
         RetrofitApi.getService().userRegister(Session.getUserEmail()).enqueue(new retrofit2.Callback<Boolean>(){
             @Override
@@ -244,6 +256,14 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtra("userImage",Session.getUserImage());
         startActivity(intent);
     }
+
+    // 로그인 안하고 종료
+    private void goToExit() {
+        moveTaskToBack(true);
+        finish();
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
     private void saveLoginInfo(String userEmail,String userName,Uri userImage){
         SharedPreferences login_info=getSharedPreferences("loginConfig",0);
         SharedPreferences.Editor editor=login_info.edit();
