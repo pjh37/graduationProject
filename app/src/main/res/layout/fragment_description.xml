@@ -2,8 +2,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/scroll_view">
+    android:layout_height="match_parent">
 
     <LinearLayout
 
@@ -191,59 +190,73 @@
 
 
 
-        <LinearLayout
-            android:id="@+id/hashtags"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
+        <!--    <LinearLayout-->
+        <!--        android:id="@+id/hashtags"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:gravity="center"-->
+        <!--        android:orientation="vertical"-->
 
-            >
-            <TextView
-                android:text="해시태그"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+        <!--        >-->
+        <!--        <TextView-->
+        <!--            android:text="해시태그"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
 
-                android:textColor="#FFFFFF"
-                android:background="#888888"
-                android:textSize="15dp"
-                android:padding="10dp"
-                android:gravity="center_horizontal"/>
-        </LinearLayout>
+        <!--            android:textColor="#FFFFFF"-->
+        <!--            android:background="#888888"-->
+        <!--            android:textSize="15dp"-->
+        <!--            android:padding="10dp"-->
+        <!--            android:gravity="center_horizontal"/>-->
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_centerInParent="true"
-            android:background="#CCCCCC"
-            android:layout_marginTop="10dp"
-            />
 
-        <LinearLayout
-            android:id="@+id/replys"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
+        <!--    </LinearLayout>-->
 
-            >
-            <TextView
-                android:text="댓글"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
 
-                android:textColor="#FFFFFF"
-                android:background="#888888"
-                android:textSize="15dp"
-                android:padding="10dp"
-                android:gravity="center_horizontal"/>
-        </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_centerInParent="true"
-            android:background="#CCCCCC"
-            android:layout_marginTop="20dp"/>
+        <!--    <View-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="2dp"-->
+        <!--        android:layout_centerInParent="true"-->
+        <!--        android:background="#CCCCCC"-->
+        <!--        android:layout_marginTop="10dp"-->
+        <!--        />-->
+
+        <!--    <LinearLayout-->
+        <!--        android:id="@+id/replys"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:gravity="center"-->
+        <!--        android:orientation="vertical"-->
+
+        <!--        >-->
+        <!--        <TextView-->
+        <!--            android:text="댓글"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+
+        <!--            android:textColor="#FFFFFF"-->
+        <!--            android:background="#888888"-->
+        <!--            android:textSize="15dp"-->
+        <!--            android:padding="10dp"-->
+        <!--            android:gravity="center_horizontal"/>-->
+
+
+        <!--    </LinearLayout>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </LinearLayout>
 </ScrollView>

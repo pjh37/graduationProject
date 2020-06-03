@@ -35,6 +35,7 @@ public class MyGroupActivity extends AppCompatActivity {
         adapter=new MyGroupAdapter(this,datas);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
         getMyGroup();
     }
     public void getMyGroup(){

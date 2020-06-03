@@ -116,8 +116,8 @@ public class OfflineFormRVAdapter extends RecyclerView.Adapter<RecyclerView.View
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    Log.d("mawang", "UploadedFormEditableActivity editRequest Error = " + e.toString());
-                    Log.d("mawang", "UploadedFormEditableActivity editRequest Error = " + e.getMessage());
+                    Log.d("mawang", "old_UploadedFormEditableActivity editRequest Error = " + e.toString());
+                    Log.d("mawang", "old_UploadedFormEditableActivity editRequest Error = " + e.getMessage());
                     e.printStackTrace();
                 }
 

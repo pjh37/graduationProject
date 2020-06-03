@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.graduationproject.R;
 import com.example.graduationproject.community.activity.GroupCreateActivity;
@@ -36,9 +37,11 @@ public class GroupFragment extends Fragment {
     Button btnGroupCreate;
     Button btnCategory;
     Button btnMyGroup;
+    //TextView tvCategory;// for later
 
     RecyclerView recyclerView;
     GroupAdapter adapter;
+
 
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<GroupDTO> datas;
@@ -63,11 +66,11 @@ public class GroupFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        findAllGroup();
-    }
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        findAllGroup();
+//    }
 
     public void findAllGroup(){
         RetrofitApi.getService().grouptGet(Session.getUserEmail(),COUNT,offset).enqueue(new retrofit2.Callback<ArrayList<GroupDTO>>(){
@@ -93,7 +96,7 @@ public class GroupFragment extends Fragment {
                     break;
                 }
                 case R.id.btnCategory:{
-
+                    Toast.makeText(getContext(),"btnCategory",Toast.LENGTH_SHORT).show();
                     break;
                 }
                 case R.id.btnMyGroup:{
@@ -104,4 +107,15 @@ public class GroupFragment extends Fragment {
             }
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        datas.clear();
+        adapter.datasClear();
+        findAllGroup();
+//        Log.d("mawang","GroupFragment onResume - 짠");
+    }
+
 }

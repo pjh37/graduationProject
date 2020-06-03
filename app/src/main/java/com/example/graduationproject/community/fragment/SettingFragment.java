@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -19,6 +20,7 @@ import com.example.graduationproject.community.adapter.FriendAdapter;
 import com.example.graduationproject.community.model.FriendDTO;
 import com.example.graduationproject.login.Session;
 import com.example.graduationproject.retrofitinterface.RetrofitApi;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -38,15 +40,20 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SettingFragment extends Fragment {
-    static final int PICK_FROM_ALBUM=1;
-    static final int SETTING_FRAGMENT_FRIEND_ADAPTER=0;
+    static final int PICK_FROM_ALBUM = 1;
+    static final int SETTING_FRAGMENT_FRIEND_ADAPTER = 0;
+
     ImageView profileImage;
     ImageView imageAdd;
+    TextView friendCount;
+    TextView findFriend;
+
     RecyclerView recyclerView;
     FriendAdapter adapter;
 
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<FriendDTO> datas;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,6 +61,10 @@ public class SettingFragment extends Fragment {
         profileImage=(ImageView)rootView.findViewById(R.id.profile_image);
         imageAdd=(ImageView)rootView.findViewById(R.id.imageAdd);
         imageAdd.setOnClickListener(new ClickListener());
+
+        friendCount = rootView.findViewById(R.id.tvFriendCnt);
+        findFriend = rootView.findViewById(R.id.tvFindFriend);
+        findFriend.setOnClickListener(new ClickListener());
 
         recyclerView=(RecyclerView)rootView.findViewById(R.id.recyclerView);
         datas=new ArrayList<>();
@@ -134,12 +145,18 @@ public class SettingFragment extends Fragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-                case R.id.imageAdd:{
-                    Intent intent=new Intent(Intent.ACTION_PICK);
+                case R.id.imageAdd:
+                    Intent intent = new Intent(Intent.ACTION_PICK);
                     intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
                     startActivityForResult(intent, PICK_FROM_ALBUM);
+
+//                    Snackbar.make(getView(),"imageAdd.",Snackbar.LENGTH_LONG).show();
+
                     break;
-                }
+
+                case R.id.tvFindFriend:
+                    Snackbar.make(getView(),"tvFindFriend.",Snackbar.LENGTH_LONG).show();
+                    break;
             }
         }
     }

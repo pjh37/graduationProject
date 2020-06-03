@@ -147,7 +147,7 @@ public class FormTypeLinear extends FormAbstract{
         mSwitch.setChecked(vo.isRequired_switch());
 
         beginSpinner.setSelection(vo.getBeginIndex());
-        endSpinner.setSelection(vo.getEndIndex());
+        endSpinner.setSelection(vo.getEndIndex()-2); // 위에서 +2를 하니 밑에서 -2를 해야함
         beginLabel.setText(vo.getBeingLabel());
         endLabel.setText(vo.getEndLabel());
     }

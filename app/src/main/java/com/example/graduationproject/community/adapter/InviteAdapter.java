@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.graduationproject.R;
+import com.example.graduationproject.community.fragment.FriendFragment;
 import com.example.graduationproject.community.model.FriendDTO;
 import com.example.graduationproject.login.Session;
 import com.example.graduationproject.retrofitinterface.RetrofitApi;
@@ -56,7 +57,9 @@ public class InviteAdapter extends RecyclerView.Adapter<InviteAdapter.InviteHold
         }
         holder.btnGrant.setOnClickListener(new InviteAdapter.ClickListener(holder,items.get(position).getUserEmail()));
         holder.btnReject.setOnClickListener(new InviteAdapter.ClickListener(holder,items.get(position).getUserEmail()));
-        holder.userEmail.setText(items.get(position).getUserEmail().split("@")[0]);
+
+//        holder.userEmail.setText(items.get(position).getUserEmail().split("@")[0]);
+        holder.userEmail.setText(items.get(position).getUserNickname()); // 닉네임
     }
 
     @Override
@@ -76,12 +79,15 @@ public class InviteAdapter extends RecyclerView.Adapter<InviteAdapter.InviteHold
         ImageView profileImage;
         Button btnGrant;
         Button btnReject;
+        //        TextView requestTime;
+
         InviteHolder(View itemView){
             super(itemView);
             profileImage=(ImageView)itemView.findViewById(R.id.profile_image);
             userEmail=(TextView)itemView.findViewById(R.id.userEmail);
             btnGrant=(Button)itemView.findViewById(R.id.btnGrant);
             btnReject=(Button)itemView.findViewById(R.id.btnReject);
+            //            requestTime=(TextView)itemView.findViewById(R.id.requestTime);
         }
     }
     class ClickListener implements View.OnClickListener{
@@ -95,13 +101,21 @@ public class InviteAdapter extends RecyclerView.Adapter<InviteAdapter.InviteHold
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.btnGrant:{
-                    update(1);
+                    update(FriendFragment.FRIENDSTATEACCEPT);
                     holder.userEmail.append(" 님과 친구가 되었습니다.");
+
+                    // 중복 클릭 방지
+                    holder.btnGrant.setVisibility(View.GONE);
+                    holder.btnReject.setVisibility(View.GONE);
                     break;
                 }
                 case R.id.btnReject:{
-                    update(0);
+                    update(FriendFragment.FRIENDSTATEREJECT);
                     holder.userEmail.append(" 님을 거절했습니다.");
+
+                    // 중복 클릭 방지
+                    holder.btnGrant.setVisibility(View.GONE);
+                    holder.btnReject.setVisibility(View.GONE);
                     break;
                 }
             }

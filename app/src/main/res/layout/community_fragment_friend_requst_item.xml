@@ -1,24 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/normal_border"
     android:backgroundTint="#ffffff"
     android:layout_margin="10dp">
+
     <ImageView
         android:id="@+id/profile_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="#FFFFFF"
+
+        android:src="@drawable/tmp_mymymy"
+        android:scaleType="fitCenter"
         />
+
     <TextView
         android:id="@+id/userEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+
         android:layout_toRightOf="@id/profile_image"
-        android:text="defalut"
+        android:text="Nickname"
         android:textColor="#0A0A0A"/>
+    <TextView
+        android:id="@+id/requestTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+
+        android:layout_toRightOf="@id/profile_image"
+        android:layout_below="@id/userEmail"
+        android:layout_above="@id/btnGrant"
+
+        android:text="Time"
+        android:textColor="#0A0A0A"/>
+
     <Button
         android:id="@+id/btnGrant"
         android:layout_width="wrap_content"

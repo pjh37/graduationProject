@@ -17,16 +17,23 @@ public class Session extends Application {
     private static String userImage;
 
 
+
+    private static Uri userImage_uri;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
 
     }
-    public void setSession( String userEmail, String userName, String userImage){
+    public void setSession( String userEmail, String userName, String userImage,Uri userImage_uri){
         this.userEmail=userEmail;
         this.userName=userName;
         this.userImage=userImage;
+        this.userImage_uri=userImage_uri;
     }
+
+
     public void messageServiceStart(){
         Intent intent=new Intent(this, MessagingService.class);
         intent.putExtra("userEmail",userEmail);
@@ -58,6 +65,9 @@ public class Session extends Application {
     public static String getUserImage() {
         return userImage;
     }
+
+    public static Uri getUserImage_uri() {return userImage_uri;}
+    public static void setUserImage_uri(Uri userImage_uri) {Session.userImage_uri = userImage_uri;}
 
     public static String getTime(){
         long now=Long.valueOf(String.valueOf(System.currentTimeMillis()));

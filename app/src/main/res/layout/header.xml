@@ -12,11 +12,11 @@
         android:layout_width="100dp"
         android:layout_height="0dp"
         android:layout_weight="0.8"
-        android:layout_margin="10dp"
         android:id="@+id/imvUserImg"
-        android:src="@drawable/graph"
+        android:src="@drawable/tmp_mymymy"
         android:layout_gravity="center"
         android:scaleType="fitXY"
+        android:layout_margin="5dp"
         />
     <TextView
         android:id="@+id/txtUserID"
@@ -24,8 +24,9 @@
         android:layout_height="0dp"
         android:layout_weight="0.2"
         android:background="#393A3C"
-        android:text="unprepared"
+        android:text="사용자 닉네임"
         android:textColor="#ffffff"
         android:textSize="15dp"
-        android:padding="10dp"/>
+        android:padding="5dp"
+        />
 </LinearLayout>

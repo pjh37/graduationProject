@@ -1,6 +1,7 @@
 package com.example.graduationproject.login;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -9,6 +10,7 @@ import retrofit2.Response;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -59,9 +61,6 @@ public class LoginActivity extends AppCompatActivity {
     private SignInButton btnLogin;
     private Button btnExit;
     private LinearLayout autoLogin;
-    private String userEmail;
-    private String userName;
-    private String userImage;
     boolean fileReadPermission;
     boolean fileWritePermission;
     boolean internetPermission;
@@ -130,14 +129,7 @@ public class LoginActivity extends AppCompatActivity {
         if(mPref.getBoolean("isAutoLogin",false)){
             chkAutoLogin.setChecked(true);
         }
-        // 로그인 누르기전에 실행되서,, null 값이다.
-//        userEmail=session.getUserEmail();
-//        userName=session.getUserName();
-//        userImage=session.getUserImage();
-//
-//        Log.d("mawang", "LoginActivity onStart - userEmail = "+userEmail);
-//        Log.d("mawang", "LoginActivity onStart - userName = "+userName);
-//        Log.d("mawang", "LoginActivity onStart - userImage = "+userImage);
+
     }
 
     public void onClick(View v){
@@ -160,9 +152,9 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.btnGoCommunity:
                 goToCommunity();
                 break;
-            case R.id.btn_exit:
-                goToExit();
-                break;
+//            case R.id.btn_exit:
+//                goToExit();
+//                break;
         }
     }
     @Override
@@ -198,15 +190,10 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user=firebaseAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
 
-                            session.setSession(user.getEmail(),user.getDisplayName(),String.valueOf(user.getPhotoUrl()));
+                            session.setSession(user.getEmail(),user.getDisplayName(),String.valueOf(user.getPhotoUrl()),user.getPhotoUrl());
                             saveLoginInfo(user.getEmail(),user.getDisplayName(),user.getPhotoUrl());
                             session.messageServiceStart();
                             loginSuccess();
-
-                            // 로그인 후에 해야 값이 온다.
-                            userEmail= session.getUserEmail();
-                            userName= session.getUserName();
-                            userImage= session.getUserImage();
 
                             //위젯 로그인용
                             widgetLoginEdit.putString("LoginID",user.getEmail());
@@ -244,25 +231,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private void goToSurvey(){
         Intent intent=new Intent(LoginActivity.this, MainActivity.class); // new
-        intent.putExtra("userEmail",Session.getUserEmail());
-        intent.putExtra("userName",Session.getUserName());
-        intent.putExtra("userImage",Session.getUserImage());
         startActivity(intent);
     }
     private void goToCommunity(){
         Intent intent=new Intent(LoginActivity.this, CommunityMainActivity.class); // new
-        intent.putExtra("userEmail",Session.getUserEmail());
-        intent.putExtra("userName",Session.getUserName());
-        intent.putExtra("userImage",Session.getUserImage());
         startActivity(intent);
     }
 
-    // 로그인 안하고 종료
-    private void goToExit() {
-        moveTaskToBack(true);
-        finish();
-        android.os.Process.killProcess(android.os.Process.myPid());
-    }
+
 
     private void saveLoginInfo(String userEmail,String userName,Uri userImage){
         SharedPreferences login_info=getSharedPreferences("loginConfig",0);
@@ -272,4 +248,30 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("userImage",String.valueOf(userImage));
         editor.commit();
     }
+
+    @Override
+    public void onBackPressed() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("저장").setMessage("앱을 종료하시겠습니까?");
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {}
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    // 로그인 안하고 종료
+//    private void goToExit() {
+//        moveTaskToBack(true);
+//        finish();
+//        android.os.Process.killProcess(android.os.Process.myPid());
+//    }
 }

@@ -58,7 +58,7 @@
                     android:id="@+id/recommand_group_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="모든 그룹"
+                    android:text="참여하지 않은 그룹들"
                     android:textStyle="bold"
                     android:textSize="18dp"/>
                 <androidx.recyclerview.widget.RecyclerView

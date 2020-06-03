@@ -36,7 +36,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     private ArrayList<CommentDTO> items;
     private Context mContext;
     private View itemView;
-    private boolean isDeleted = false;
+//    private boolean isDeleted = false;
     private OnItemClick mCallback;
 
     private final static int COUNT = 5;
@@ -67,11 +67,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
         }
+
         holder.userEmail.setText(items.get(position).getUserEmail().split("@")[0]);
+//        holder.userEmail.setText(items.get(position).getNickname());
+
         holder.time.setText(getTime(items.get(position).getTime()));
         holder.content.setText(items.get(position).getContent());
 
-        loadComment(holder.adapter, items.get(holder.getAdapterPosition()).get_id());
+        loadCommentReply(holder.adapter, items.get(holder.getAdapterPosition()).get_id());
     }
 
     @Override
@@ -93,7 +96,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         TextView userEmail;
         TextView time;
         TextView content;
-        Button delButton;
+
+        //        Button delButton;
+        TextView delButton;
+
         RecyclerView replyRV;
         CommentReplyAdapter adapter;
 
@@ -105,7 +111,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             userEmail=(TextView)view.findViewById(R.id.comment_id);
             time=(TextView)view.findViewById(R.id.comment_time);
             content=(TextView)view.findViewById(R.id.comment_text);
-            delButton=(Button)view.findViewById(R.id.comment_del);
+
+            delButton=view.findViewById(R.id.comment_del);
+
             commentObject = (LinearLayout)view.findViewById(R.id.comment_object);
             replyRV = (RecyclerView)view.findViewById(R.id.commentReply_rv);
 
@@ -118,9 +126,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             commentObject.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Toast.makeText(mContext, Integer.toString(getAdapterPosition()), Toast.LENGTH_LONG).show();
                     mCallback.onPostObjectClick(items.get(getAdapterPosition()).get_id(), PostActivity.COMMENT_REPLY);
-                    mCallback.getTargetUserEmail(items.get(getAdapterPosition()).getUserEmail());
+                    mCallback.setTargetUserEmail(items.get(getAdapterPosition()).getUserEmail());
+                    mCallback.setTargetNickname(items.get(getAdapterPosition()).getNickname());
                 }
             });
 
@@ -139,12 +147,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     public String getTime(String str){
         long now=Long.valueOf(str);
         Date date=new Date(now);
-        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy MM월 dd일");
+//        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy MM월 dd일");
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = simpleDate.format(date);
         return time;
     }
 
-    public void loadComment(CommentReplyAdapter adapter, int post_id){
+    public void loadCommentReply(CommentReplyAdapter adapter, int post_id){
         RetrofitApi.getService().getReply(post_id,COUNT,offset).enqueue(new retrofit2.Callback<ArrayList<CommentReplyDTO>>(){
             @Override
             public void onResponse(Call<ArrayList<CommentReplyDTO>> call, Response<ArrayList<CommentReplyDTO>> response) {

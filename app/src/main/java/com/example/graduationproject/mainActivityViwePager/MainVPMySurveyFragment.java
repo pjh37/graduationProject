@@ -50,12 +50,9 @@ public class MainVPMySurveyFragment extends Fragment {
     OfflineFormRVAdapter offlineFormAdapter; //    RecyclerView.Adapter offlineFormAdapter;
     UploadedSurveyRV uploadedSurveyAdapter; //    RecyclerView.Adapter uploadedSurveyAdapter;
 
-//    private RecyclerView.LayoutManager layoutManager;
     private TextView txtMoreOfflineView;
     private TextView txtMoreMySurveyView;
 
-//    private FormSaveManager formSaveManager;
-//    public String userEmail;
     private String url;
     private ProgressBar progressBar;
     private boolean isFinish;
@@ -68,9 +65,6 @@ public class MainVPMySurveyFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         isFinish=false;
-        //        if (getArguments() != null) { // 여기서 이메일 받는군
-//            this.userEmail = getArguments().getString("userEmail");
-//        }
         url = getString(R.string.baseUrl);
         datas = new ArrayList<>();
         items = new ArrayList<>();

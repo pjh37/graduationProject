@@ -78,6 +78,11 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupHolder>
         this.items.addAll(position,datas);
         notifyItemRangeChanged(position,datas.size());
     }
+    public void datasClear() { // 삭제 즉각 반영
+        items.clear();
+        notifyDataSetChanged();
+//        Log.d("mawang", "GroupAdapter datasClear - called");
+    }
 
     class GroupHolder extends RecyclerView.ViewHolder{
         TextView title;
@@ -104,15 +109,17 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupHolder>
         public void onClick(View view) {
             if(holder.btnJoin.getText().equals("가입")){
                 //공개, 비공개 그룹인지 확인
-                //비공개일 경우 비밀번호를 입력하는 다이얼로그 창 열기
                 if(items.get(position).getAuthority()==PRIVATE){
+                    //비공개일 경우 비밀번호를 입력하는 다이얼로그 창 열기
                     privateJoinDialog(position,holder);
 
-                }else{
+                }else{ // PUBLIC
                     groupJoin(items.get(position).get_id());
+                    holder.btnJoin.setText("참여중"); // 어차피 안보이니까 이미 참여했다면
                 }
             }else{
-                holder.btnJoin.setText("가입");
+//                holder.btnJoin.setText("가입");
+                Toast.makeText(mContext,"이미 가입하신 그룹입니다.",Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -161,7 +168,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupHolder>
             public void onResponse(Call<RetrofitResponse> call, @NonNull Response<RetrofitResponse> response) {
                 if(response.body()!=null){
                     if(response.body().isRight()){
-                        holder.btnJoin.setText("탈퇴");
+//                        holder.btnJoin.setText("탈퇴");
+                        //holder.btnJoin.setText("참여중"); // 어차피 안보이니까 이미 참여했다면
+
                         items.remove(holder);
                         notifyItemRemoved(holder.getAdapterPosition());
                         Toast.makeText(mContext,"가입완료",Toast.LENGTH_SHORT).show();

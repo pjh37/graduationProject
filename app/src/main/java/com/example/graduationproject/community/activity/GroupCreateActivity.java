@@ -40,15 +40,19 @@ public class GroupCreateActivity extends AppCompatActivity{
     private static final int PICK_FROM_ALBUM=1;
     private static final int PUBLIC=0;
     private static final int PRIVATE=1;
+
     private boolean radioCheck=false;
     private boolean btnPublic;
     private boolean btnPrivate;
+    private boolean coverImgCheck=false;
+
     private Spinner spinner;
     private EditText title;
     private EditText description;
     private EditText groupPassword;
     private RadioGroup radioGroup;
     private Button btnGroupCreate;
+
     private ImageView coverImage;
     LinearLayout addCoverImage;
 
@@ -57,6 +61,7 @@ public class GroupCreateActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_create);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Forms");
         setSupportActionBar(toolbar);
@@ -70,6 +75,7 @@ public class GroupCreateActivity extends AppCompatActivity{
         spinner=(Spinner)findViewById(R.id.categoryMenu);
         title=(EditText)findViewById(R.id.editGroupTitle);
         description=(EditText)findViewById(R.id.editGroupDescription);
+
         groupPassword=(EditText)findViewById(R.id.groupPassword);
         groupPassword.setVisibility(View.GONE);
 
@@ -89,6 +95,9 @@ public class GroupCreateActivity extends AppCompatActivity{
                     Intent intent=new Intent(Intent.ACTION_PICK);
                     intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
                     startActivityForResult(intent, PICK_FROM_ALBUM);
+
+                    coverImgCheck = true;
+
                     break;
                 }
                 case R.id.btnGroupCreate:{
@@ -96,7 +105,7 @@ public class GroupCreateActivity extends AppCompatActivity{
 
                     if(inputCheck()){
                         groupCreate(dataParse());
-                        finish();
+                        //                        finish(); // 여기서 끝내면 GroupFragment findAllGroup 과 동시에 진행되서 서버 렉 걸림
                     }
                     break;
                 }
@@ -126,6 +135,7 @@ public class GroupCreateActivity extends AppCompatActivity{
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                 Log.v("그룹생성테스트","response");
+                finish(); // 생성 후에 GroupFragment 가 findAllGroup 할 수 있게 하자.
             }
             @Override
             public void onFailure(Call<Boolean> call, Throwable t) {
@@ -149,6 +159,11 @@ public class GroupCreateActivity extends AppCompatActivity{
         }
         if(btnPrivate&&groupPassword.getText().toString().equals("")){
             Toast.makeText(this,"비공개일경우 비밀번호필수",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        // 이미지를 첨부해야 db쪽에서 저장이 된다.
+        if(!coverImgCheck){
+            Toast.makeText(this,"커버이미지를 첨부하세요.",Toast.LENGTH_SHORT).show();
             return false;
         }
 

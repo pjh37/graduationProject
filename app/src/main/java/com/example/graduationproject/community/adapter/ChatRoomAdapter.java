@@ -48,21 +48,39 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
                 .load(mContext.getString(R.string.baseUrl)+"user/profile/select/"+items.get(position).getUserEmails().get(0)+".jpg")
                 .error(R.drawable.profile)
                 .apply(new RequestOptions().circleCrop()).into(holder.chatRoomImage);
-        int len = items.get(position).getUserEmails().size()>2 ? 2 : items.get(position).getUserEmails().size();
 
-        for(int i=0;i<len-1;i++){
-            holder.userEmails.append(items.get(position).getUserEmails().get(i).split("@")[0]+",");
+
+//        int len = items.get(position).getUserEmails().size()>2 ? 2 : items.get(position).getUserEmails().size();
+        int len = items.get(position).getUserNicknames().size();
+
+        holder.userEmails.setText(""); // 한 번 비워주고
+        // text view 길이로 '...' 붙여야겠다.
+        if (len > 4){
+            for(int i=0;i<4;i++){ // 4개까지만 표시하고
+//                holder.userEmails.append(items.get(position).getUserEmails().get(i).split("@")[0]+",");
+                holder.userEmails.append(items.get(position).getUserNicknames().get(i) +",");
+            }
+            holder.userEmails.append("..."); // 점 표시
+        }else{ // 4개 이하면
+            for(int i=0;i<len-1;i++){
+//                holder.userEmails.append(items.get(position).getUserEmails().get(i).split("@")[0]+",");
+                holder.userEmails.append(items.get(position).getUserNicknames().get(i) +",");
+            }
+//            holder.userEmails.append(items.get(position).getUserEmails().get(len-1).split("@")[0]);
+            holder.userEmails.append(items.get(position).getUserNicknames().get(len-1)); // 마지막 참여자
         }
 
         holder.userEmails.append(items.get(position).getUserEmails().get(len-1).split("@")[0]);
-        holder.userCnt.setText(items.get(position).getUserCnt());
-        //holder.time.setText(getTime(items.get(position).getTime()));
-        holder.time.setText("0.0.0.0");
-        holder.lastReceivedMessage.setText("구현중...");
+
+
+        holder.userCnt.setText("참여 "+items.get(position).getUserCnt()+"명");
+
+//        holder.time.setText(getTime(items.get(position).getTime()));
+                holder.time.setText("time");
+
+        holder.lastReceivedMessage.setText("지난 문자");
 
         itemView.setOnClickListener(new ClickListener(holder.getAdapterPosition()));
-        Log.v("테스트","getAdapterPosition : "+holder.getAdapterPosition());
-        Log.v("테스트","onBindViewHolder this.items.size : "+this.items.size());
     }
 
     @Override
@@ -71,15 +89,19 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
     }
 
     public void addData(ArrayList<ChatRoomDTO> data){
-        Log.v("테스트","this.items.size : "+this.items.size()+"     data : "+data.size());
-        this.items.addAll(data);
-        Log.v("테스트","this.items.size : "+this.items.size()+"     data : "+data.size());
+        //this.items.addAll(data); // ChatServiceActivity 에서
+        // adapter=new ChatRoomAdapter(this,items); 로 연결되었기 때문에 하면 x2 가된다..
         notifyDataSetChanged();
+    }
+    public void datasClear() { // 삭제 즉각 반영
+        items.clear();
+        notifyDataSetChanged();
+//        Log.d("mawang", "ChatRoomAdapter datasClear - called");
     }
 
     class ChatRoomHolder extends RecyclerView.ViewHolder{
         ImageView chatRoomImage;
-        TextView userEmails;
+        TextView userEmails; // userNicknames
         TextView userCnt;
         TextView lastReceivedMessage;
         TextView time;
@@ -111,7 +133,8 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
         //임시
         long now=System.currentTimeMillis();
         Date date=new Date(now);
-        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy MM월 dd hh:mm:ss");
+//        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy MM월 dd hh:mm:ss");
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = simpleDate.format(date);
         return time;
     }

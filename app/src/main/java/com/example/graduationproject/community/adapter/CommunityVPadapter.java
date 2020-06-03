@@ -19,13 +19,22 @@ public class CommunityVPadapter extends FragmentStatePagerAdapter {
     private GroupFragment groupFragment;
     private SettingFragment settingFragment;
 
-    public CommunityVPadapter(FragmentManager fm, Bundle args){
+    // no need
+//    public CommunityVPadapter(FragmentManager fm, Bundle args){
+//        super(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+//        homeFragment=new HomeFragment();
+//        friendFragment=new FriendFragment();
+//        groupFragment=new GroupFragment();
+//        settingFragment=new SettingFragment();
+//    }
+    public CommunityVPadapter(FragmentManager fm){
         super(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         homeFragment=new HomeFragment();
         friendFragment=new FriendFragment();
         groupFragment=new GroupFragment();
         settingFragment=new SettingFragment();
     }
+
     @NonNull
     @Override
     public Fragment getItem(int position) {

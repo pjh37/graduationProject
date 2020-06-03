@@ -7,7 +7,6 @@ public class DialogVO {
     public int getImgType() {
         return imgType;
     }
-
     public void setImgType(int imgType) {
         this.imgType = imgType;
     }
@@ -15,7 +14,6 @@ public class DialogVO {
     public String getTxtType() {
         return txtType;
     }
-
     public void setTxtType(String txtType) {
         this.txtType = txtType;
     }
