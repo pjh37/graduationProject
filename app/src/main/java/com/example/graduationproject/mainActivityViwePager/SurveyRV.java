@@ -10,15 +10,16 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.graduationproject.R;
 import com.example.graduationproject.result.ResultActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class SurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private Context mContext;
@@ -78,6 +79,7 @@ public class SurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             Intent intent = new Intent(mContext, ResultActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("form_id", datas.get(getAdapterPosition()).get_id());
+            intent.putExtra("userEmail", datas.get(getAdapterPosition()).getUserEmail());
             mContext.startActivity(intent);
         }
         public void previewRequest() {
@@ -115,6 +117,7 @@ public class SurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         ((ViewHolder)holder).txtTime.setText(getTime(vo.getTime()));
         ((ViewHolder) holder).txtResponse.setText(vo.getResponse_cnt() + " 참여"); //response
     }
+
     @Override
     public int getItemCount() {
         return datas.size();

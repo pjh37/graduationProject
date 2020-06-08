@@ -1,37 +1,23 @@
 package com.example.graduationproject.result;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 
 import com.example.graduationproject.R;
-import com.example.graduationproject.login.Session;
 import com.google.android.material.tabs.TabLayout;
-
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class ResultActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout mTabLayout;
     private ResultViewPagerAdapter pagerAdapter;
     private int form_id;
+    private String userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +25,7 @@ public class ResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_result);
         Intent intent=getIntent();
         form_id=intent.getIntExtra("form_id",-1);
+        userEmail=intent.getStringExtra("userEmail");
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("Result");
         setSupportActionBar(toolbar);
@@ -50,6 +37,7 @@ public class ResultActivity extends AppCompatActivity {
 
         Bundle args=new Bundle();
         args.putInt("form_id",form_id);
+        args.putString("userEmail",userEmail);
 
         pagerAdapter=new ResultViewPagerAdapter(getSupportFragmentManager(),args);
 
