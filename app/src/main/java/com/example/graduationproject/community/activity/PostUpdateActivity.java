@@ -151,8 +151,8 @@ public class PostUpdateActivity extends AppCompatActivity implements View.OnClic
         HashMap<String,Object> hashMap=new HashMap<>();
         hashMap.put("postID",postID);
         hashMap.put("content",content.getText().toString());
-        hashMap.put("userEmail", Session.getUserEmail());
-        hashMap.put("time",System.currentTimeMillis());
+//        hashMap.put("userEmail", Session.getUserEmail()); // DB 쪽에서 필요없지 않은가
+//        hashMap.put("time",System.currentTimeMillis()); // DB 쪽에서 필요없지 않은가
         hashMap.put("deleteList",deleteImageList);
         RetrofitApi.getService().postUpdate(hashMap,files).enqueue(new retrofit2.Callback<PostDTO>(){
             @Override
@@ -179,7 +179,7 @@ public class PostUpdateActivity extends AppCompatActivity implements View.OnClic
                     files.remove(index);
                     imageList.removeView(img);
                 }
-                dialogInterface.cancel();
+                dialogInterface.cancel(); // 안해도 닫힘
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {

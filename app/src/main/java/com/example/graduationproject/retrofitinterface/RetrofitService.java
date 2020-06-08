@@ -130,7 +130,7 @@ public interface RetrofitService {
     @GET("post/{groupID}/{count}/{offset}")
     Call<ArrayList<PostDTO>> getPost(@Path("groupID")Integer groupID,@Path("count")Integer count,@Path("offset")Integer offset);
 
-    @GET("post/comment/{postID}/{count}/{offset}")
+    @GET("post/old_comment/{postID}/{count}/{offset}")
     Call<ArrayList<CommentDTO>> getComment(@Path("postID")Integer groupID, @Path("count")Integer count, @Path("offset")Integer offset);
 
     @GET("post/comment_reply/{postID}/{count}/{offset}")

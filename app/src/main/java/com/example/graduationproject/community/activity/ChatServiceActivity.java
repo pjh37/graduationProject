@@ -38,6 +38,7 @@ public class ChatServiceActivity extends AppCompatActivity {
     private HashMap<String,ArrayList<String>> rooms;
     private Button btnChatRoomCreate;
     private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,16 +61,9 @@ public class ChatServiceActivity extends AppCompatActivity {
         adapter=new ChatRoomAdapter(this,items);
         recyclerView.setAdapter(adapter);
 
-        //
-
-
-        getChatRoomList();
+        //        getChatRoomList(); // onResume 으로 옮김
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
 
     class ClickListener implements View.OnClickListener{
         @Override
@@ -91,14 +85,21 @@ public class ChatServiceActivity extends AppCompatActivity {
             public void onResponse(Call<ArrayList<ChatRoomTempDTO>> call, Response<ArrayList<ChatRoomTempDTO>> response) {
                 if(response.body()!=null){
                     ArrayList<ChatRoomTempDTO> res=response.body();
-                    ArrayList<ChatRoomDTO> datas=new ArrayList<>();
+//                    ArrayList<ChatRoomDTO> datas=new ArrayList<>();
                     for(int i=0;i<res.size();i++){
                         if(rooms.containsKey(res.get(i).getRoomKey())){
-                            rooms.get(res.get(i).getRoomKey()).add(res.get(i).getUserEmail());
+                            // 채팅방에 참여자 추가
+//                            rooms.get(res.get(i).getRoomKey()).add(res.get(i).getUserEmail());
+                            rooms.get(res.get(i).getRoomKey()).add(res.get(i).getUserNickname());
                         }else{
-                            ArrayList<String> userEmails=new ArrayList<>();
-                            userEmails.add(res.get(i).getUserEmail());
-                            rooms.put(res.get(i).getRoomKey(),userEmails);
+//                            ArrayList<String> userEmails=new ArrayList<>();
+//                            userEmails.add(res.get(i).getUserEmail());
+                            ArrayList<String> userNicks=new ArrayList<>();
+                            userNicks.add(res.get(i).getUserNickname());
+
+                            // 채팅방 개설 ,채팅방 방장 추가
+//                            rooms.put(res.get(i).getRoomKey(),userEmails);
+                            rooms.put(res.get(i).getRoomKey(),userNicks);
                         }
                     }
                     Set<String> roomKeys=rooms.keySet();
@@ -106,11 +107,17 @@ public class ChatServiceActivity extends AppCompatActivity {
                         ChatRoomDTO room=new ChatRoomDTO();
                         room.setRoomKey(roomKey);
                         room.setUserCnt(String.valueOf(rooms.get(roomKey).size()));
-                        room.setUserEmails(rooms.get(roomKey));
+
+                        //                        room.setUserEmails(rooms.get(roomKey)); // ArrayList , 참여자들 메일
+                        room.setUserNicknames(rooms.get(roomKey)); // ArrayList , 참여자들 닉네임
+
                         room.setChatRoomImageUrl(rooms.get(roomKey).get(0));
-                        datas.add(room);
+
+                        //                        datas.add(room);
+                        items.add(room);
                     }
-                    adapter.addData(datas);
+                    //                    adapter.addData(datas);
+                    adapter.addData(items);
 
                 }
             }
@@ -127,5 +134,19 @@ public class ChatServiceActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+//        Log.d("mawang","ChatServiceActivity onResume - 짠");
+        items.clear();
+        rooms.clear();
+        adapter.datasClear();
+
+
+        getChatRoomList(); // 채팅방 불러오기
+//        Log.d("mawang", "ChatServiceActivity onResume - called");
     }
 }

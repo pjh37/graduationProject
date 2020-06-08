@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitApi {
 
-    private static String baseUrl="http://203.229.46.196:8001/";
+    private static String baseUrl="http://pjh.cafe24app.com/";
 
     private static Retrofit retrofit=null;
     public static RetrofitService getService(){

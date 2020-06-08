@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/comment_object"
@@ -12,26 +13,42 @@
 
         <ImageView
             android:id="@+id/comment_profile"
-            android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:scaleType="fitCenter"
+            android:src="@drawable/tmp_mymymy"
+            />
 
         <TextView
             android:id="@+id/comment_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="24dp"
             android:layout_gravity="center_vertical"
             android:text="아이디"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end">
-            <Button
-                android:id="@+id/comment_del"
-                android:layout_width="24dp"
-                android:layout_height="24dp" />
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/comment_del"
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:text="삭제"
+            android:gravity="center"
+            />
+        <!--        <RelativeLayout-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:gravity="end">-->
+        <!--            <Button-->
+        <!--                android:id="@+id/comment_del"-->
+        <!--                android:layout_width="24dp"-->
+        <!--                android:layout_height="24dp"-->
+
+        <!--                />-->
+        <!--        </RelativeLayout>-->
 
     </LinearLayout>
 
@@ -40,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="댓글"/>
+        android:text="댓글내용"/>
 
     <TextView
         android:id="@+id/comment_time"

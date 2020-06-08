@@ -58,11 +58,16 @@ public class CommentReplyAdapter extends RecyclerView.Adapter<CommentReplyAdapte
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .apply(new RequestOptions().circleCrop()).into(holder.profileImage);
         }
-        holder.userEmail.setText(items.get(position).getUserEmail().split("@")[0]);
+
+//        holder.userEmail.setText(items.get(position).getUserEmail().split("@")[0]);
+        holder.userEmail.setText(items.get(position).getNickname());
+
         holder.time.setText(getTime(items.get(position).getTime()));
 
-        String targetEmailText = "@" + items.get(position).getTargetUserEmail().split("@")[0];
-        String contentText = targetEmailText + "   " + items.get(position).getContent();
+//        String targetEmailText = "@" + items.get(position).getTargetUserEmail().split("@")[0];
+        String targetEmailText = "@" + items.get(position).getTarget_Nickname(); // 타겟 닉넴으로 바꾸어보자
+
+        String contentText = targetEmailText + "   " + items.get(position).getContent(); // 3칸 공백
         SpannableString spannableString = new SpannableString(contentText);
         int start = contentText.indexOf(targetEmailText);
         int end = start + targetEmailText.length();
@@ -92,7 +97,8 @@ public class CommentReplyAdapter extends RecyclerView.Adapter<CommentReplyAdapte
         TextView userEmail;
         TextView time;
         TextView content;
-        Button delButton;
+        //        Button delButton;
+        TextView delButton;
         LinearLayout replyObject;
 
         CommentReplyHolder(View view){
@@ -102,14 +108,15 @@ public class CommentReplyAdapter extends RecyclerView.Adapter<CommentReplyAdapte
             userEmail=(TextView)view.findViewById(R.id.commentReply_id);
             time=(TextView)view.findViewById(R.id.commentReply_time);
             content=(TextView)view.findViewById(R.id.commentReply_text);
-            delButton=(Button)view.findViewById(R.id.commentReply_del);
+            delButton=view.findViewById(R.id.commentReply_del);
             replyObject = (LinearLayout)view.findViewById(R.id.commentReply_object);
 
             replyObject.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mCallback.onPostObjectClick(items.get(getAdapterPosition()).getPost_id(), PostActivity.COMMENT_REPLY);
-                    mCallback.getTargetUserEmail(items.get(getAdapterPosition()).getUserEmail());
+                    mCallback.onPostObjectClick(items.get(getAdapterPosition()).getComment_id(), PostActivity.COMMENT_REPLY);
+                    mCallback.setTargetUserEmail(items.get(getAdapterPosition()).getUserEmail());
+                    mCallback.setTargetNickname(items.get(getAdapterPosition()).getNickname());
                 }
             });
 
@@ -127,7 +134,7 @@ public class CommentReplyAdapter extends RecyclerView.Adapter<CommentReplyAdapte
     public String getTime(String str){
         long now=Long.valueOf(str);
         Date date=new Date(now);
-        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy MM월 dd일");
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = simpleDate.format(date);
         return time;
     }

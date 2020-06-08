@@ -1,5 +1,6 @@
 package com.example.graduationproject;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.graduationproject.form.FormActivity;
+import com.example.graduationproject.login.Session;
 import com.example.graduationproject.mainActivityViwePager.MainVPMySurveyFragment;
 import com.example.graduationproject.mainActivityViwePager.SurveyDTO;
 import com.example.graduationproject.result.ResultActivity;
@@ -79,7 +81,7 @@ public class UploadedSurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHold
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Intent intent = new Intent(mContext, UploadedFormEditableActivity.class);
+//                    Intent intent = new Intent(mContext, old_UploadedFormEditableActivity.class);
 //                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                    intent.putExtra("form_id", datas.get(getAdapterPosition()).get_id());
 //                    intent.putExtra("title", datas.get(getAdapterPosition()).getTitle());
@@ -144,7 +146,7 @@ public class UploadedSurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position){
         UploadedSurveyDTO vo = datas.get(position);
         ((ViewHolder) holder).txtTitle.setText(vo.getTitle());
-        ((ViewHolder) holder).txtWriterName.setText(MainActivity.getUserName());
+        ((ViewHolder) holder).txtWriterName.setText(Session.getUserName());
         ((ViewHolder) holder).txtTime.setText(vo.getTime());
         ((ViewHolder) holder).txtResponse.setText(vo.getResponse_cnt() + " 참여"); //response
     }
@@ -156,18 +158,16 @@ public class UploadedSurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void addDatas(ArrayList<UploadedSurveyDTO> data) { // 더보기에서 쓰는군
         datas.addAll(data);
         notifyDataSetChanged();
-//        Log.d("mawang", "UploadedSurveyRV addItem - called");
     }
 
     public void datasClear() { // 삭제 즉각 반영
         datas.clear();
         notifyDataSetChanged();
-//        Log.d("mawang", "UploadedSurveyRV datasClear - called");
     }
 
     public void setDatas(ArrayList<UploadedSurveyDTO> datas) {
         this.datas = datas;
-        notifyDataSetChanged(); // work
+        notifyDataSetChanged();
     }
 
 
@@ -177,9 +177,9 @@ public class UploadedSurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHold
         View view = inflater.inflate(R.layout.activity_uploaded_form, null);
 
         ImageView imgSurveyWriterPhoto = view.findViewById(R.id.survey_writer_photo);;
-        Glide.with(mContext).load(MainActivity.getUserImage()).into(imgSurveyWriterPhoto);
+        Glide.with(mContext).load(Session.getUserImage()).into(imgSurveyWriterPhoto);
         TextView tvSurveyWriterEmail= view.findViewById(R.id.survey_writer_email);
-        tvSurveyWriterEmail.setText(MainActivity.getUserEmail());
+        tvSurveyWriterEmail.setText(Session.getUserEmail());
         TextView tvSurveyRoomTitle = view.findViewById(R.id.survey_room_title);
         tvSurveyRoomTitle.setText(SurveyRoomTitle);
 
@@ -198,22 +198,18 @@ public class UploadedSurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHold
                 switch (v.getId()) {
                     case R.id.btnResult: {
                         resultRequest();
-//                        Toast.makeText(mContext,"btnResult",Toast.LENGTH_SHORT).show();
                         break;
                     }
                     case R.id.btnShare: {
                         shareRequest();
-//                        Toast.makeText(mContext,"btnShare",Toast.LENGTH_SHORT).show();
                         break;
                     }
                     case R.id.btnEdit: {
                         editRequest();
-//                        Toast.makeText(mContext,"btnEdit",Toast.LENGTH_SHORT).show();
                         break;
                     }
                     case R.id.btnPreview: {
                         previewRequest();
-//                        Toast.makeText(mContext,"btnPreview",Toast.LENGTH_SHORT).show();
                         break;
                     }
                     case R.id.btnDelete: {
@@ -290,7 +286,7 @@ public class UploadedSurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHold
         Log.d("mawang", "deleteRequest 실행 - form_id = "+form_id);
 
         okhttp3.Request request=new okhttp3.Request.Builder()
-                .url(mContext.getString(R.string.baseUrl) + "deleteform/" + form_id+"/"+MainActivity.getUserEmail())
+                .url(mContext.getString(R.string.baseUrl) + "deleteform/" + form_id+"/"+Session.getUserEmail())
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -305,7 +301,12 @@ public class UploadedSurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHold
                 if(res.equals("delete error")){
                     Toast.makeText(mContext,"요청 실패",Toast.LENGTH_SHORT).show();
                 }else{
-                    Log.d("mawang", "res = "+res);
+                    ((Activity)mContext).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mySurveyFragment.refreshData(); // 삭제 한 후에 리프레쉬! 해야 반영되는구나
+                        }
+                    });
                 }
             }
         });

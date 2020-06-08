@@ -47,6 +47,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
     Integer clickedPostObjectId = -1;
     Integer clickedPostObjectType = -1;
     String clickedTargetUserEmail = "";
+    String clickedTargetUserNickname = "";
     private Integer groupID;
 
     ImageView cover;
@@ -97,6 +98,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
 
         content=(Button) findViewById(R.id.content);
         content.setOnClickListener(this);
+
         load();
     }
 
@@ -164,8 +166,12 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void getTargetUserEmail(String target){
+    public void setTargetUserEmail(String target){ // 대댓글 용이구나
         clickedTargetUserEmail = target;
+    }
+    @Override
+    public void setTargetNickname(String target){ // 대댓글 용이구나
+        clickedTargetUserNickname = target;
     }
 
     @Override
@@ -203,6 +209,9 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
             hashMap.put("content",commentEditor.getText().toString());
             hashMap.put("userEmail",Session.getUserEmail());
             hashMap.put("time",System.currentTimeMillis());
+
+            hashMap.put("Nickname",Session.getUserName());
+
             RetrofitApi.getService().commentCreate(hashMap).enqueue(new retrofit2.Callback<Boolean>(){
                 @Override
                 public void onResponse(Call<Boolean> call, Response<Boolean> response) {
@@ -215,11 +224,18 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
 
         if(clickedPostObjectType == COMMENT_REPLY){
             HashMap<String,Object> hashMap=new HashMap<>();
-            hashMap.put("post_id",clickedPostObjectId);
+
+            //            hashMap.put("post_id",clickedPostObjectId); // 명칭바꿈
+            hashMap.put("comment_id",clickedPostObjectId);
+
             hashMap.put("content",commentEditor.getText().toString());
             hashMap.put("target_userEmail",clickedTargetUserEmail);
             hashMap.put("userEmail",Session.getUserEmail());
             hashMap.put("time",System.currentTimeMillis());
+
+            hashMap.put("target_Nickname",clickedTargetUserNickname);
+            hashMap.put("Nickname",Session.getUserName());
+
             RetrofitApi.getService().replyCreate(hashMap).enqueue(new retrofit2.Callback<Boolean>(){
                 @Override
                 public void onResponse(Call<Boolean> call, Response<Boolean> response) {
@@ -259,4 +275,12 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         immhide.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (editLayout.getVisibility()== View.VISIBLE) { // 댓글 입력창 닫기
+            editLayout.setVisibility(View.INVISIBLE);
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

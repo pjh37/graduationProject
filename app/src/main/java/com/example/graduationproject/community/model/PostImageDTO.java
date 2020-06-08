@@ -8,7 +8,6 @@ public class PostImageDTO {
     public Integer get_id() {
         return _id;
     }
-
     public void set_id(Integer _id) {
         this._id = _id;
     }
@@ -16,7 +15,6 @@ public class PostImageDTO {
     public Integer getPost_id() {
         return post_id;
     }
-
     public void setPost_id(Integer post_id) {
         this.post_id = post_id;
     }
@@ -24,7 +22,6 @@ public class PostImageDTO {
     public String getFilename() {
         return filename;
     }
-
     public void setFilename(String filename) {
         this.filename = filename;
     }

@@ -24,11 +24,17 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class FriendFragment extends Fragment {
+    public static final int FRIENDSTATEINVITE=-1;
+    public static final int FRIENDSTATEREJECT=0;
+    public static final int FRIENDSTATEACCEPT=1;
+
     RecyclerView recyclerView;
     InviteAdapter adapter;
     TextView tvFriendCnt;
-    private RecyclerView.LayoutManager layoutManager;
+//    private RecyclerView.LayoutManager layoutManager;
+    private LinearLayoutManager layoutManager;
     private ArrayList<FriendDTO> datas;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,7 +59,7 @@ public class FriendFragment extends Fragment {
         //거절 목록  state -> 0
         //수락목록 (진짜 친구목록)  state -> 1
 
-        RetrofitApi.getService().getFriendList(Session.getUserEmail(),-1).enqueue(new retrofit2.Callback<ArrayList<FriendDTO>>(){
+        RetrofitApi.getService().getFriendList(Session.getUserEmail(),FRIENDSTATEINVITE).enqueue(new retrofit2.Callback<ArrayList<FriendDTO>>(){
             @Override
             public void onResponse(Call<ArrayList<FriendDTO>> call, Response<ArrayList<FriendDTO>> response) {
                 if(response.body()!=null){

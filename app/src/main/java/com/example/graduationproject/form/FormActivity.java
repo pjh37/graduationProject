@@ -1,11 +1,7 @@
 package com.example.graduationproject.form;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.media.FaceDetector;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,11 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -26,7 +19,7 @@ import com.bumptech.glide.Glide;
 import com.example.graduationproject.MainActivity;
 import com.example.graduationproject.NetworkManager;
 import com.example.graduationproject.R;
-import com.example.graduationproject.UploadedFormEditableActivity;
+import com.example.graduationproject.old_UploadedFormEditableActivity;
 import com.example.graduationproject.UploadedSurveyRV;
 import com.example.graduationproject.login.Session;
 import com.example.graduationproject.offlineform.OfflineFormRVAdapter;
@@ -145,7 +138,7 @@ public class FormActivity extends AppCompatActivity {
         // 첫 시작인지, 중간편집 , 가편집인지 구분
         if (classifyByCategory == MainActivity.categoryNumber) {
             // 첫시작
-        } else if (classifyByCategory == UploadedFormEditableActivity.categoryNumber || classifyByCategory == UploadedSurveyRV.categoryNumber) {
+        } else if (classifyByCategory == old_UploadedFormEditableActivity.categoryNumber || classifyByCategory == UploadedSurveyRV.categoryNumber) {
             // 중간편집
             load();
         }else if ( classifyByCategory == OfflineFormRVAdapter.categoryNumber) {

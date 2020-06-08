@@ -89,12 +89,18 @@ public class PostAdapter extends  RecyclerView.Adapter<PostAdapter.PostHolder>{
         }
         Glide.with(mContext).load(mContext.getString(R.string.baseUrl)+"post/image/thumbnail/"+items.get(position).get_id())
                 .into(holder.thumbnail);
-        holder.userEmail.setText(items.get(position).getUserEmail().split("@")[0]);
+
+//        holder.userEmail.setText(items.get(position).getUserEmail().split("@")[0]);
+        holder.userEmail.setText(items.get(position).getNickname()); // 이거 닉넴으로 바꾼다.
+
         holder.time.setText(getTime(items.get(position).getTime()));
         holder.content.setText(items.get(position).getContent());
+
         loadComment(holder.adapter, items.get(holder.getAdapterPosition()).get_id());
+
         holder.postDelete.setOnClickListener(new ClickListener(holder,position));
         holder.postUpdate.setOnClickListener(new ClickListener(holder,position));
+
         if(items.get(position).getUserEmail().equals(Session.getUserEmail())){
             holder.postDelete.setVisibility(View.VISIBLE);
             holder.postUpdate.setVisibility(View.VISIBLE);
@@ -133,7 +139,6 @@ public class PostAdapter extends  RecyclerView.Adapter<PostAdapter.PostHolder>{
                     break;
                 }
                 case R.id.post_update:{
-                    Toast.makeText(mContext,"업데이트 클릭",Toast.LENGTH_LONG).show();
                     Intent intent=new Intent(mContext, PostUpdateActivity.class);
                     intent.putExtra("postID",items.get(position).get_id());
                     intent.putExtra("content",items.get(position).getContent());
@@ -167,8 +172,8 @@ public class PostAdapter extends  RecyclerView.Adapter<PostAdapter.PostHolder>{
             @Override
             public void onResponse(Call<RetrofitResponse> call, @NonNull Response<RetrofitResponse> response) {
                 if(response.body().isRight()){
-                    notifyItemRemoved(position);
                     items.remove(position);
+                    notifyItemRemoved(position);
 
                 }
             }
@@ -218,7 +223,14 @@ public class PostAdapter extends  RecyclerView.Adapter<PostAdapter.PostHolder>{
             commentBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    commentRV.setVisibility(View.VISIBLE);
+
+                    if(commentRV.getVisibility()== View.VISIBLE){
+                        commentRV.setVisibility(View.GONE);
+                        commentBtn.setText("댓글 보기");
+                    }else{
+                        commentRV.setVisibility(View.VISIBLE);
+                        commentBtn.setText("댓글 닫기");
+                    }
                 }
             });
 
@@ -232,7 +244,8 @@ public class PostAdapter extends  RecyclerView.Adapter<PostAdapter.PostHolder>{
     public String getTime(String str){
         long now=Long.valueOf(str);
         Date date=new Date(now);
-        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy MM월 dd일");
+//        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy MM월 dd일");
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = simpleDate.format(date);
         return time;
     }

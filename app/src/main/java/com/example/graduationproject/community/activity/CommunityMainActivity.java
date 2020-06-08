@@ -15,13 +15,17 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.graduationproject.R;
 import com.example.graduationproject.community.adapter.CommunityVPadapter;
 import com.example.graduationproject.community.fragment.HomeFragment;
 import com.example.graduationproject.community.model.FriendDTO;
+import com.example.graduationproject.login.Session;
 import com.example.graduationproject.retrofitinterface.RetrofitApi;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -36,14 +40,15 @@ public class CommunityMainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout mTabLayout;
     private CommunityVPadapter adapter;
-    private String userEmail;
     private Toolbar toolbar;
     private SearchView searchView;
     private TextView tvTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_main);
+
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -52,6 +57,7 @@ public class CommunityMainActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.navigation);
 
         tvTitle=(TextView)findViewById(R.id.tvTitle);
+
         searchView=(SearchView)findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchListener());
         SearchView.SearchAutoComplete searchAutoComplete=(SearchView.SearchAutoComplete)findViewById(R.id.search_src_text);
@@ -60,14 +66,22 @@ public class CommunityMainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
         navigationView=(NavigationView)findViewById(R.id.navigationView);
+        View NavHeader = navigationView.getHeaderView(0); // LinearLayout
+        TextView txtUserID = NavHeader.findViewById(R.id.txtUserID);
+        txtUserID.setText(Session.getUserName());
+        ImageView imvUserImg = NavHeader.findViewById(R.id.imvUserImg);
+        Glide.with(this).load(Session.getUserImage_uri()).into(imvUserImg);
         navigationView.setNavigationItemSelectedListener(new NavigatorListener());
+
         drawerLayout = (DrawerLayout) findViewById(R.id.main_drawer);
 
-        Intent intent = getIntent();
-        userEmail = intent.getStringExtra("userEmail");
-        Bundle args = new Bundle();
-        args.putString("userEmail", userEmail);
-        adapter=new CommunityVPadapter(getSupportFragmentManager(),args);
+        // 필요없음
+//        Intent intent = getIntent();
+//        userEmail = intent.getStringExtra("userEmail");
+//        Bundle args = new Bundle();
+//        args.putString("userEmail", userEmail);
+//        adapter=new CommunityVPadapter(getSupportFragmentManager(),args);
+
         viewPager.setAdapter(adapter);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -135,7 +149,7 @@ public class CommunityMainActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.START);
             switch (menuItem.getItemId()){
                 case R.id.mailbox:{
-
+                    Toast.makeText(getApplicationContext(),"mailbox",Toast.LENGTH_SHORT).show();
                     break;
                 }
                 case R.id.chatroom:{

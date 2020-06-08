@@ -36,6 +36,7 @@ public class InvitingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inviting);
+
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         btnChatRoomCreate=(Button)findViewById(R.id.btnChatRoomCreate);
         btnChatRoomCreate.setOnClickListener(new ClickListener());
@@ -50,6 +51,7 @@ public class InvitingActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         datas=new ArrayList<>();
         adapter=new FriendAdapter(InvitingActivity.this,datas,1);
+
         getFriendList();
     }
 

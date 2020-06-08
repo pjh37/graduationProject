@@ -30,19 +30,6 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle toggle;
 
-//    RecyclerView uploadedSurveyRV;
-//    RecyclerView.Adapter uploadedSurveyAdapter;
-//    private RecyclerView.LayoutManager layoutManager;
-//    private ArrayList<UploadedSurveyDTO> datas;
-//    private String url;
-//    private ProgressBar progressBar;
-//    private boolean isFinish;
-
-    private Session session;
-
-    private static String userEmail;
-    private static String userName;
-    private static Uri userImage;
 
     private ViewPager viewPager;
     private MainVPAdapter mainVPAdapter;
@@ -53,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        session=(Session)getApplication();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Forms");
         setSupportActionBar(toolbar);
@@ -73,21 +60,13 @@ public class MainActivity extends AppCompatActivity {
 
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
 
-        Intent intent = getIntent();
-        userEmail = intent.getStringExtra("userEmail");
-        userName = intent.getStringExtra("userName");
-        userImage = intent.getExtras().getParcelable("userImage");
-//        session.setSession(userEmail,userName,userImage);
-        //session.messageServiceStart();
-
-
 
         NavigationView navigationView=(NavigationView)findViewById(R.id.navigationView);
         View NavHeader = navigationView.getHeaderView(0); // LinearLayout
         TextView txtUserID = NavHeader.findViewById(R.id.txtUserID);
-        txtUserID.setText(userName);
+        txtUserID.setText(Session.getUserName());
         ImageView imvUserImg = NavHeader.findViewById(R.id.imvUserImg);
-        Glide.with(this).load(userImage).into(imvUserImg);
+        Glide.with(this).load(Session.getUserImage_uri()).into(imvUserImg);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -130,8 +109,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        Bundle args = new Bundle();
-        args.putString("userEmail", userEmail);
         mainVPAdapter = new MainVPAdapter(getSupportFragmentManager());
         viewPager.setAdapter(mainVPAdapter);
         viewPager.setCurrentItem(0);
@@ -177,15 +154,11 @@ public class MainActivity extends AppCompatActivity {
         switch (v.getId()) {
             case R.id.bottom_menu:
                 Intent intent = new Intent(this, FormActivity.class);
-                intent.putExtra("userEmail", userEmail);
+                intent.putExtra("category",categoryNumber);
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 startActivity(intent);
                 break;
         }
     }
 
-    // Session class 로 이용해도 된다.
-    public static Uri getUserImage() {return userImage;}
-    public static String getUserName() {return userName;}
-    public static String getUserEmail() {return userEmail;}
 }

@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.graduationproject.R;
 import com.example.graduationproject.community.model.FriendDTO;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -59,6 +60,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendHold
         holder.userEmail.setText(items.get(position).getUserEmail().split("@")[0]);
         if(type==FRIEND_LIST){
             holder.chkInviteChatRoom.setVisibility(View.GONE);
+            holder.btnFriendDelete.setOnClickListener(new ClickListener());
         }else if(type==INVITE_LIST){
             holder.btnFriendDelete.setVisibility(View.GONE);
             holder.chkInviteChatRoom.setOnClickListener(new View.OnClickListener() {
@@ -105,10 +107,15 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendHold
             chkInviteChatRoom=(CheckBox)itemView.findViewById(R.id.chkInviteChatRoom);
         }
     }
-    class ClickListener implements View.OnClickListener{
+    class ClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.btnFriendDelete:
+                    Snackbar.make(itemView, "btnFriendDelete.", Snackbar.LENGTH_LONG).show();
+                    break;
 
+            }
         }
     }
 }

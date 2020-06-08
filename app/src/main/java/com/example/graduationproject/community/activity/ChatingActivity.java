@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.graduationproject.R;
 import com.example.graduationproject.community.adapter.ChatRoomAdapter;
@@ -34,31 +35,37 @@ import java.util.Set;
 
 public class ChatingActivity extends AppCompatActivity {
     private static final int COUNT=50;
-    private int offset;
-    Button btnSend;
+    private int offset = 0;
+
     String roomKey;
     String msg;
 
+    Button btnSendfile; // not yet
     EditText editSendMessage;
+    Button btnSend;
 
     RecyclerView recyclerView;
     ChatingAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<MessageDTO> items;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_chating);
         registerReceiver(receiver,new IntentFilter("com.example.RECEIVE_ACTION"));
-        offset=0;
+
         items=new ArrayList<>();
 
         Intent intent=getIntent();
         roomKey=intent.getStringExtra("roomKey");
         Log.v("테스트","roomKeys"+roomKey);
+
+        btnSendfile=(Button)findViewById(R.id.fileSendBtn);
+        btnSendfile.setOnClickListener(new ClickListener());
+        editSendMessage=(EditText)findViewById(R.id.editSendMessage);
         btnSend=(Button)findViewById(R.id.btnSend);
         btnSend.setOnClickListener(new ClickListener());
-        editSendMessage=(EditText)findViewById(R.id.editSendMessage);
 
         recyclerView=(RecyclerView)findViewById(R.id.recyclerView);
         layoutManager= new LinearLayoutManager(this);
@@ -68,11 +75,20 @@ public class ChatingActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    //    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        getMessageCache(roomKey,offset);
+//    }
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
+
+        // onResume 에서 하면 화면 나갔다 들어오면 refresh 된다.
         getMessageCache(roomKey,offset);
+//        getRoomMessages(roomKey,offset);
     }
+
     //로컬 캐시
     public void getMessageCache(String roomKey,int offset){
         ArrayList<MessageDTO> msg=MessageSaveManager.getInstance(this).findRoomMessage(roomKey, offset);
@@ -110,7 +126,12 @@ public class ChatingActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-                case R.id.btnSend:{
+                case R.id.fileSendBtn:
+                    Toast.makeText(getApplicationContext(),"파일전송",Toast.LENGTH_SHORT).show();
+                    Log.d("mawang", "ChatingActivity ClickListener - fileSendBtn clicked ");
+                    break;
+
+                case R.id.btnSend:
                     MessageDTO msg=new MessageDTO(roomKey
                             , Session.getUserEmail()
                             ,editSendMessage.getText().toString()
@@ -120,7 +141,7 @@ public class ChatingActivity extends AppCompatActivity {
                     recyclerView.scrollToPosition(adapter.getItemCount()-1);
                     editSendMessage.setText("");
                     break;
-                }
+
             }
         }
     }

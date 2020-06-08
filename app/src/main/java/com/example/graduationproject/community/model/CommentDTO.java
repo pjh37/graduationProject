@@ -6,11 +6,11 @@ public class CommentDTO {
     private String userEmail;
     private String content;
     private String time;
+    private String Nickname;
 
     public String getUserEmail() {
         return userEmail;
     }
-
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
     }
@@ -18,7 +18,6 @@ public class CommentDTO {
     public Integer get_id() {
         return _id;
     }
-
     public void set_id(Integer _id) {
         this._id = _id;
     }
@@ -26,7 +25,6 @@ public class CommentDTO {
     public Integer getPost_id() {
         return post_id;
     }
-
     public void setPost_id(Integer post_id) {
         this.post_id = post_id;
     }
@@ -34,7 +32,6 @@ public class CommentDTO {
     public String getContent() {
         return content;
     }
-
     public void setContent(String content) {
         this.content = content;
     }
@@ -42,8 +39,10 @@ public class CommentDTO {
     public String getTime() {
         return time;
     }
-
     public void setTime(String time) {
         this.time = time;
     }
+
+    public String getNickname() {return Nickname;}
+    public void setNickname(String nickname) {Nickname = nickname;}
 }

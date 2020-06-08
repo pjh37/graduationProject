@@ -37,6 +37,7 @@ public class PostCreateActivity extends AppCompatActivity implements View.OnClic
     private Integer groupID;
     private File file;
     private ArrayList<MultipartBody.Part> files;
+
     Button btnPost;
     ImageButton imageAdd;
     EditText content;
@@ -61,7 +62,7 @@ public class PostCreateActivity extends AppCompatActivity implements View.OnClic
         switch (v.getId()){
             case R.id.btnPost:{
                 postCreate();
-                content.setText("");
+//                content.setText("");
                 break;
             }
             case R.id.imageAdd:{
@@ -101,12 +102,13 @@ public class PostCreateActivity extends AppCompatActivity implements View.OnClic
         return result;
     }
     public void postCreate(){
-        Log.v("포스트","postCreate");
         HashMap<String,Object> hashMap=new HashMap<>();
         hashMap.put("group_id",groupID);
         hashMap.put("content",content.getText().toString());
         hashMap.put("userEmail", Session.getUserEmail());
         hashMap.put("time",System.currentTimeMillis());
+        hashMap.put("Nickname", Session.getUserName()); // 닉네임
+
         RetrofitApi.getService().postCreate(hashMap,files).enqueue(new retrofit2.Callback<PostDTO>(){
             @Override
             public void onResponse(Call<PostDTO> call, @NonNull Response<PostDTO> response) {
