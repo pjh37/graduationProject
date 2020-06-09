@@ -33,14 +33,9 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.example.graduationproject.BuildConfig;
-import com.example.graduationproject.MainActivity;
-import com.example.graduationproject.form.FormComponentVO;
-import com.example.graduationproject.form.FormType;
-import com.example.graduationproject.MainActivity;
 import com.example.graduationproject.R;
 import com.example.graduationproject.form.FormComponentVO;
 import com.example.graduationproject.form.FormType;
-import com.example.graduationproject.login.Session;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.itextpdf.text.Document;
@@ -113,6 +108,8 @@ public class SummaryViewFragment extends Fragment {
 
         if (getArguments() != null) {
             form_id = getArguments().getInt("form_id");
+            Toast.makeText(getContext(), Integer.toString(form_id), Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getArguments().getString("userEmail"), Toast.LENGTH_LONG).show();
         }
 
         individualViewDTO = new IndividualViewDTO();
@@ -371,7 +368,8 @@ public class SummaryViewFragment extends Fragment {
         OkHttpClient client = new OkHttpClient();
         RequestBody requestbody = new MultipartBody.Builder().
                 setType(MultipartBody.FORM)
-                .addFormDataPart("userEmail", Session.getUserEmail())
+                //.addFormDataPart("userEmail", MainActivity.getUserEmail())
+                .addFormDataPart("userEmail", getArguments().getString("userEmail"))
                 .addFormDataPart("form_id", String.valueOf(form_id))
                 .build();
         okhttp3.Request request = new okhttp3.Request.Builder()
@@ -400,7 +398,7 @@ public class SummaryViewFragment extends Fragment {
 
                     JSONArray jsonArray = new JSONArray(res);
                     participate_num = jsonArray.length();
-
+                    Log.d("partnum", res);
                     HashMap<String, ArrayList<String>> gridParser = new HashMap<>();
 
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -550,7 +548,6 @@ public class SummaryViewFragment extends Fragment {
                     Type type = new TypeToken<ArrayList<FormComponentVO>>() {
                     }.getType();
                     ArrayList<FormComponentVO> componentVOS = gson.fromJson(jsonObject.getString("json"), type);
-
 
 
                     if(participate_num != 0){
