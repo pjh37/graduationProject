@@ -44,6 +44,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
 
     @Override
     public void onBindViewHolder(@NonNull ChatRoomHolder holder, int position) {
+        Log.v("테스트","ChatRoomAdapter : "+ items.size());
         Glide.with(holder.itemView.getContext())
                 .load(mContext.getString(R.string.baseUrl)+"user/profile/select/"+items.get(position).getUserEmails().get(0)+".jpg")
                 .error(R.drawable.profile)
@@ -70,13 +71,13 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
             holder.userEmails.append(items.get(position).getUserNicknames().get(len-1)); // 마지막 참여자
         }
 
-        holder.userEmails.append(items.get(position).getUserEmails().get(len-1).split("@")[0]);
+        //holder.userEmails.append(items.get(position).getUserEmails().get(len-1).split("@")[0]);
 
 
         holder.userCnt.setText("참여 "+items.get(position).getUserCnt()+"명");
 
 //        holder.time.setText(getTime(items.get(position).getTime()));
-                holder.time.setText("time");
+        holder.time.setText("");
 
         holder.lastReceivedMessage.setText("지난 문자");
 

@@ -36,6 +36,7 @@ public class ChatServiceActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<ChatRoomDTO> items;
     private HashMap<String,ArrayList<String>> rooms;
+    private HashMap<String,ArrayList<String>> roomsUserEmails;
     private Button btnChatRoomCreate;
     private Toolbar toolbar;
 
@@ -46,6 +47,7 @@ public class ChatServiceActivity extends AppCompatActivity {
         //채팅 서버와 연결 테스트
         MessageManager.getInstance(this).connect();
         rooms=new HashMap<>();
+        roomsUserEmails=new HashMap<>();
         items=new ArrayList<>();
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -85,20 +87,24 @@ public class ChatServiceActivity extends AppCompatActivity {
             public void onResponse(Call<ArrayList<ChatRoomTempDTO>> call, Response<ArrayList<ChatRoomTempDTO>> response) {
                 if(response.body()!=null){
                     ArrayList<ChatRoomTempDTO> res=response.body();
+                    for(ChatRoomTempDTO t : res){
+                        //Log.d("채팅방리스트","ChatRoomTempDTO : "+t.getUserEmail()+" "+t.getUserNickname()+" "+t.getRoomKey());
+                    }
 //                    ArrayList<ChatRoomDTO> datas=new ArrayList<>();
                     for(int i=0;i<res.size();i++){
                         if(rooms.containsKey(res.get(i).getRoomKey())){
                             // 채팅방에 참여자 추가
-//                            rooms.get(res.get(i).getRoomKey()).add(res.get(i).getUserEmail());
+                            roomsUserEmails.get(res.get(i).getRoomKey()).add(res.get(i).getUserEmail());
                             rooms.get(res.get(i).getRoomKey()).add(res.get(i).getUserNickname());
                         }else{
-//                            ArrayList<String> userEmails=new ArrayList<>();
-//                            userEmails.add(res.get(i).getUserEmail());
+                            ArrayList<String> userEmails=new ArrayList<>();
+                            userEmails.add(res.get(i).getUserEmail());
                             ArrayList<String> userNicks=new ArrayList<>();
                             userNicks.add(res.get(i).getUserNickname());
 
                             // 채팅방 개설 ,채팅방 방장 추가
 //                            rooms.put(res.get(i).getRoomKey(),userEmails);
+                            roomsUserEmails.put(res.get(i).getRoomKey(),userEmails);
                             rooms.put(res.get(i).getRoomKey(),userNicks);
                         }
                     }
@@ -108,7 +114,7 @@ public class ChatServiceActivity extends AppCompatActivity {
                         room.setRoomKey(roomKey);
                         room.setUserCnt(String.valueOf(rooms.get(roomKey).size()));
 
-                        //                        room.setUserEmails(rooms.get(roomKey)); // ArrayList , 참여자들 메일
+                        room.setUserEmails(roomsUserEmails.get(roomKey)); // ArrayList , 참여자들 메일
                         room.setUserNicknames(rooms.get(roomKey)); // ArrayList , 참여자들 닉네임
 
                         room.setChatRoomImageUrl(rooms.get(roomKey).get(0));
@@ -117,6 +123,9 @@ public class ChatServiceActivity extends AppCompatActivity {
                         items.add(room);
                     }
                     //                    adapter.addData(datas);
+                    for(ChatRoomDTO t : items){
+                        Log.d("테스트","ChatRoomDTO : "+t.getUserEmails()+" "+t.getUserNicknames()+" "+t.getRoomKey());
+                    }
                     adapter.addData(items);
 
                 }

@@ -49,6 +49,7 @@ public class SettingFragment extends Fragment {
     TextView findFriend;
 
     RecyclerView recyclerView;
+    TextView tvFriendCnt;
     FriendAdapter adapter;
 
     private RecyclerView.LayoutManager layoutManager;
@@ -59,6 +60,7 @@ public class SettingFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView=(ViewGroup)inflater.inflate(R.layout.community_fragment_setting,container,false);
         profileImage=(ImageView)rootView.findViewById(R.id.profile_image);
+        tvFriendCnt=(TextView)rootView.findViewById(R.id.tvFriendCnt);
         imageAdd=(ImageView)rootView.findViewById(R.id.imageAdd);
         imageAdd.setOnClickListener(new ClickListener());
 
@@ -134,6 +136,7 @@ public class SettingFragment extends Fragment {
             public void onResponse(Call<ArrayList<FriendDTO>> call, Response<ArrayList<FriendDTO>> response) {
                 if(response.body()!=null){
                     datas=response.body();
+                    tvFriendCnt.setText(datas.size()+"명");
                     adapter.addItems(datas);
                 }
             }

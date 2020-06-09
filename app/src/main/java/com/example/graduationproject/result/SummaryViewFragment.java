@@ -40,6 +40,7 @@ import com.example.graduationproject.MainActivity;
 import com.example.graduationproject.R;
 import com.example.graduationproject.form.FormComponentVO;
 import com.example.graduationproject.form.FormType;
+import com.example.graduationproject.login.Session;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.itextpdf.text.Document;
@@ -370,7 +371,7 @@ public class SummaryViewFragment extends Fragment {
         OkHttpClient client = new OkHttpClient();
         RequestBody requestbody = new MultipartBody.Builder().
                 setType(MultipartBody.FORM)
-                .addFormDataPart("userEmail", MainActivity.getUserEmail())
+                .addFormDataPart("userEmail", Session.getUserEmail())
                 .addFormDataPart("form_id", String.valueOf(form_id))
                 .build();
         okhttp3.Request request = new okhttp3.Request.Builder()

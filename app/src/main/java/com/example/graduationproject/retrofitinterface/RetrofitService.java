@@ -44,8 +44,10 @@ public interface RetrofitService {
     @GET("search/{queryText}/{pages}")
     Call<ArrayList<FriendDTO>> getSearchResult(@Path("queryText") String queryText,@Path("pages")Integer page);
 
-    @GET("user/{userEmail}")
-    Call<Boolean> userRegister(@Path("userEmail") String userEmail);
+    //원래 @GET("user/{userEmail}") 닉네임 때문에 수정
+    @GET("user/{userEmail}/{nickname}")
+    Call<Boolean> userRegister(@Path("userEmail") String userEmail,@Path("nickname") String nickname);
+
 
     @Multipart
     @POST("user/profile/upload")

@@ -22,6 +22,7 @@ import com.example.graduationproject.R;
 import com.example.graduationproject.UploadedSurveyDTO;
 import com.example.graduationproject.UploadedSurveyRV;
 import com.example.graduationproject.form.FormSaveManager;
+import com.example.graduationproject.login.Session;
 import com.example.graduationproject.offlineform.FormItem;
 import com.example.graduationproject.offlineform.OfflineFormRVAdapter;
 import com.example.graduationproject.retrofitinterface.RetrofitApi;
@@ -118,7 +119,7 @@ public class moreViewActivity extends AppCompatActivity {
 
             }
         }).start();
-        RetrofitApi.getService().getSurveyList(MainActivity.getUserEmail()).enqueue(new retrofit2.Callback<ArrayList<UploadedSurveyDTO>>() {
+        RetrofitApi.getService().getSurveyList(Session.getUserEmail()).enqueue(new retrofit2.Callback<ArrayList<UploadedSurveyDTO>>() {
             @Override
             public void onResponse(retrofit2.Call<ArrayList<UploadedSurveyDTO>> call, retrofit2.Response<ArrayList<UploadedSurveyDTO>> response) {
                 isFinish=true;
@@ -176,7 +177,7 @@ public class moreViewActivity extends AppCompatActivity {
 
     public void getMyDraftedSurveyList(){
 
-        RetrofitApi.getService().getDraftSurveyList(MainActivity.getUserEmail()).enqueue(new retrofit2.Callback<ArrayList<FormItem>>() {
+        RetrofitApi.getService().getDraftSurveyList(Session.getUserEmail()).enqueue(new retrofit2.Callback<ArrayList<FormItem>>() {
             @Override
             public void onResponse(retrofit2.Call<ArrayList<FormItem>> call, retrofit2.Response<ArrayList<FormItem>> response) {
                 if(response.isSuccessful()){

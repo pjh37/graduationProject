@@ -216,7 +216,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setVisibility(View.GONE);
         btnExit.setVisibility(View.GONE);
         autoLogin.setVisibility(View.GONE);
-        RetrofitApi.getService().userRegister(Session.getUserEmail()).enqueue(new retrofit2.Callback<Boolean>(){
+        RetrofitApi.getService().userRegister(Session.getUserEmail(),Session.getUserName()).enqueue(new retrofit2.Callback<Boolean>(){
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                 if(response.body()!=null){

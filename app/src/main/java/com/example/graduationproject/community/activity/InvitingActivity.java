@@ -96,7 +96,9 @@ public class InvitingActivity extends AppCompatActivity {
     public void chatRoomCreateRequest(){
         HashMap<String, Object> input = new HashMap<>();
         input.put("userEmail", Session.getUserEmail());
-        input.put("friends",adapter.getCheckedFriends());
+        input.put("userNickName",Session.getUserName());
+        input.put("friendsNickName",adapter.getCheckedFriendNickName());
+        input.put("friendsEmail",adapter.getCheckedFriendsEmail());
         input.put("pk",Session.getUserEmail()+System.currentTimeMillis());
 
         RetrofitApi.getService().chatRoomCreateRequest(input).enqueue(new retrofit2.Callback<Boolean>(){

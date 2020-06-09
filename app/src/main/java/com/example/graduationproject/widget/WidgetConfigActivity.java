@@ -204,7 +204,7 @@ public class WidgetConfigActivity extends Activity {
                             FirebaseUser user=firebaseAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
 
-                            loginSession.setSession(user.getEmail(),user.getDisplayName(),String.valueOf(user.getPhotoUrl()));
+                            loginSession.setSession(user.getEmail(),user.getDisplayName(),String.valueOf(user.getPhotoUrl()),user.getPhotoUrl());
 
                             waitText.setVisibility(View.GONE);
                             recyclerView.setVisibility(View.VISIBLE);

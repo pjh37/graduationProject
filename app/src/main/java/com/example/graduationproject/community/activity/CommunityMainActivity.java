@@ -80,7 +80,7 @@ public class CommunityMainActivity extends AppCompatActivity {
 //        userEmail = intent.getStringExtra("userEmail");
 //        Bundle args = new Bundle();
 //        args.putString("userEmail", userEmail);
-//        adapter=new CommunityVPadapter(getSupportFragmentManager(),args);
+        adapter=new CommunityVPadapter(getSupportFragmentManager());
 
         viewPager.setAdapter(adapter);
         viewPager = (ViewPager) findViewById(R.id.viewPager);

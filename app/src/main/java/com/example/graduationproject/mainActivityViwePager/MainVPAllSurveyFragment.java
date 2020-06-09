@@ -149,9 +149,14 @@ public class MainVPAllSurveyFragment extends Fragment {
         RetrofitApi.getService().getSurveyList(type,page).enqueue(new retrofit2.Callback<ArrayList<SurveyDTO>>() {
             @Override
             public void onResponse(retrofit2.Call<ArrayList<SurveyDTO>> call, retrofit2.Response<ArrayList<SurveyDTO>> response) {
-                isFinish=true;
-                footer.setVisibility(View.GONE);
-                surveysAdapter.addDatas(response.body());
+                if(response.isSuccessful()){
+                    isFinish=true;
+                    footer.setVisibility(View.GONE);
+                    surveysAdapter.addDatas(response.body());
+                }else{
+                    Log.d("테스트", "MainVPAllSurveyFragment : 통신에러");
+                }
+
             }
             @Override
             public void onFailure(retrofit2.Call<ArrayList<SurveyDTO>> call, Throwable t) { }

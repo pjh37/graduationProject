@@ -17,6 +17,7 @@ import com.example.graduationproject.UploadedSurveyRV;
 import com.example.graduationproject.login.Session;
 import com.example.graduationproject.offlineform.FormItem;
 import com.example.graduationproject.offlineform.OfflineFormRVAdapter;
+import com.example.graduationproject.retrofitinterface.RetrofitApi;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -114,14 +115,14 @@ public class MainVPMySurveyFragment extends Fragment {
             switch (view.getId()){
                 case R.id.moreMySurveyView:{
                     Intent intent =new Intent(getContext(),moreViewActivity.class);
-                    intent.putExtra("type",OFFLINE_SURVEY);
+                    intent.putExtra("type",SERVER_SURVEY);
 //                    intent.putExtra("userEmail",userEmail);
                     startActivity(intent);
                     break;
                 }
                 case R.id.moreOfflineView:{
                     Intent intent =new Intent(getContext(),moreViewActivity.class);
-                    intent.putExtra("type",SERVER_SURVEY);
+                    intent.putExtra("type",OFFLINE_SURVEY);
 //                    intent.putExtra("userEmail",userEmail);
                     startActivity(intent);
                     break;
@@ -180,6 +181,39 @@ public class MainVPMySurveyFragment extends Fragment {
 //        }
 //    }
 
+
+    public void getMySubmittedSurveyList(){
+        Log.v("테스트","getMySurveyList 호출");
+        progressBar.setVisibility(View.VISIBLE);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(!isFinish){ }
+                if(isFinish){
+                    getActivity().runOnUiThread(()->{ progressBar.setVisibility(View.GONE); });
+                }
+
+            }
+        }).start();
+        RetrofitApi.getService().getSurveyList(Session.getUserEmail()).enqueue(new retrofit2.Callback<ArrayList<UploadedSurveyDTO>>() {
+            @Override
+            public void onResponse(retrofit2.Call<ArrayList<UploadedSurveyDTO>> call, retrofit2.Response<ArrayList<UploadedSurveyDTO>> response) {
+                isFinish=true;
+                if(response.isSuccessful()){
+                    ArrayList<UploadedSurveyDTO> body=response.body();
+                    ArrayList<UploadedSurveyDTO> temp=new ArrayList<>();
+                    int len=(body.size()>3) ? 3:body.size();
+                    for(int i=0;i<len;i++){
+                        temp.add(body.get(i));
+                    }
+                    uploadedSurveyAdapter.addDatas(temp); // 한꺼번에
+                    isFinish=true;
+                }
+            }
+            @Override
+            public void onFailure(retrofit2.Call<ArrayList<UploadedSurveyDTO>> call, Throwable t) { }
+        });
+    }
     public void getResponseWaitSurvey(){
         progressBar.setVisibility(View.VISIBLE);
         new Thread(new Runnable() {
@@ -358,7 +392,8 @@ public class MainVPMySurveyFragment extends Fragment {
         uploadedSurveyAdapter.datasClear();
         offlineFormAdapter.ItemsClear();
 
-        getResponseWaitSurvey();
+        //getResponseWaitSurvey();
+        getMySubmittedSurveyList();
         getDraftSurvey(); // work
     }
 

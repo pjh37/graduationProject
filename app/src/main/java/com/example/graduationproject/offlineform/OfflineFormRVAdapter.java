@@ -18,7 +18,9 @@ import com.example.graduationproject.form.FormSaveManager;
 import com.example.graduationproject.mainActivityViwePager.SurveyDTO;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -179,7 +181,19 @@ public class OfflineFormRVAdapter extends RecyclerView.Adapter<RecyclerView.View
         this.formItem = datas;
         notifyDataSetChanged(); // work
     }
-
+    public String getTime(String str){
+        long now;
+        Date date;
+        if(str != null) {
+            now = Long.valueOf(str);
+            date = new Date(now);
+        }
+        else
+            date = new Date();
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy MM월 dd hh:mm:ss");
+        String time = simpleDate.format(date);
+        return time;
+    }
     public ArrayList<FormItem> getItems() {
         return formItem;
     }

@@ -92,6 +92,7 @@ public class HomeFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_wordle, container, false);
 
         // 가속도센서,자이로센서
+
         mSensorManager = (SensorManager)getActivity().getSystemService(Context.SENSOR_SERVICE);
         userSensorListner = new UserSensorListner();
         mGyroscopeSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
@@ -110,6 +111,8 @@ public class HomeFragment extends Fragment {
                     extractedTitles = extractTitleFromSurveyDTO(datas);
 
                     koreanPhraseExtractor = new KoreanPhraseExtractorApi(extractedTitles);
+
+
                     ArrayList<String> str = koreanPhraseExtractor.extractPhrase();
 
                     wordCloud = new String[str.size()];

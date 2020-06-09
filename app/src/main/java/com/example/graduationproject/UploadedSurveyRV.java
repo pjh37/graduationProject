@@ -26,7 +26,9 @@ import com.example.graduationproject.mainActivityViwePager.SurveyDTO;
 import com.example.graduationproject.result.ResultActivity;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -147,7 +149,7 @@ public class UploadedSurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHold
         UploadedSurveyDTO vo = datas.get(position);
         ((ViewHolder) holder).txtTitle.setText(vo.getTitle());
         ((ViewHolder) holder).txtWriterName.setText(Session.getUserName());
-        ((ViewHolder) holder).txtTime.setText(vo.getTime());
+        ((ViewHolder) holder).txtTime.setText(getTime(vo.getTime()));
         ((ViewHolder) holder).txtResponse.setText(vo.getResponse_cnt() + " 참여"); //response
     }
     @Override
@@ -339,5 +341,17 @@ public class UploadedSurveyRV extends RecyclerView.Adapter<RecyclerView.ViewHold
         mBottomSheetDialog.dismiss();
     }
 
-
+    public String getTime(String str){
+        long now;
+        Date date;
+        if(str != null) {
+            now = Long.valueOf(str);
+            date = new Date(now);
+        }
+        else
+            date = new Date();
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy MM월 dd hh:mm:ss");
+        String time = simpleDate.format(date);
+        return time;
+    }
 }

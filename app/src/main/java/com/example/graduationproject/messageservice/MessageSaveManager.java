@@ -77,7 +77,7 @@ public class MessageSaveManager {
         String[] columns=new String[]{"_id","roomKey","userEmail","message","date","isRead"};
         String selection="roomKey=?";
         String[] selectionArgs=new String[]{String.valueOf(roomKey)};
-        String orderBy="date desc";
+        String orderBy="date asc";
         String limit=offset+","+count;
         Cursor cursor=query(columns,selection,selectionArgs,null,null,orderBy,limit);
         if(cursor!=null) {

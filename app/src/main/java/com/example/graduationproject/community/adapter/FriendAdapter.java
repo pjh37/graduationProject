@@ -84,7 +84,17 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendHold
         this.items.addAll(items);
         notifyDataSetChanged();
     }
-    public JSONArray getCheckedFriends(){
+    public JSONArray getCheckedFriendNickName(){
+        ArrayList<String> friends=new ArrayList<>();
+        JSONArray jsonArray=new JSONArray();
+        for(int i=0;i<items.size();i++){
+            if(items.get(i).isSelected()){
+                jsonArray.put(items.get(i).getUserNickname());
+            }
+        }
+        return jsonArray;
+    }
+    public JSONArray getCheckedFriendsEmail(){
         ArrayList<String> friends=new ArrayList<>();
         JSONArray jsonArray=new JSONArray();
         for(int i=0;i<items.size();i++){
